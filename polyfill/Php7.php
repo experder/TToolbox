@@ -13,6 +13,12 @@ namespace tt\polyfill;
  */
 class Php7 {
 
+	/**
+	 * Example: $session_id = bin2hex(\tt\polyfill\Php7::random_bytes(10));
+	 *
+	 * @param int $length
+	 * @return string
+	 */
 	public static function random_bytes($length) {
 		$string = "";
 		for ($i = 0; $i < $length; $i++) {
