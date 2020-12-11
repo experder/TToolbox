@@ -17,3 +17,7 @@ Repository
 #### When cloning an existing project with submodule(s):
 `git clone --recurse-submodules https://github.com/experder/ttDemo.git .`
 
+Requirements
+------------
+
+TT is currently downward compatible to PHP 5.3.
