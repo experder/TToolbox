@@ -7,6 +7,4 @@
  */
 
 require_once __DIR__.'/config/Config.php';
-
 \tt\config\Config::initWeb();
-

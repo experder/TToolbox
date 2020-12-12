@@ -40,7 +40,6 @@ class Autoloader {
 			if (!file_exists($file)) {
 				return Autoloader::notFound($class_name);
 			} else {
-				/** @noinspection PhpIncludeInspection */
 				require_once $file;
 			}
 

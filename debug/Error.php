@@ -14,8 +14,15 @@ class Error {
 	 * @param string $message Errormessage
 	 */
 	public function __construct($message) {
-		echo $message;
+		$report = $message;
+		$report .= implode("\n",DebugTools::backtrace());
+		$report = "<pre>$report</pre>";
+		echo $report;
 		exit;
+	}
+
+	public static function fromException(\Exception $e) {
+		return new Error($e->getMessage());
 	}
 
 }
