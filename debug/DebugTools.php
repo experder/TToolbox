@@ -19,13 +19,12 @@ class DebugTools {
 	public static function backtrace() {
 		$caller = array();
 		$backtrace = debug_backtrace();
-		if ($backtrace && is_array($backtrace)) {
-			foreach ($backtrace as $row) {
-				$caller[] =
-					(isset($row["file"]) ? $row["file"] : "?")
-					. ":"
-					. (isset($row["line"]) ? $row["line"] : "?");
-			}
+		if (!$backtrace || !is_array($backtrace)) {
+			return array("unknown_caller");
+		}
+		foreach ($backtrace as $row) {
+			if (!isset($row["file"]) || !isset($row["line"])) continue;
+			$caller[] = $row["file"] . ':' . $row["line"];
 		}
 		if (!$caller) {
 			$caller[] = "unknown_caller";

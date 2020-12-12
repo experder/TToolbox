@@ -10,11 +10,22 @@ namespace tt\config;
 
 use tt\debug\Error;
 use tt\service\ServiceFiles;
+use tt\usermgmt\User;
 
 class Config {
 
 	public static $init_server = true;
-	public static $init_server_file = "../../TTconfig/init_server.php";
+	public static $init_server_dir = null;
+	public static $init_server_file = "init_server.php";
+
+	public static $init_user = true;
+
+	public static function getServerDir(){
+		if(self::$init_server_dir===null){
+			return dirname(dirname(__DIR__)).'/TTconfig/'.self::$init_server_dir;
+		}
+		return self::$init_server_dir;
+	}
 
 	public static function initWeb(){
 
@@ -23,10 +34,12 @@ class Config {
 
 		if (self::$init_server) Config::initServer();
 
+		if (self::$init_user) User::initSession();
+
 	}
 
 	public static function initServer(){
-		$cfg_file = __DIR__.'/'.self::$init_server_file;
+		$cfg_file = self::getServerDir().'/'.self::$init_server_file;
 		$cfg_file = ServiceFiles::cleanupRelativePath($cfg_file);
 
 		if (!file_exists($cfg_file)){

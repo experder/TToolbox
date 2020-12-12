@@ -34,6 +34,7 @@ class Database {
 	 * @var string $dbname
 	 */
 	private $dbname;
+	private $host;
 
 	/** @var Database $singleton */
 	static private $singleton = null;
@@ -51,17 +52,26 @@ class Database {
 	 * @param string $user
 	 * @param string $password
 	 */
-	public function __construct($host, $dbname, $user, $password) {
+	public function __construct($host, $dbname, $user, $password, $init_pdo=true) {
+		$this->host = $host;
 		$this->dbname = $dbname;
+		if($init_pdo)$this->initPdo($user, $password);
+	}
+
+	public function initPdo($user, $password){
 		try {
-			$this->pdo = new \PDO("mysql:host=" . $host . ";dbname=" . $dbname, $user, $password);
+			$this->pdo = new \PDO("mysql:host=" . $this->host . ";dbname=" . $this->dbname, $user, $password);
 			$this->pdo->query('SET NAMES utf8');
 		} catch (\Exception $e) {
 			if ($e instanceof \PDOException) {
-				if ($e->getCode() === 1049/*Unknown database*/) {
-					new Error("Unknown database");
-				} else if ($e->getCode() === 2002/*php_network_getaddresses: getaddrinfo failed*/) {
-					new Error("Host unknown!");
+				if ($e->getCode() === 2002/*php_network_getaddresses: getaddrinfo failed*/) {
+					new Error("Host unknown! $this->host");
+				} else if ($e->getCode() === 1045/*Access denied*/) {
+					new Error("Access denied! $user@$this->host");
+				} else if ($e->getCode() === 1044/*Access denied for user to database*/) {
+					new Error("Access denied to database '$this->dbname'!");
+				} else if ($e->getCode() === 1049/*Unknown database*/) {
+					new Error("Unknown database! $this->dbname");
 				}
 			}
 			Error::fromException($e);

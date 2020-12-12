@@ -8,7 +8,9 @@
 
 namespace tt\autoload;
 
+use tt\config\Config;
 use tt\debug\Error;
+use tt\service\ServiceEnv;
 
 class Autoloader {
 
@@ -36,6 +38,35 @@ class Autoloader {
 				return Autoloader::notFound($class_name . " (doesn't match ^tt\\)");
 			}
 			$name = $matches[1];
+
+			/*
+			 * Special case: API
+			 * You can override any class defined in tt/api.
+			 * Just place a file with the same name in the project's config/api folder.
+			 */
+			if (preg_match("/^tt\\\\api\\\\(.*)\$/", $class_name, $matches)){
+				require_once dirname(__DIR__).'/service/ServiceFiles.php';
+				require_once dirname(__DIR__).'/config/Config.php';
+				$name_api = $matches[1];
+				$file_api = Config::getServerDir().'/api/'.$name_api.".php";
+				if (file_exists($file_api)){
+					require_once dirname(__DIR__) . '/service/ServiceEnv.php';
+					require_once dirname(__DIR__) . '/debug/Error.php';
+
+					require_once $file_api;
+
+					//instanceof without instanziation:
+					if (!ServiceEnv::reflectionInstanceof($class_name, "tt\\api_default\\$name_api")) {
+						new Error("TT API class '$class_name' ($file_api) does not extend '\\tt\\api_default\\$name_api'!");
+					}
+
+					return true;
+				}
+			}
+
+			/*
+			 * Default case
+			 */
 			$file = dirname(__DIR__) . '/' . str_replace('\\', '/', $name) . '.php';
 			if (!file_exists($file)) {
 				return Autoloader::notFound($class_name);
@@ -50,7 +81,7 @@ class Autoloader {
 
 	private static function notFound($class) {
 		if(!Autoloader::$abort_on_error)return false;
-		require_once __DIR__ . '/../debug/Error.php';
+		require_once dirname(__DIR__) . '/debug/Error.php';
 		new Error("Can't autoload \"$class\"!");
 		return null;
 	}

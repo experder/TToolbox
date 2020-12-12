@@ -6,11 +6,16 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-require_once __DIR__.'/config/Config.php';
-/*
-\tt\config\Config::$init_server = true;
-\tt\config\Config::$init_server_dir = dirname(__DIR__).'/TTconfig';
-\tt\config\Config::$init_server_file = "init_server.php";
-\tt\config\Config::$init_user = true;
-/**/
-\tt\config\Config::initWeb();
+namespace tt\usermgmt;
+
+use tt\api\Session;
+
+class User {
+
+	public static function initSession(){
+		#echo "...init session...";
+		echo Session::getLoginHtml();
+		echo "<hr>";
+	}
+
+}
