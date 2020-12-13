@@ -8,10 +8,26 @@
 
 namespace tt\api_default;
 
+use t2\core\form\Formfield_text;
+use tt\html\form\Form;
+use tt\html\form\FormfieldPassword;
+use tt\html\form\FormfieldText;
+use tt\html\Html;
+use tt\service\ServiceStrings;
+
 class Session {
 
 	public static function getLoginHtml(){
-		return "Login Default";
+		$html="";
+
+		$form = new Form();
+		$form->add_field(new FormfieldText("name", "User"));
+		$form->add_field(new FormfieldPassword("pass", "Password"));
+
+		$html .= Html::H1("Login");
+		$html .= $form->toHtml();
+
+		return $html;
 	}
 
 }

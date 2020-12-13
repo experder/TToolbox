@@ -9,6 +9,7 @@
 namespace tt\autoload;
 
 use tt\config\Config;
+use tt\debug\DebugTools;
 use tt\debug\Error;
 use tt\service\ServiceEnv;
 
@@ -69,7 +70,7 @@ class Autoloader {
 			 */
 			$file = dirname(__DIR__) . '/' . str_replace('\\', '/', $name) . '.php';
 			if (!file_exists($file)) {
-				return Autoloader::notFound($class_name);
+				return Autoloader::notFound($class_name, 1);
 			} else {
 				require_once $file;
 			}
@@ -79,10 +80,12 @@ class Autoloader {
 
 	}
 
-	private static function notFound($class) {
+	private static function notFound($class, $backtrace_hint=false) {
 		if(!Autoloader::$abort_on_error)return false;
 		require_once dirname(__DIR__) . '/debug/Error.php';
-		new Error("Can't autoload \"$class\"!");
+		new Error("Can't autoload \"$class\""
+			.($backtrace_hint===false?"!":" in ".DebugTools::backtrace_hint($backtrace_hint+1))
+		);
 		return null;
 	}
 

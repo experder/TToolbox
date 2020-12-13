@@ -20,6 +20,8 @@ class Config {
 
 	public static $init_user = true;
 
+	public static $DEVMODE = false;
+
 	public static function getServerDir(){
 		if(self::$init_server_dir===null){
 			return dirname(dirname(__DIR__)).'/TTconfig/'.self::$init_server_dir;
