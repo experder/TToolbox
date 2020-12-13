@@ -9,6 +9,7 @@
 namespace tt\config;
 
 use tt\debug\Error;
+use tt\page\Page;
 use tt\service\ServiceFiles;
 use tt\usermgmt\User;
 
@@ -17,6 +18,8 @@ class Config {
 	public static $init_server = true;
 	public static $init_server_dir = null;
 	public static $init_server_file = "init_server.php";
+
+	public static $init_page = true;
 
 	public static $init_user = true;
 
@@ -35,6 +38,8 @@ class Config {
 		\tt\autoload\Autoloader::init();
 
 		if (self::$init_server) Config::initServer();
+
+		if (self::$init_page) Page::init();
 
 		if (self::$init_user) User::initSession();
 

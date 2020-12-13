@@ -9,13 +9,19 @@
 namespace tt\usermgmt;
 
 use tt\api\Session;
+use tt\page\Page;
 
 class User {
 
 	public static function initSession(){
-		#echo "...init session...";
-		echo Session::getLoginHtml();
-		echo "<hr>";
+		$login_html = Session::getLoginHtml();
+		$login_html.="<hr>";
+		//TODO: Page::echo does this:
+		if($page=Page::getInstance()){
+			$page->add($login_html);
+		}else{
+			echo $login_html;
+		}
 	}
 
 }

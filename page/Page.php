@@ -22,6 +22,8 @@ class Page {
 	 */
 	private static $messages = array();
 
+	private $html_nodes = array();
+
 	private function __construct() {
 	}
 
@@ -52,10 +54,46 @@ class Page {
 		self::$messages[] = new Message($type, $message);
 	}
 
+	/**
+	 * @param mixed $node must be of a type described in \t2\core\Node::check_type
+	 * @see \tt\page\Node::check_type
+	 */
+	public function add($node) {
+
+		Node::check_type($node);
+
+		if (is_array($node)) {
+			foreach ($node as $n) {
+				$this->add($n);
+			}
+			return;
+		}
+
+		$this->html_nodes[] = $node;
+	}
+
 	public function getHtml(){
-		$html = "";
-		$html.=$this->messagesToHtml();
-		$html.="PAGECONTENT";
+		$head = "<link href=\"".HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
+		$head = "<head>$head</head>";
+
+		$messages = $this->messagesToHtml();
+		$messages = $messages?"<div class='messages'>$messages</div>":"";
+
+		$body = $this->getBodyHtml();
+		$body = "<div class='inner_body'>$body</div>";
+		$body = "<body>$body</body>";
+		$body = $messages.$body;
+
+		$html = $head.$body;
+		$html = "<!DOCTYPE html><html>$html</html>";
+		return $html;
+	}
+
+	public function getBodyHtml(){
+		$html="";
+		foreach ($this->html_nodes as $node) {
+			$html .= $node;
+		}
 		return $html;
 	}
 
@@ -68,7 +106,6 @@ class Page {
 	}
 
 	public function deliver(){
-		new Error("deliverfailure");
 		echo $this->getHtml();
 		exit;
 	}

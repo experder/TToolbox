@@ -33,5 +33,12 @@ class DebugTools {
 		return $caller;
 	}
 
+	public static function backtraceLine($steps=0) {
+		if(!is_int($steps))return false;
+		$steps+=1;
+		$backtrace = self::backtrace();
+		if(!isset($backtrace[$steps]))return false;
+		return $backtrace[$steps];
+	}
 
 }

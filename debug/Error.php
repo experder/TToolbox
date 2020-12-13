@@ -35,14 +35,12 @@ class Error {
 
 		Page::addMessageText(Message::TYPE_ERROR, $text_html);
 
-		$page=Page::getInstance();
-
-		if($page===null){
+		if($page=Page::getInstance()){
+			if($this->fatal) $page->deliver();
+		}else{
 			echo $this->withNoDependencies();
 			if($this->fatal)exit;
 		}
-
-		if($this->fatal) $page->deliver();
 	}
 
 	public function isWarning() {

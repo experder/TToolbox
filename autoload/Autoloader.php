@@ -84,7 +84,7 @@ class Autoloader {
 		if(!Autoloader::$abort_on_error)return false;
 		require_once dirname(__DIR__) . '/debug/Error.php';
 		new Error("Can't autoload \"$class\""
-			.($backtrace_hint===false?"!":" in ".DebugTools::backtrace_hint($backtrace_hint+1))
+			.($backtrace_hint===false?"!":" in ".DebugTools::backtraceLine($backtrace_hint+1))
 		);
 		return null;
 	}
