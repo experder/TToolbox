@@ -6,16 +6,10 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\usermgmt;
+namespace tt\debug;
 
-use tt\api\Session;
+class Warning extends Error {
 
-class User {
-
-	public static function initSession(){
-		#echo "...init session...";
-		echo Session::getLoginHtml();
-		echo "<hr>";
-	}
+	protected $fatal = false;
 
 }

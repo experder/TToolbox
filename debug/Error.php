@@ -8,75 +8,91 @@
 
 namespace tt\debug;
 
+use tt\page\Message;
+use tt\page\Page;
 use tt\service\ServiceEnv;
 
 class Error {
 
 	private static $recursion_protection = true;
 
+	protected $fatal = true;
+	private $message;
+
 	/**
 	 * @param string $message Errormessage
 	 */
 	public function __construct($message) {
+		$this->message = $message;
 
-		if(!!self::$recursion_protection)self::withNoDependencies($message);
+		if(!self::$recursion_protection){
+			echo $this->withNoDependencies();
+			exit;
+		}
 		self::$recursion_protection = false;
 
-		$report = $message;
-		$report .= "\n".implode("\n",DebugTools::backtrace());
-		$report = "<pre>$report</pre>";
+		$text_html = $this->getTextHtml();
 
-		echo $report;
-		exit;
+		Page::addMessageText(Message::TYPE_ERROR, $text_html);
+
+		$page=Page::getInstance();
+
+		if($page===null){
+			echo $this->withNoDependencies();
+			if($this->fatal)exit;
+		}
+
+		if($this->fatal) $page->deliver();
+	}
+
+	public function isWarning() {
+		return !$this->fatal;
 	}
 
 	public static function fromException(\Exception $e) {
 		return new Error($e->getMessage());
 	}
 
-	/**
-	 * Classes used in errorhandling could cause an error and thus an endless loop.
-	 * In this case this quick exit is used.
-	 * @param $message
-	 */
-	private function withNoDependencies($message){
-
+	private function withNoDependencies(){
 		require_once dirname(__DIR__).'/service/ServiceEnv.php';
+		require_once dirname(__DIR__).'/debug/DebugTools.php';
+		require_once dirname(__DIR__).'/page/Message.php';
+
 		$is_commandline_call = ServiceEnv::isSapiCLI();
 		$is_json_response = ServiceEnv::$response_is_expected_to_be_json;
 		$response_sent = ServiceEnv::responseSent();
 
-		require_once dirname(__DIR__).'/debug/DebugTools.php';
 		$backtrace = DebugTools::backtrace();
 
 		if($is_commandline_call){
-			echo $message
+			return $this->message
 				."\n" .implode("\n",$backtrace);
-			exit;
 		}
 
 		if($is_json_response) {
-			echo json_encode(array(
+			return json_encode(array(
 				"ok" => "false",
-				"error_msg" => $message,
+				"error_msg" => $this->message,
 				"backtrace" => $backtrace,
 			), JSON_PRETTY_PRINT);
-			exit;
 		}
 
 		//HTML-Response:
-		if(!$response_sent){
-			$css = defined('HTTP_SKIN')?
-				"<link href=\"".HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />"
-				:"";
-			echo $css;
+		$msg = new Message(Message::TYPE_ERROR, $this->getTextHtml());
+		$css = "";
+		if(!$response_sent && defined('HTTP_SKIN')){
+			$css = "<link href=\"".HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
 		}
-		echo "<div class='message error'><pre class='emergency_errormessage'>"
-			."<div class='emergency_errormessage_message'>".htmlentities($message)."</div>"
+		return $css.$msg->toHtml();
+	}
+
+	private function getTextHtml(){
+		return "<pre class='emergency_errormessage'>"
+			."<div class='emergency_errormessage_message'>".htmlentities($this->message)."</div>"
 			."<hr>"
-			."<div class='emergency_errormessage_backtrace'>".implode("<br>",$backtrace)."</div>"
-			."</pre></div>";
-		exit;
+			."<div class='emergency_errormessage_backtrace'>".implode("<br>",DebugTools::backtrace())."</div>"
+			."</pre>";
+
 	}
 
 }
