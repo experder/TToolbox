@@ -71,11 +71,11 @@ class Error {
 				:"";
 			echo $css;
 		}
-		echo "<pre class='emergency_errormessage'>"
+		echo "<div class='message error'><pre class='emergency_errormessage'>"
 			."<div class='emergency_errormessage_message'>".htmlentities($message)."</div>"
 			."<hr>"
 			."<div class='emergency_errormessage_backtrace'>".implode("<br>",$backtrace)."</div>"
-			."</pre>";
+			."</pre></div>";
 		exit;
 	}
 

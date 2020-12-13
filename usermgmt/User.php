@@ -13,7 +13,7 @@ use tt\api\Session;
 class User {
 
 	public static function initSession(){
-		#echo "...init session...";
+		echo "...init session...";
 		echo Session::getLoginHtml();
 		echo "<hr>";
 	}
