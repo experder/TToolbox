@@ -76,17 +76,7 @@ class Config {
 	}
 
 	public static function initServer(){
-		//TODO: wie initProject
-		$cfg_file = self::getServerDir().'/'.self::$init_server_file;
-		$cfg_file = ServiceFiles::cleanupRelativePath($cfg_file);
-
-		if (!file_exists($cfg_file)){
-			new Error("Server specific config file not found. $cfg_file");
-		}
-
-		require_once $cfg_file;
-
-		return true;
+		ServiceEnv::requireFile(self::getServerDir().'/'.self::$init_server_file, "Server specific config file not found. {{FILE}}");
 	}
 
 	public static function initProject(){
