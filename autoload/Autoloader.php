@@ -12,6 +12,7 @@ use tt\config\Config;
 use tt\debug\DebugTools;
 use tt\debug\Error;
 use tt\service\ServiceEnv;
+use tt\service\ServiceStrings;
 
 class Autoloader {
 
@@ -33,21 +34,16 @@ class Autoloader {
 
 	private function register(){
 		spl_autoload_register(function ($class_name) {
-
-			$matches_tt = preg_match("/^tt\\\\(.*)/", $class_name, $matches);
-			if (!$matches_tt){
-				return Autoloader::notFound($class_name . " (doesn't match ^tt\\)");
-			}
-			$name = $matches[1];
+			require_once dirname(__DIR__).'/service/ServiceStrings.php';
+			require_once dirname(__DIR__).'/config/Config.php';
+			$class_name = ServiceStrings::classnameSafe($class_name);
 
 			/*
-			 * Special case: API
+			 * Case API
 			 * You can override any class defined in tt/api.
 			 * Just place a file with the same name in the project's config/api folder.
 			 */
 			if (preg_match("/^tt\\\\api\\\\(.*)\$/", $class_name, $matches)){
-				require_once dirname(__DIR__).'/service/ServiceFiles.php';
-				require_once dirname(__DIR__).'/config/Config.php';
 				$name_api = $matches[1];
 				$file_api = Config::getServerDir().'/api/'.$name_api.".php";
 				if (file_exists($file_api)){
@@ -56,7 +52,6 @@ class Autoloader {
 
 					require_once $file_api;
 
-					//instanceof without instanziation:
 					if (!ServiceEnv::reflectionInstanceof($class_name, "tt\\api_default\\$name_api")) {
 						new Error("TT API class '$class_name' ($file_api) does not extend '\\tt\\api_default\\$name_api'!");
 					}
@@ -66,18 +61,44 @@ class Autoloader {
 			}
 
 			/*
-			 * Default case
+			 * Case TT
 			 */
-			$file = dirname(__DIR__) . '/' . str_replace('\\', '/', $name) . '.php';
-			if (!file_exists($file)) {
-				return Autoloader::notFound($class_name, 1);
-			} else {
-				require_once $file;
+			if (preg_match("/^tt\\\\(.*)/", $class_name, $matches)){
+				$name = $matches[1];
+				$file = dirname(__DIR__) . '/' . str_replace('\\', '/', $name) . '.php';
+				if (file_exists($file)){
+					require_once $file;
+					return true;
+				}
 			}
 
-			return true;
+			/*
+			 * Case PROJECT
+			 */
+			if($file = Autoloader::classnameMatchesProjectNamespace($class_name)){
+				if (file_exists($file)){
+					require_once $file;
+					return true;
+				}
+				return Autoloader::notFound($class_name, 1);
+			}
+
+			return Autoloader::notFound($class_name, 1);
 		});
 
+	}
+
+	public static function classnameMatchesProjectNamespace($classname){
+
+		if (!defined('PROJ_NAMESPACE_ROOT'))return false;
+
+		if (!preg_match("/^".PROJ_NAMESPACE_ROOT."\\\\(.*)\$/", $classname, $matches))return false;
+
+		$name = $matches[1];
+
+		$file = str_replace('\\', '/', Config::getProjectDir() . '/' . $name . '.php');
+
+		return $file;
 	}
 
 	private static function notFound($class, $backtrace_hint=false) {

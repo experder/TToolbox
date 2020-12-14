@@ -10,6 +10,7 @@ namespace tt\config;
 
 use tt\debug\Error;
 use tt\page\Page;
+use tt\service\ServiceEnv;
 use tt\service\ServiceFiles;
 use tt\usermgmt\User;
 
@@ -19,6 +20,10 @@ class Config {
 	public static $init_server_dir = null;
 	public static $init_server_file = "init_server.php";
 
+	public static $init_project = true;
+	public static $init_project_dir = null;
+	public static $init_project_file = null;
+
 	public static $init_page = true;
 
 	public static $init_user = true;
@@ -26,10 +31,33 @@ class Config {
 	public static $DEVMODE = false;
 
 	public static function getServerDir(){
+
+		//Default:
 		if(self::$init_server_dir===null){
 			return dirname(dirname(__DIR__)).'/TTconfig/'.self::$init_server_dir;
 		}
+
 		return self::$init_server_dir;
+	}
+
+	public static function getProjectDir(){
+
+		//Default:
+		if(self::$init_project_dir===null){
+			return dirname(dirname(__DIR__));
+		}
+
+		return self::$init_project_dir;
+	}
+
+	public static function getProjectConfig(){
+
+		//Default:
+		if(self::$init_project_file===null){
+			return dirname(dirname(__DIR__)).'/TTconfig/init_project.php';
+		}
+
+		return self::$init_project_file;
 	}
 
 	public static function initWeb(){
@@ -39,6 +67,8 @@ class Config {
 
 		if (self::$init_server) Config::initServer();
 
+		if (self::$init_project) Config::initProject();
+
 		if (self::$init_page) Page::init();
 
 		if (self::$init_user) User::initSession();
@@ -46,6 +76,7 @@ class Config {
 	}
 
 	public static function initServer(){
+		//TODO: wie initProject
 		$cfg_file = self::getServerDir().'/'.self::$init_server_file;
 		$cfg_file = ServiceFiles::cleanupRelativePath($cfg_file);
 
@@ -56,6 +87,10 @@ class Config {
 		require_once $cfg_file;
 
 		return true;
+	}
+
+	public static function initProject(){
+		ServiceEnv::requireFile(self::getProjectConfig(), "Project specific config file not found. {{FILE}}");
 	}
 
 }

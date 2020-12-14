@@ -45,4 +45,13 @@ class ServiceEnv {
 		return ob_get_length()!=0;
 	}
 
+	public static function requireFile($file, $errormsg){
+
+		if (!file_exists($file)){
+			new Error(str_ireplace("{{file}}", $file, $errormsg));
+		}
+
+		require_once $file;
+	}
+
 }

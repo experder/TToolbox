@@ -6,16 +6,14 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\usermgmt;
+namespace tt\run;
 
-use tt\api\Session;
-use tt\page\Page;
+use tt\debug\Error;
 
-class User {
+require_once dirname(__DIR__).'/init_web.php';
 
-	public static function initSession(){
-		return;//disabled for the moment
-		Page::doEcho(Session::getLoginHtml(), true);
-	}
-
+if(!isset($_REQUEST["c"])){
+	new Error("No controller given! [ /?c= ]");
 }
+
+Controller::run($_REQUEST["c"]);

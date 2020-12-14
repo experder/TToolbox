@@ -110,4 +110,19 @@ class Page {
 		exit;
 	}
 
+	public static function doEcho($html, $andQuit=false){
+		if($page=Page::getInstance()){
+			$page->add($html);
+			if($andQuit){
+				$page->deliver();
+			}
+		}else{
+			echo $html;
+			if($andQuit){
+				exit;
+			}
+		}
+
+	}
+
 }
