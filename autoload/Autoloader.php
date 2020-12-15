@@ -8,6 +8,7 @@
 
 namespace tt\autoload;
 
+use tt\config\CFG;
 use tt\config\Config;
 use tt\debug\DebugTools;
 use tt\debug\Error;
@@ -45,6 +46,7 @@ class Autoloader {
 			 */
 			if (preg_match("/^tt\\\\api\\\\(.*)\$/", $class_name, $matches)){
 				$name_api = $matches[1];
+				//TODO:
 				$file_api = Config::getServerDir().'/api/'.$name_api.".php";
 				if (file_exists($file_api)){
 					require_once dirname(__DIR__) . '/service/ServiceEnv.php';
@@ -96,7 +98,7 @@ class Autoloader {
 
 		$name = $matches[1];
 
-		$file = str_replace('\\', '/', Config::getProjectDir() . '/' . $name . '.php');
+		$file = str_replace('\\', '/', CFG::getProjectDir() . '/' . $name . '.php');
 
 		return $file;
 	}

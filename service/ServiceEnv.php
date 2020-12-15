@@ -48,7 +48,7 @@ class ServiceEnv {
 	public static function requireFile($file, $errormsg){
 
 		if (!file_exists($file)){
-			new Error(str_ireplace("{{file}}", $file, $errormsg));
+			new Error($errormsg);
 		}
 
 		require_once $file;

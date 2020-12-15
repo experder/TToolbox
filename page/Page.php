@@ -28,17 +28,12 @@ class Page {
 	}
 
 	/**
-	 * @return Page|null
+	 * @return Page
 	 */
 	public static function getInstance(){
-		return self::$instance;
-	}
-
-	public static function init(){
-		if(self::$instance!==null){
-			new Error("Page has been initialized already.");
+		if(self::$instance===null){
+			self::$instance = new Page();
 		}
-		self::$instance = new Page();
 		return self::$instance;
 	}
 
@@ -73,7 +68,7 @@ class Page {
 	}
 
 	public function getHtml(){
-		$head = "<link href=\"".HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
+		$head = $this->getMainCss();
 		$head = "<head>$head</head>";
 
 		$messages = $this->messagesToHtml();
@@ -110,6 +105,16 @@ class Page {
 		exit;
 	}
 
+	public function getMainCss(){
+		if(defined('HTTP_SKIN')){
+			return "<link href=\"".HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
+		}
+		return "";
+	}
+
+	/**
+	 * @deprecated TODO
+	 */
 	public static function doEcho($html, $andQuit=false){
 		if($page=Page::getInstance()){
 			$page->add($html);

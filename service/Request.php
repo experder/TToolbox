@@ -10,6 +10,9 @@ namespace tt\service;
 
 class Request {
 
+	/**
+	 * @deprecated TODO: use ServiceEnv::requestValue instead
+	 */
 	public static function value($key, $default = null) {
 		if (isset($_REQUEST[$key])) {
 			return $_REQUEST[$key];

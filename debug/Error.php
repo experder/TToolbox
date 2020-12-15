@@ -35,12 +35,8 @@ class Error {
 
 		Page::addMessageText(Message::TYPE_ERROR, $text_html);
 
-		if($page=Page::getInstance()){
-			if($this->fatal) $page->deliver();
-		}else{
-			echo $this->withNoDependencies();
-			if($this->fatal)exit;
-		}
+		//TODO:Handle response types
+		Page::getInstance()->deliver();
 	}
 
 	public function isWarning() {
@@ -60,35 +56,45 @@ class Error {
 		$is_json_response = ServiceEnv::$response_is_expected_to_be_json;
 		$response_sent = ServiceEnv::responseSent();
 
-		$backtrace = DebugTools::backtrace();
-
 		if($is_commandline_call){
-			return $this->message
-				."\n" .implode("\n",$backtrace);
+			return $this->getTextPlain();
 		}
 
 		if($is_json_response) {
-			return json_encode(array(
-				"ok" => "false",
-				"error_msg" => $this->message,
-				"backtrace" => $backtrace,
-			), JSON_PRETTY_PRINT);
+			return $this->getJson();
 		}
 
 		//HTML-Response:
+		//TODO:GetMessage
 		$msg = new Message(Message::TYPE_ERROR, $this->getTextHtml());
 		$css = "";
 		if(!$response_sent && defined('HTTP_SKIN')){
+			//TODO:Page:get...
 			$css = "<link href=\"".HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
 		}
 		return $css.$msg->toHtml();
 	}
 
+	private function getTextPlain(){
+		return $this->message
+			."\n" .implode("\n",DebugTools::backtrace());
+	}
+
+	private function getJson($pretty_print=true){
+		return json_encode(array(
+			"ok" => "false",
+			"error_msg" => $this->message,
+			"backtrace" => DebugTools::backtrace(),
+		),
+			$pretty_print ? JSON_PRETTY_PRINT : 0
+		);
+	}
+
 	private function getTextHtml(){
-		return "<pre class='emergency_errormessage'>"
-			."<div class='emergency_errormessage_message'>".htmlentities($this->message)."</div>"
+		return "<pre class='errormessage'>"
+			."<div class='errormessage_message'>".htmlentities($this->message)."</div>"
 			."<hr>"
-			."<div class='emergency_errormessage_backtrace'>".implode("<br>",DebugTools::backtrace())."</div>"
+			."<div class='errormessage_backtrace'>".implode("<br>",DebugTools::backtrace())."</div>"
 			."</pre>";
 
 	}

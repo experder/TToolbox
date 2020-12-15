@@ -6,10 +6,12 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\debug;
+namespace tt\config;
 
-class Warning extends Error {
+class CFG {
 
-	protected $fatal = false;
+	public static function getProjectDir(){
+		Config::getInstance()->getProjectDir();
+	}
 
 }

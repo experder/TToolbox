@@ -8,6 +8,7 @@
 
 namespace tt\config;
 
+use tt\autoload\Autoloader;
 use tt\debug\Error;
 use tt\page\Page;
 use tt\service\ServiceEnv;
@@ -16,71 +17,100 @@ use tt\usermgmt\User;
 
 class Config {
 
-	public static $init_server = true;
-	public static $init_server_dir = null;
-	public static $init_server_file = "init_server.php";
+	/**
+	 * @var Config $instance
+	 */
+	private static $instance = null;
 
-	public static $init_project = true;
-	public static $init_project_dir = null;
-	public static $init_project_file = null;
+	private function __construct() {
+	}
 
-	public static $init_page = true;
+	public static function getInstance(){
+		return self::$instance;
+	}
 
-	public static $init_user = true;
+	public static function init(){
+		if(self::$instance!==null)return false;
+		self::$instance = new Config();
+		return self::$instance;
+	}
+
+	private $init_server_dir = null;
+	private $init_server_file = null;
+	private $init_project_dir = null;
+	private $init_project_file = null;
+
+	public function getServerDir(){
+
+		//DEFAULT:
+		if($this->init_server_dir===null)$this->init_server_dir=dirname(dirname(__DIR__)).'/TTconfig';
+
+		return $this->init_server_dir;
+	}
+	public function getServerFile(){
+
+		//DEFAULT:
+		if($this->init_server_file===null)
+			$this->init_server_file=dirname(dirname(__DIR__)).'/TTconfig/init_server.php';
+
+		return $this->init_server_file;
+	}
+	public function getProjectDir(){
+
+		//DEFAULT:
+		if($this->init_project_dir===null)$this->init_project_dir=dirname(dirname(__DIR__));
+
+		return $this->init_project_dir;
+	}
+	public function getProjectFile(){
+
+		//DEFAULT:
+		if($this->init_project_file===null)
+			$this->init_project_file=dirname(dirname(__DIR__)).'/TTconfig/init_project.php';
+
+		return $this->init_project_file;
+	}
+	public function setServerDir($dir){
+		$this->init_server_dir=$dir;
+	}
+	public function setServerFile($file){
+		$this->init_server_file=$file;
+	}
+	public function setProjectDir($dir){
+		$this->init_project_dir=$dir;
+	}
+	public function setProjectFile($file){
+		$this->init_project_file=$file;
+	}
 
 	public static $DEVMODE = false;
 
-	public static function getServerDir(){
+	public function startWeb(){
 
-		//Default:
-		if(self::$init_server_dir===null){
-			return dirname(dirname(__DIR__)).'/TTconfig/'.self::$init_server_dir;
-		}
+		$this->initAutoloader();
 
-		return self::$init_server_dir;
+		$this->initServerCfg();
+
+		$this->initProjectCfg();
+
+		$page = Page::init();
+
+		User::initSession();
+
+		return $page;
 	}
 
-	public static function getProjectDir(){
-
-		//Default:
-		if(self::$init_project_dir===null){
-			return dirname(dirname(__DIR__));
-		}
-
-		return self::$init_project_dir;
-	}
-
-	public static function getProjectConfig(){
-
-		//Default:
-		if(self::$init_project_file===null){
-			return dirname(dirname(__DIR__)).'/TTconfig/init_project.php';
-		}
-
-		return self::$init_project_file;
-	}
-
-	public static function initWeb(){
-
+	public function initAutoloader(){
 		require_once dirname(__DIR__).'/autoload/Autoloader.php';
-		\tt\autoload\Autoloader::init();
-
-		if (self::$init_server) Config::initServer();
-
-		if (self::$init_project) Config::initProject();
-
-		if (self::$init_page) Page::init();
-
-		if (self::$init_user) User::initSession();
-
+		Autoloader::init();
 	}
 
-	public static function initServer(){
-		ServiceEnv::requireFile(self::getServerDir().'/'.self::$init_server_file, "Server specific config file not found. {{FILE}}");
+	public function initServerCfg(){
+		ServiceEnv::requireFile($this->getServerFile(), "Server specific config file not found.");
 	}
 
-	public static function initProject(){
-		ServiceEnv::requireFile(self::getProjectConfig(), "Project specific config file not found. {{FILE}}");
+	public function initProjectCfg(){
+		ServiceEnv::requireFile($this->getProjectFile(), "Project specific config file not found.");
 	}
 
 }
