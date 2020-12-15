@@ -11,7 +11,12 @@ namespace tt\config;
 class CFG {
 
 	public static function getProjectDir(){
-		Config::getInstance()->getProjectDir();
+		return Config::getInstance()->getProjectDir();
 	}
+
+	public static function getServerDir(){
+		return Config::getInstance()->getServerDir();
+	}
+
 
 }

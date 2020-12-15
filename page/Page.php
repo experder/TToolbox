@@ -8,8 +8,6 @@
 
 namespace tt\page;
 
-use tt\debug\Error;
-
 class Page {
 
 	/**
@@ -52,6 +50,7 @@ class Page {
 	/**
 	 * @param mixed $node must be of a type described in \t2\core\Node::check_type
 	 * @see \tt\page\Node::check_type
+	 * @return Page $this
 	 */
 	public function add($node) {
 
@@ -61,10 +60,12 @@ class Page {
 			foreach ($node as $n) {
 				$this->add($n);
 			}
-			return;
+			return $this;
 		}
 
 		$this->html_nodes[] = $node;
+
+		return $this;
 	}
 
 	public function getHtml(){
@@ -112,22 +113,10 @@ class Page {
 		return "";
 	}
 
-	/**
-	 * @deprecated TODO
-	 */
-	public static function doEcho($html, $andQuit=false){
-		if($page=Page::getInstance()){
-			$page->add($html);
-			if($andQuit){
-				$page->deliver();
-			}
-		}else{
-			echo $html;
-			if($andQuit){
-				exit;
-			}
-		}
-
+	public static function echoAndQuit($html=""){
+		Page::getInstance()
+			->add($html)
+			->deliver();
 	}
 
 }

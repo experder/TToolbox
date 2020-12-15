@@ -10,12 +10,15 @@ namespace tt\usermgmt;
 
 use tt\api\Session;
 use tt\page\Page;
+use tt\service\ServiceEnv;
 
 class User {
 
 	public static function initSession(){
 		return;//disabled for the moment
-		Page::doEcho(Session::getLoginHtml(), true);
+		if (ServiceEnv::isSapiWeb() && !ServiceEnv::$response_is_expected_to_be_json){
+			Page::echoAndQuit(Session::getLoginHtml());
+		}
 	}
 
 }

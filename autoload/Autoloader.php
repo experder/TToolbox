@@ -46,8 +46,7 @@ class Autoloader {
 			 */
 			if (preg_match("/^tt\\\\api\\\\(.*)\$/", $class_name, $matches)){
 				$name_api = $matches[1];
-				//TODO:
-				$file_api = Config::getServerDir().'/api/'.$name_api.".php";
+				$file_api = CFG::getServerDir().'/api/'.$name_api.".php";
 				if (file_exists($file_api)){
 					require_once dirname(__DIR__) . '/service/ServiceEnv.php';
 					require_once dirname(__DIR__) . '/debug/Error.php';

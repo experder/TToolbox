@@ -37,6 +37,9 @@ class ServiceEnv {
 	public static function isSapiCLI(){
 		return php_sapi_name() == 'cli';
 	}
+	public static function isSapiWeb(){
+		return php_sapi_name() != 'cli';
+	}
 
 	/**
 	 * @return bool Output buffer is not empty. Returns false if no buffering is active.

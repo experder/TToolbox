@@ -8,22 +8,28 @@
 
 namespace tt\install;
 
+use tt\autoload\Autoloader;
+use tt\service\Templates;
+
 class Installer {
 
 	public static function requireWebPointer(){
 		$file = dirname(__DIR__).'/init_web_pointer.php';
-		if(file_exists($file)){
-			require_once $file;
-			return;
+
+		if(!file_exists($file)){
+			require_once dirname(__DIR__).'/autoload/Autoloader.php';
+			Autoloader::init();
+
+			if(!isset($_REQUEST['createWebPointer'])) {
+				//TODO:POST wäre viel besser!
+				//Bsp: .../TToolbox/run/?c=ttdemo\demo\DemoCss
+				self::startWizard("File not found. $file", "<a href='?createWebPointer'>Create file</a>");
+			}
+
+			Templates::create_file($file, dirname(__DIR__).'/init_web_pointer_template.php', array());
 		}
 
-		if(!isset($_REQUEST['createWebPointer'])){
-			self::startWizard("File not found. $file","<a href='?createWebPointer'>Create file</a>");
-
-		}else{
-			//...
-		}
-
+		require_once $file;
 	}
 
 	public static function startWizard($hook, $wizard){

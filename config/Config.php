@@ -26,12 +26,9 @@ class Config {
 	}
 
 	public static function getInstance(){
-		return self::$instance;
-	}
-
-	public static function init(){
-		if(self::$instance!==null)return false;
-		self::$instance = new Config();
+		if(self::$instance===null){
+			self::$instance=new Config();
+		}
 		return self::$instance;
 	}
 
@@ -87,22 +84,18 @@ class Config {
 
 	public function startWeb(){
 
-		$this->initAutoloader();
+		require_once dirname(__DIR__).'/autoload/Autoloader.php';
+		Autoloader::init();
 
 		$this->initServerCfg();
 
 		$this->initProjectCfg();
 
-		$page = Page::init();
+		$page = Page::getInstance();
 
 		User::initSession();
 
 		return $page;
-	}
-
-	public function initAutoloader(){
-		require_once dirname(__DIR__).'/autoload/Autoloader.php';
-		Autoloader::init();
 	}
 
 	public function initServerCfg(){
