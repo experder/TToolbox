@@ -9,10 +9,8 @@
 namespace tt\config;
 
 use tt\autoload\Autoloader;
-use tt\debug\Error;
 use tt\page\Page;
 use tt\service\ServiceEnv;
-use tt\service\ServiceFiles;
 use tt\usermgmt\User;
 
 class Config {
@@ -36,6 +34,38 @@ class Config {
 	private $init_server_file = null;
 	private $init_project_dir = null;
 	private $init_project_file = null;
+
+	public static $DEVMODE = false;
+
+	const PLATFORM_UNKNOWN = 0;
+	const PLATFORM_WINDOWS = 1;
+	const PLATFORM_LINUX = 2;
+
+	private static $platform = Config::PLATFORM_UNKNOWN;
+
+	/**
+	 * @return int Config::PLATFORM_
+	 */
+	public static function getPlatform() {
+		return self::$platform;
+	}
+
+	/**
+	 * @param int $platform Config::PLATFORM_
+	 */
+	public static function setPlatform($platform) {
+		self::$platform = $platform;
+	}
+
+	public static function isPlatformWindows() {
+		return self::$platform = self::PLATFORM_WINDOWS;
+	}
+	public static function isPlatformLinux() {
+		return self::$platform = self::PLATFORM_LINUX;
+	}
+	public static function isPlatformUnknown() {
+		return self::$platform = self::PLATFORM_UNKNOWN;
+	}
 
 	public function getServerDir(){
 
@@ -79,8 +109,6 @@ class Config {
 	public function setProjectFile($file){
 		$this->init_project_file=$file;
 	}
-
-	public static $DEVMODE = false;
 
 	public function startWeb(){
 

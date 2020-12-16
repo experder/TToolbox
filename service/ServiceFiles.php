@@ -8,6 +8,9 @@
 
 namespace tt\service;
 
+use tt\config\Config;
+use tt\debug\Error;
+
 class ServiceFiles {
 
 	/**
@@ -35,5 +38,38 @@ class ServiceFiles {
 		return $path;
 	}
 
+	/**
+	 * Saves a string to a file.
+	 * @param string $filename
+	 * @param string $content
+	 * @param bool   $append
+	 * @return bool|int the number of bytes written, or <b>FALSE</b> on error.
+	 */
+	public static function save($filename, $content, $append = false) {
+		$dirname = dirname($filename);
+		if (!is_dir($dirname)) {
+			mkdir($dirname, 0755, true);
+		}
+		$file = @fopen($filename, $append ? "a" : "w");
+		$success = false;
+		if ($file !== false) {
+			$success = fwrite($file, $content);
+			fclose($file);
+		}
+		if ($success === false) {
+			new Error("Couldn't store file \"$filename\". Please check rights."
+				. (Config::isPlatformWindows() ? "" : "\nTry this:\nsudo chmod 777 '" . dirname($filename) . "' -R")
+			#	. (Config::isPlatformLinux() ? "" : "\n(???)")//What to to on windows?
+			);
+		}
+		return $success;
+	}
+
+	public static function get_contents($file) {
+		if (!file_exists($file)) {
+			new Error("File does not exist!\nFile: $file", 1);
+		}
+		return file_get_contents($file);
+	}
 
 }

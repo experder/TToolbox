@@ -61,7 +61,7 @@ class Templates {
 			return self::RETURN_FILE_EXISTS;
 		}
 		$content = self::load($template_file, $keyVals);
-		$success = Files::save($target_file, $content, false, false);
+		$success = ServiceFiles::save($target_file, $content);
 		if ($success === false) {
 			new Error("Couldn't store file \"$target_file\". Please check rights."
 				."\nTry this:\nsudo chmod 777 '" . dirname($target_file) . "' -R");
