@@ -16,13 +16,12 @@ class Error {
 
 	private static $recursion_protection = true;
 
-	protected $fatal = true;
 	private $message;
 
 	/**
 	 * @param string $message Errormessage
 	 */
-	public function __construct($message) {
+	public function __construct($message, $cutBacktrace=0) {
 		$this->message = $message;
 
 		if(!self::$recursion_protection){
@@ -31,16 +30,12 @@ class Error {
 		}
 		self::$recursion_protection = false;
 
-		$text_html = $this->getTextHtml();
+		$text_html = $this->getTextHtml($cutBacktrace+1);
 
 		Page::addMessageText(Message::TYPE_ERROR, $text_html);
 
 		//TODO:Handle response types
 		Page::getInstance()->deliver();
-	}
-
-	public function isWarning() {
-		return !$this->fatal;
 	}
 
 	public static function fromException(\Exception $e) {
@@ -90,11 +85,11 @@ class Error {
 		);
 	}
 
-	private function getTextHtml(){
+	private function getTextHtml($cutBacktrace=0){
 		return "<pre class='errormessage'>"
 			."<div class='errormessage_message'>".htmlentities($this->message)."</div>"
 			."<hr>"
-			."<div class='errormessage_backtrace'>".implode("<br>",DebugTools::backtrace())."</div>"
+			."<div class='errormessage_backtrace'>".implode("<br>",DebugTools::backtrace($cutBacktrace+1))."</div>"
 			."</pre>";
 
 	}

@@ -81,10 +81,9 @@ class Autoloader {
 					require_once $file;
 					return true;
 				}
-				return Autoloader::notFound($class_name, 1);
 			}
 
-			return Autoloader::notFound($class_name, 1);
+			return Autoloader::notFound($class_name, 2);
 		});
 
 	}
@@ -102,12 +101,10 @@ class Autoloader {
 		return $file;
 	}
 
-	private static function notFound($class, $backtrace_hint=false) {
+	private static function notFound($class, $cutBacktrace=0) {
 		if(!Autoloader::$abort_on_error)return false;
 		require_once dirname(__DIR__) . '/debug/Error.php';
-		new Error("Can't autoload \"$class\""
-			.($backtrace_hint===false?"!":" in ".DebugTools::backtraceLine($backtrace_hint+1))
-		);
+		new Error("Can't autoload \"$class\"!",$cutBacktrace+1);
 		return null;
 	}
 

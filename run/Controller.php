@@ -11,16 +11,15 @@ namespace tt\run;
 use tt\autoload\Autoloader;
 use tt\debug\Error;
 use tt\page\Page;
-use tt\service\ServiceEnv;
 use tt\service\ServiceStrings;
 
-abstract class Controller {
+class Controller {
 
 	/**
 	 * @return string HTML
 	 */
 	public function runWeb(){
-		new Error("runWeb is not defined in "."");
+		new Error("runWeb is not defined in "."");//TODO:Dertermine class/file
 		return "";
 	}
 
@@ -40,13 +39,13 @@ abstract class Controller {
 		return null;
 	}
 
-	public static function getUrl($controllerClass){
+	public static function getWebUrl($controllerClass){
 		return HTTP_RUN.'/?c='.$controllerClass;
 	}
 
-	public static function getLink($controllerClass, $linkTitle=null){
+	public static function getWebLink($controllerClass, $linkTitle=null){
 		if($linkTitle===null)$linkTitle=$controllerClass;
-		return "<a href='".self::getUrl($controllerClass)."'>".$linkTitle."</a>";
+		return "<a href='".self::getWebUrl($controllerClass)."'>".$linkTitle."</a>";
 	}
 
 	public static function run($controllerClass){
@@ -65,11 +64,8 @@ abstract class Controller {
 			new Error("File not found: '$file'");
 		}
 
-//		if (!ServiceEnv::reflectionInstanceof($controllerClass, "tt\\run\\Controller")) {
-//			new Error("Controller class '$controllerClass' does not extend 'tt\\run\\Controller'!");
-//		}
-
 		$class = new $controllerClass();
+
 		if(!$class instanceof Controller){
 			new Error("Controller class '$controllerClass' does not extend 'tt\\run\\Controller'!");
 		}

@@ -8,6 +8,7 @@
 
 namespace tt\html;
 
+use tt\debug\Error;
 use tt\service\ServiceStrings;
 
 class Html {
@@ -75,7 +76,8 @@ class Html {
 		}
 	}
 
-	public function addClass($class) {//TODO(2): add css class: Check, if class already exists
+	public function addClass($class) {
+		new Error("TODO!");//add css class: Check, if class already exists
 		if ($class === null) {
 			return;
 		}
@@ -279,13 +281,6 @@ class Html {
 		return $html;
 	}
 
-	/**
-	 * @deprecated
-	 */
-	public static function href_internal($relative_page_without_extension) {
-		return self::href_internal_root($relative_page_without_extension);
-	}
-
 	public static function href_internal_root($relative_page_without_extension) {
 		return Config::get_value_core('HTTP_ROOT') . '/' . self::href_internal_relative($relative_page_without_extension);
 	}
@@ -298,7 +293,7 @@ class Html {
 	}
 
 	public static function href_internal_module($module, $relative_page_without_extension) {
-		//TODO(2):Determine current module
+		//TODODetermine current module
 		$module_root = Config::get_value_core('MODULE_PATH');
 		$module_root = str_replace(":HTTP_ROOT", Config::get_value_core('HTTP_ROOT'), $module_root);
 		return $module_root . "/$module/" . self::href_internal_relative($relative_page_without_extension);

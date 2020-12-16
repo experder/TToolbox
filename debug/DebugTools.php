@@ -14,31 +14,35 @@ class DebugTools {
 	 * Examples:
 	 * $backtrace_plain = implode("\n", DebugTools::backtrace());
 	 * $backtrace_html = implode("<br>", DebugTools::backtrace());
+	 * @param int $cut_from_the_start Number of steps after the error occured.
 	 * @return string[]
 	 */
-	public static function backtrace() {
+	public static function backtrace($cut_from_the_start = 0) {
+		//TODO:Andy other paths that schould use $cut_from_the_start?
 		$caller = array();
 		$backtrace = debug_backtrace();
 		if (!$backtrace || !is_array($backtrace)) {
-			return array("unknown_caller");
+			new Error("TODO");//Is there any reason for this?
+			return array("unknown caller");
+		}
+		if($cut_from_the_start){
+			if(isset($backtrace[$cut_from_the_start])){
+				$backtrace = array_slice($backtrace, $cut_from_the_start);
+			}else{
+				new Error("Fix your code.31");
+				return array("unset depth $cut_from_the_start");
+			}
 		}
 		foreach ($backtrace as $row) {
 			if (!isset($row["file"]) || !isset($row["line"])) continue;
 			$caller[] = $row["file"] . ':' . $row["line"];
 		}
 		if (!$caller) {
-			$caller[] = "unknown_caller";
+			new Error("TODO");//Is there any reason for this?
+			return array("unknown_caller");
 		}
 
 		return $caller;
-	}
-
-	public static function backtraceLine($steps=0) {
-		if(!is_int($steps))return false;
-		$steps+=1;
-		$backtrace = self::backtrace();
-		if(!isset($backtrace[$steps]))return false;
-		return $backtrace[$steps];
 	}
 
 }
