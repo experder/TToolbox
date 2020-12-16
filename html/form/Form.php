@@ -53,11 +53,13 @@ class Form {
 
 	}
 
+	/**
+	 * @deprecated TODO Use addField instead.
+	 */
 	public function add_field(Formfield $formfield) {
-		//PHP type check does this:
-//		if(!($formfield instanceof Formfield)){
-//			new Error_("Please pass formfields only.");
-//		}
+		$this->fields[] = $formfield;
+	}
+	public function addField(Formfield $formfield) {
 		$this->fields[] = $formfield;
 	}
 
