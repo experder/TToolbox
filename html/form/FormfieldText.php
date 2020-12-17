@@ -10,6 +10,11 @@ namespace tt\html\form;
 
 class FormfieldText extends Formfield {
 
+	public function __construct($name, $title = null, $value = null, $val_from_request = true, $more_params = array()) {
+		parent::__construct($name, $title, $value, $val_from_request, $more_params);
+		$this->cssClasses[] = "form-control";
+	}
+
 	public function inner_html() {
 		return "<input type='text'" . $this->getParams_inner() . " />";
 	}

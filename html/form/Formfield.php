@@ -37,6 +37,8 @@ abstract class Formfield {
 	protected $outer_class = null;
 	protected $outer_more_params = array();
 
+	protected $cssClasses = array();
+
 	/**
 	 * Formfield constructor.
 	 * @param             $name
@@ -81,6 +83,10 @@ abstract class Formfield {
 		$this->outer_id = $id;
 	}
 
+	public function setTooltip($tooltip){
+		$this->tooltip = $tooltip;
+	}
+
 	protected function get_title() {
 		$tooltip = $this->tooltip;
 
@@ -118,6 +124,12 @@ abstract class Formfield {
 		}
 		if ($this->id) {
 			$params["id"] = $this->id;
+		}
+		if ($this->cssClasses) {
+			if(!isset($params["class"]))$params["class"]="";
+			foreach ($this->cssClasses as $class){
+				$params["class"] .= " ".$class;
+			}
 		}
 
 		return Html::tag_keyValues($params);

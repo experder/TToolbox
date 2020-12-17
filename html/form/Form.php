@@ -35,7 +35,7 @@ class Form {
 	 * @param string|null  $method ["get"|"post"] Form submission method. The submission method is "post" by default.
 	 * @param array        $params Associative array width additional params for the HTML form tag.
 	 */
-	public function __construct($CMD_ = null, $action = "", $submit_text = "Send", $method = "post", $params = array()) {
+	public function __construct($CMD_ = null, $action = "", $submit_text = "Submit", $method = "post", $params = array()) {
 
 		$this->params = $params;
 

@@ -10,21 +10,17 @@ namespace tt\html\form;
 
 class FormfieldCheckbox extends Formfield {
 
-	private $label;
-
-	public function __construct($name, $title = null, $value = null, $label = null, $val_from_request = true, $more_params = array()) {
-		$this->label = $label;
+	public function __construct($name, $title = null, $value = null, $val_from_request = true, $more_params = array()) {
 		parent::__construct($name, $title, $value, $val_from_request, $more_params);
+		$this->outer_class = "checkbox";
 	}
 
 	protected function toHtml() {
-		$label = $this->label ?: "&nbsp;";
-		return "<div" . $this->getParams_outer() . ">"
-			. "<label>$label</label>"
-			. "<div class='formfield_inner' " . $this->get_title() . " ><label class='radiolabel'><div>"
+		return "<div" . $this->getParams_outer() .$this->get_title(). ">"
+			. "<label>"
 			. $this->inner_html()
-			. '' . $this->get_label() . '</div></label>'
-			. "</div>"
+				.$this->get_label()
+			."</label>"
 			. "</div>";
 	}
 
