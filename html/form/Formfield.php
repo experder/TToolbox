@@ -74,7 +74,7 @@ abstract class Formfield {
 
 	protected function toHtml() {
 		return "<div" . $this->getParams_outer() . ">"
-			. "<label" . $this->get_title() . ">" . $this->get_label() . "</label>"
+			. "<label" . $this->getTitle() . ">" . $this->getLabel() . "</label>"
 			. $this->inner_html()
 			. "</div>";
 	}
@@ -87,22 +87,27 @@ abstract class Formfield {
 		$this->tooltip = $tooltip;
 	}
 
-	protected function get_title() {
+	protected function getValue() {
+		return $this->value;
+	}
+
+	protected function getTitle() {
 		$tooltip = $this->tooltip;
 
 		//Developers see the fieldname
 		if (Config::$DEVMODE) $tooltip .= " [" . $this->name . "]";
 
 		$title = $tooltip ? " title='" . ServiceStrings::escape_value_html($tooltip) . "'" : "";
+
+		if($this->tooltip){
+			$title.=" class='tooltipped'";
+		}
+
 		return $title;
 	}
 
-	protected function get_label() {
+	protected function getLabel() {
 		$label = $this->title;
-		//Tooltip? Change label
-		if ($this->tooltip) {
-			$label .= " (!)";//TODO(3): Mark label if has tooltip
-		}
 		return $label;
 	}
 
