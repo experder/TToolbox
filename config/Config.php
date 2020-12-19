@@ -117,7 +117,7 @@ class Config {
 
 		$this->initServerCfg();
 
-		$this->initProjectCfg();
+		$this->initProjectCfg();//TODO: Deprecated
 
 		$page = Page::getInstance();
 

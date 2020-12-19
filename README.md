@@ -3,3 +3,4 @@ Best of [T2](https://github.com/experder/T2), [Tethys](https://github.com/GitFab
 
 [[How to install](docs/install.md)]
 [[Demo project (GitHub)](https://github.com/experder/ttDemo)]
+[[Folders and dependencies](docs/folders.md)]
