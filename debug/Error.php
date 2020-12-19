@@ -25,6 +25,7 @@ class Error {
 		$this->message = $message;
 
 		if(!self::$recursion_protection){
+			$this->message = "(ERROR IN ERROR HANDLING!) ".$this->message;
 			echo $this->withNoDependencies();
 			exit;
 		}
@@ -46,6 +47,12 @@ class Error {
 		require_once dirname(__DIR__).'/service/ServiceEnv.php';
 		require_once dirname(__DIR__).'/debug/DebugTools.php';
 		require_once dirname(__DIR__).'/page/Message.php';
+		require_once dirname(__DIR__).'/page/Page.php';
+
+		$last_msg = null;
+		if(($messages = Page::getInstance()->getMessages()) && is_array($messages) && ($c=count($messages))>0){
+			$last_msg = array_pop($messages);
+		}
 
 		$is_commandline_call = ServiceEnv::isSapiCLI();
 		$is_json_response = ServiceEnv::$response_is_expected_to_be_json;
@@ -60,14 +67,10 @@ class Error {
 		}
 
 		//HTML-Response:
-		//TODO:GetMessage
 		$msg = new Message(Message::TYPE_ERROR, $this->getTextHtml());
-		$css = "";
-		if(!$response_sent && defined('HTTP_SKIN')){
-			//TODO:Page:get...
-			$css = "<link href=\"".HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
-		}
-		return $css.$msg->toHtml();
+		$css = $response_sent?"":Page::getInstance()->getMainCss();
+		$lastMsgHtml = $last_msg?$last_msg->toHtml():"";
+		return $css.$lastMsgHtml.$msg->toHtml();
 	}
 
 	private function getTextPlain(){

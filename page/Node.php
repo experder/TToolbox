@@ -24,7 +24,7 @@ class Node {
 	 * @see \tt\page\Node::check_type
 	 */
 	public function __construct($node) {
-		self::check_type($node, 1);
+		self::check_type($node);
 		$this->node = $node;
 	}
 
@@ -44,11 +44,12 @@ class Node {
 	 *                    numbers are also allowed, NULL is also allowed,
 	 *                    arrays of $nodes are also allowed.
 	 */
-	public static function check_type($node, $depth=0){
+	public static function check_type($node, $cutBacktrace=0){
 		if (is_array($node)) {
 			foreach ($node as $n) {
-				self::check_type($n);
+				self::check_type($n, $cutBacktrace+1);
 			}
+			return;
 		}
 
 		if (!is_string($node)
@@ -58,9 +59,9 @@ class Node {
 		) {
 			$hint = "";
 			if (is_bool($node)) {
-				$hint = "Booleans need to be converted to strings.\n\$page->add(\$ok?'Yes':'No');";
+				$hint = "\nBooleans need to be converted.\nExample: \$page->add(\$ok?'Yes':'No');";
 			}
-			new Error("Invalid node!".($hint?" ".$hint:""));
+			new Error("Invalid node!".$hint, $cutBacktrace+1);
 		}
 	}
 

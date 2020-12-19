@@ -8,6 +8,8 @@
 
 namespace tt\page;
 
+use tt\thirdparty\Jquery;
+
 class Page {
 
 	/**
@@ -35,6 +37,7 @@ class Page {
 		return self::$instance;
 	}
 
+	//TODO: not static!
 	public static function addMessage(Message $message){
 		self::$messages[] = $message;
 	}
@@ -42,6 +45,7 @@ class Page {
 	/**
 	 * @param string $type Message::TYPE_
 	 * @param string $message
+	 * TODO: Not static!
 	 */
 	public static function addMessageText($type, $message){
 		self::$messages[] = new Message($type, $message);
@@ -54,7 +58,7 @@ class Page {
 	 */
 	public function add($node) {
 
-		Node::check_type($node);
+		Node::check_type($node, 1);
 
 		if (is_array($node)) {
 			foreach ($node as $n) {
@@ -70,15 +74,16 @@ class Page {
 
 	public function getHtml(){
 		$head = $this->getMainCss();
-		$head = "<head>$head</head>";
+		$head .= "\n".$this->getJs();
+		$head = "\n<head>\n$head\n</head>";
 
 		$messages = $this->messagesToHtml();
-		$messages = $messages?"<div class='messages'>$messages</div>":"";
+		$messages = $messages?"<div class='messages'>\n$messages\n</div>":"";
 
 		$body = $this->getBodyHtml();
-		$body = "<div class='inner_body'>$body</div>";
-		$body = "<body>$body</body>";
+		$body = "\n<div class='inner_body'>\n$body\n</div>";
 		$body = $messages.$body;
+		$body = "\n<body>\n$body\n</body>\n";
 
 		$html = $head.$body;
 		$html = "<!DOCTYPE html><html>$html</html>";
@@ -93,9 +98,13 @@ class Page {
 		return $html;
 	}
 
+	public function getMessages(){
+		return self::$messages;
+	}
+
 	public function messagesToHtml(){
 		$html = array();
-		foreach (self::$messages as $message){
+		foreach (self::getMessages() as $message){
 			$html[] = $message->toHtml();
 		}
 		return implode("\n", $html);
@@ -107,10 +116,19 @@ class Page {
 	}
 
 	public function getMainCss(){
+		$css = array();
 		if(defined('HTTP_SKIN')){
-			return "<link href=\"".HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
+			$css[] = "<link href=\"".HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
 		}
-		return "";
+		return implode("\n", $css);
+	}
+
+	public function getJs(){
+		$js = array();
+		if(defined('HTTP_3RDPARTY')){
+			$js[] = ($j=new Jquery())->getScriptReferenceHtml();
+		}
+		return implode("\n", $js);
 	}
 
 	public static function echoAndQuit($html=""){
