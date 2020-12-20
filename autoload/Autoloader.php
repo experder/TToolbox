@@ -8,9 +8,7 @@
 
 namespace tt\autoload;
 
-use tt\config\CFG;
-use tt\config\Config;
-use tt\debug\DebugTools;
+use tt\core\Config;
 use tt\debug\Error;
 use tt\service\ServiceEnv;
 use tt\service\ServiceStrings;
@@ -46,7 +44,7 @@ class Autoloader {
 			 */
 			if (preg_match("/^tt\\\\api\\\\(.*)\$/", $class_name, $matches)){
 				$name_api = $matches[1];
-				$file_api = CFG::getServerDir().'/api/'.$name_api.".php";
+				$file_api = Config::get(Config::CFG_DIR).'/api/'.$name_api.".php";
 				if (file_exists($file_api)){
 					require_once dirname(__DIR__) . '/service/ServiceEnv.php';
 					require_once dirname(__DIR__) . '/debug/Error.php';
@@ -90,13 +88,13 @@ class Autoloader {
 
 	public static function classnameMatchesProjectNamespace($classname){
 
-		if (!defined('PROJ_NAMESPACE_ROOT'))return false;
+		$PROJ_NAMESPACE_ROOT = Config::get(Config::PROJ_NAMESPACE_ROOT);
 
-		if (!preg_match("/^".PROJ_NAMESPACE_ROOT."\\\\(.*)\$/", $classname, $matches))return false;
+		if (!preg_match("/^$PROJ_NAMESPACE_ROOT\\\\(.*)\$/", $classname, $matches))return false;
 
 		$name = $matches[1];
 
-		$file = str_replace('\\', '/', \tt\core\Config::getConfig('CFG_PROJECT_DIR') . '/' . $name . '.php');
+		$file = str_replace('\\', '/', Config::get(Config::CFG_PROJECT_DIR) . '/' . $name . '.php');
 
 		return $file;
 	}

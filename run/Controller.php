@@ -9,6 +9,7 @@
 namespace tt\run;
 
 use tt\autoload\Autoloader;
+use tt\core\Config;
 use tt\debug\Error;
 use tt\page\Page;
 use tt\service\ServiceStrings;
@@ -55,9 +56,10 @@ class Controller {
 
 		$file = Autoloader::classnameMatchesProjectNamespace($controllerClass);
 
-		if($file===false){
+		if ($file === false) {
+			$PROJ_NAMESPACE_ROOT = Config::get(Config::PROJ_NAMESPACE_ROOT);
 			new Error("No class definition found for '$controllerClass'!"
-			.(defined('PROJ_NAMESPACE_ROOT')&&PROJ_NAMESPACE_ROOT?" (must start with '".PROJ_NAMESPACE_ROOT."\\')":" (Please define 'PROJ_NAMESPACE_ROOT')")
+				. " (must start with '$PROJ_NAMESPACE_ROOT')"
 			);
 		}
 
