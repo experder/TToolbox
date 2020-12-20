@@ -6,7 +6,7 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\page;
+namespace tt\core\page;
 
 use tt\thirdparty\Jquery;
 
@@ -53,7 +53,7 @@ class Page {
 
 	/**
 	 * @param mixed $node must be of a type described in \t2\core\Node::check_type
-	 * @see \tt\page\Node::check_type
+	 * @see \tt\core\page\Node::check_type
 	 * @return Page $this
 	 */
 	public function add($node) {

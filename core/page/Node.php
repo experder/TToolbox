@@ -6,7 +6,7 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\page;
+namespace tt\core\page;
 use tt\debug\Error;
 
 /**
@@ -21,7 +21,7 @@ class Node {
 
 	/**
 	 * @param mixed $node must be of a type described in \t2\core\Node::check_type
-	 * @see \tt\page\Node::check_type
+	 * @see \tt\core\page\Node::check_type
 	 */
 	public function __construct($node) {
 		self::check_type($node);

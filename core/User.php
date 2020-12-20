@@ -6,10 +6,10 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\usermgmt;
+namespace tt\core;
 
 use tt\api\Session;
-use tt\page\Page;
+use tt\core\page\Page;
 use tt\service\ServiceEnv;
 
 class User {

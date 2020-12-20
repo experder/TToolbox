@@ -8,7 +8,7 @@
 
 namespace tt\api;
 
-class Session extends \tt\api_default\Session {
+class Session extends \tt\core\api_default\Session {
 
 
 }

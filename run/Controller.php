@@ -8,10 +8,10 @@
 
 namespace tt\run;
 
-use tt\autoload\Autoloader;
+use tt\core\Autoloader;
 use tt\core\Config;
 use tt\debug\Error;
-use tt\page\Page;
+use tt\core\page\Page;
 use tt\service\ServiceStrings;
 
 class Controller {

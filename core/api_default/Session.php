@@ -6,14 +6,12 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\api_default;
+namespace tt\core\api_default;
 
-use t2\core\form\Formfield_text;
 use tt\html\form\Form;
 use tt\html\form\FormfieldPassword;
 use tt\html\form\FormfieldText;
 use tt\html\Html;
-use tt\service\ServiceStrings;
 
 class Session {
 
@@ -21,8 +19,8 @@ class Session {
 		$html="";
 
 		$form = new Form();
-		$form->add_field(new FormfieldText("name", "User"));
-		$form->add_field(new FormfieldPassword("pass", "Password"));
+		$form->addField(new FormfieldText("name", "User"));
+		$form->addField(new FormfieldPassword("pass", "Password"));
 
 		$html .= Html::H1("Login");
 		$html .= $form->toHtml();

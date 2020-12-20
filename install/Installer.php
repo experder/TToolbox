@@ -8,7 +8,7 @@
 
 namespace tt\install;
 
-use tt\autoload\Autoloader;
+use tt\core\Autoloader;
 use tt\service\Templates;
 
 class Installer {

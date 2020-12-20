@@ -6,7 +6,7 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\autoload;
+namespace tt\core;
 
 use tt\core\Config;
 use tt\debug\Error;

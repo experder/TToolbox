@@ -8,8 +8,8 @@
 
 namespace tt\debug;
 
-use tt\page\Message;
-use tt\page\Page;
+use tt\core\page\Message;
+use tt\core\page\Page;
 use tt\service\ServiceEnv;
 
 class Error {
@@ -20,6 +20,7 @@ class Error {
 
 	/**
 	 * @param string $message Errormessage
+	 * @param int    $cutBacktrace
 	 */
 	public function __construct($message, $cutBacktrace=0) {
 		$this->message = $message;

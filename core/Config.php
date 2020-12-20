@@ -8,11 +8,9 @@
 
 namespace tt\core;
 
-use tt\autoload\Autoloader;
 use tt\debug\Error;
-use tt\page\Page;
+use tt\core\page\Page;
 use tt\service\ServiceEnv;
-use tt\usermgmt\User;
 
 class Config {
 
@@ -92,7 +90,7 @@ class Config {
 
 	public static function startWeb(){
 
-		require_once dirname(__DIR__).'/autoload/Autoloader.php';
+		require_once dirname(__DIR__).'/core/Autoloader.php';
 		Autoloader::init();
 
 		self::initServerCfg();

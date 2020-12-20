@@ -6,7 +6,7 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\database;
+namespace tt\core;
 
 use tt\debug\Error;
 
