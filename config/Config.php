@@ -127,6 +127,7 @@ class Config {
 	}
 
 	public function initServerCfg(){
+		//TODO: Use installer!
 		ServiceEnv::requireFile($this->getServerFile(), "Server specific config file not found.");
 	}
 

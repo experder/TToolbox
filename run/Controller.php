@@ -40,6 +40,7 @@ class Controller {
 	}
 
 	public static function getWebUrl($controllerClass){
+		//TODO define alias/rewrite in server_init and use here
 		return HTTP_RUN.'/?c='.$controllerClass;
 	}
 
