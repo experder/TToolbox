@@ -16,11 +16,23 @@ class Config {
 
 	private static $settings = array();
 
-	private static $DEFAULT_VALUE_NOT_FOUND = "!TTDEFVALNOTFOUND!";
+	const DEFAULT_VALUE_NOT_FOUND = "!TTDEFVALNOTFOUND!";
 
 	const PLATFORM_UNKNOWN = 0;
 	const PLATFORM_WINDOWS = 1;
 	const PLATFORM_LINUX = 2;
+
+	const CFG_PROJECT_DIR = 'CFG_PROJECT_DIR';
+	const PROJ_NAMESPACE_ROOT = 'PROJ_NAMESPACE_ROOT';
+	const CFG_DIR = 'CFG_DIR';
+	const CFG_SERVER_INIT_FILE = 'CFG_SERVER_INIT_FILE';
+	const DIR_3RDPARTY = 'DIR_3RDPARTY';
+	const HTTP_RUN = 'HTTP_RUN';
+	const HTTP_SKIN = 'HTTP_SKIN';
+	const HTTP_3RDPARTY = 'HTTP_3RDPARTY';
+	const CFG_PLATFORM = 'CFG_PLATFORM';
+	const DEVMODE = 'DEVMODE';
+	const HTTP_ROOT = 'HTTP_ROOT';
 
 	public static function set($cfgId, $value){
 		self::$settings[$cfgId] = $value;
@@ -38,24 +50,12 @@ class Config {
 
 		$default = self::getDefaultValue($cfgId);
 
-		if($default===self::$DEFAULT_VALUE_NOT_FOUND){
+		if($default===self::DEFAULT_VALUE_NOT_FOUND){
 			new Error("No default defined for $cfgId!", 1);
 		}
 
 		return $default;
 	}
-
-	const CFG_PROJECT_DIR = 'CFG_PROJECT_DIR';
-	const PROJ_NAMESPACE_ROOT = 'PROJ_NAMESPACE_ROOT';
-	const CFG_DIR = 'CFG_DIR';
-	const CFG_SERVER_INIT_FILE = 'CFG_SERVER_INIT_FILE';
-	const DIR_3RDPARTY = 'DIR_3RDPARTY';
-	const HTTP_RUN = 'HTTP_RUN';
-	const HTTP_SKIN = 'HTTP_SKIN';
-	const HTTP_3RDPARTY = 'HTTP_3RDPARTY';
-	const CFG_PLATFORM = 'CFG_PLATFORM';
-	const DEVMODE = 'DEVMODE';
-	const HTTP_ROOT = 'HTTP_ROOT';
 
 	public static function getDefaultValue($cfgId){
 		switch ($cfgId) {
@@ -63,7 +63,7 @@ class Config {
 			case self::CFG_PROJECT_DIR:
 				return dirname(dirname(__DIR__));
 			case self::PROJ_NAMESPACE_ROOT:
-				return self::$DEFAULT_VALUE_NOT_FOUND;
+				return self::DEFAULT_VALUE_NOT_FOUND;
 			case self::CFG_DIR:
 				return self::get(self::CFG_PROJECT_DIR).'/TTconfig';
 			case self::CFG_SERVER_INIT_FILE:
@@ -71,7 +71,7 @@ class Config {
 			case self::DIR_3RDPARTY:
 				return self::get(self::CFG_PROJECT_DIR).'/thirdparty';
 			case self::HTTP_ROOT:
-				return self::$DEFAULT_VALUE_NOT_FOUND;
+				return self::DEFAULT_VALUE_NOT_FOUND;
 			case self::HTTP_RUN:
 				return self::get(self::HTTP_ROOT).'/TToolbox/run';
 			case self::HTTP_SKIN:
@@ -84,7 +84,7 @@ class Config {
 				return false;
 
 			default:
-				return self::$DEFAULT_VALUE_NOT_FOUND;
+				return self::DEFAULT_VALUE_NOT_FOUND;
 		}
 	}
 

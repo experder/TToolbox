@@ -21,6 +21,7 @@ class DebugTools {
 		$caller = array();
 		$backtrace = debug_backtrace();
 		if (!$backtrace || !is_array($backtrace)) {
+			if(Error::$recursion_protection)
 			new Error("TODO");//Is there any reason for this?
 			return array("unknown caller");
 		}
@@ -28,6 +29,7 @@ class DebugTools {
 			if(isset($backtrace[$cut_from_the_start])){
 				$backtrace = array_slice($backtrace, $cut_from_the_start);
 			}else{
+				if(Error::$recursion_protection)
 				new Error("Fix your code.31");
 				return array("unset depth $cut_from_the_start");
 			}
@@ -37,6 +39,7 @@ class DebugTools {
 			$caller[] = $row["file"] . ':' . $row["line"];
 		}
 		if (!$caller) {
+			if(Error::$recursion_protection)
 			new Error("TODO");//Is there any reason for this?
 			return array("unknown_caller");
 		}

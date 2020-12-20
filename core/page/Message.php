@@ -24,9 +24,7 @@ class Message {
 	}
 
 	public function toHtml(){
-		return "<div class='message $this->type'"
-			#." style='border:3px solid black;'"
-			.">".$this->message."</div>";
+		return "<div class='message $this->type'>".$this->message."</div>";
 	}
 
 }

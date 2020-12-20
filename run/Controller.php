@@ -42,7 +42,8 @@ class Controller {
 
 	public static function getWebUrl($controllerClass){
 		//TODO define alias/rewrite in server_init and use here
-		return HTTP_RUN.'/?c='.$controllerClass;
+		$HTTP_RUN = Config::get(Config::HTTP_RUN);
+		return $HTTP_RUN.'/?c='.$controllerClass;
 	}
 
 	public static function getWebLink($controllerClass, $linkTitle=null){

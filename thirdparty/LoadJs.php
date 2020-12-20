@@ -8,6 +8,7 @@
 
 namespace tt\thirdparty;
 
+use tt\core\Config;
 use tt\debug\Error;
 
 class LoadJs {
@@ -28,7 +29,8 @@ class LoadJs {
 		if($this->getScriptRef()===null){
 			new Error("No script reference given for ".get_class()."!\nprotected \$scriptRef = 'jquery/jquery.min.js';");
 		}
-		return "<script src=\"".HTTP_3RDPARTY."/".$this->getScriptRef()."\"></script>";
+		$HTTP_3RDPARTY = Config::get(Config::HTTP_3RDPARTY);
+		return "<script src=\"".$HTTP_3RDPARTY."/".$this->getScriptRef()."\"></script>";
 	}
 
 }

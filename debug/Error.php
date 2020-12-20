@@ -14,7 +14,7 @@ use tt\service\ServiceEnv;
 
 class Error {
 
-	private static $recursion_protection = true;
+	public static $recursion_protection = true;
 
 	private $message;
 
@@ -45,10 +45,16 @@ class Error {
 	}
 
 	private function withNoDependencies(){
+
+		//Autoloader:
 		require_once dirname(__DIR__).'/service/ServiceEnv.php';
 		require_once dirname(__DIR__).'/debug/DebugTools.php';
-		require_once dirname(__DIR__).'/page/Message.php';
-		require_once dirname(__DIR__).'/page/Page.php';
+		require_once dirname(__DIR__).'/core/page/Message.php';
+		require_once dirname(__DIR__).'/core/page/Page.php';
+
+		/** @see DebugTools::backtrace: */
+		self::$recursion_protection = false;
+
 
 		$last_msg = null;
 		if(($messages = Page::getInstance()->getMessages()) && is_array($messages) && ($c=count($messages))>0){
@@ -57,7 +63,6 @@ class Error {
 
 		$is_commandline_call = ServiceEnv::isSapiCLI();
 		$is_json_response = ServiceEnv::$response_is_expected_to_be_json;
-		$response_sent = ServiceEnv::responseSent();
 
 		if($is_commandline_call){
 			return $this->getTextPlain();
@@ -69,9 +74,8 @@ class Error {
 
 		//HTML-Response:
 		$msg = new Message(Message::TYPE_ERROR, $this->getTextHtml());
-		$css = $response_sent?"":Page::getInstance()->getMainCss();
 		$lastMsgHtml = $last_msg?$last_msg->toHtml():"";
-		return $css.$lastMsgHtml.$msg->toHtml();
+		return $lastMsgHtml.$msg->toHtml();
 	}
 
 	private function getTextPlain(){

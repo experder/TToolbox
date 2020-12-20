@@ -8,6 +8,7 @@
 
 namespace tt\core\page;
 
+use tt\core\Config;
 use tt\thirdparty\Jquery;
 
 class Page {
@@ -120,9 +121,8 @@ class Page {
 
 	public function getMainCss(){
 		$css = array();
-		if(defined('HTTP_SKIN')){
-			$css[] = "<link href=\"".HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
-		}
+		$HTTP_SKIN = Config::get(Config::HTTP_SKIN);
+		$css[] = "<link href=\"".$HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
 		return implode("\n", $css);
 	}
 
