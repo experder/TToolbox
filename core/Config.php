@@ -6,14 +6,82 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\config;
+namespace tt\core;
 
 use tt\autoload\Autoloader;
+use tt\debug\Error;
 use tt\page\Page;
 use tt\service\ServiceEnv;
 use tt\usermgmt\User;
 
 class Config {
+
+	private static $settings = array();
+
+	private static $DEFAULT_VALUE_NOT_FOUND = "!TTDEFVALNOTFOUND!";
+
+	const PLATFORM_UNKNOWN = 0;
+	const PLATFORM_WINDOWS = 1;
+	const PLATFORM_LINUX = 2;
+
+	public static function setConfig($cfgId, $value){
+		self::$settings[$cfgId] = $value;
+	}
+
+	public static function getConfig($cfgId){
+
+		if(isset(self::$settings[$cfgId])){
+			return self::$settings[$cfgId];
+		}
+
+		if(defined($cfgId)){
+			return constant($cfgId);
+		}
+
+		$default = self::getDefaultValue($cfgId);
+
+		if($default===self::$DEFAULT_VALUE_NOT_FOUND){
+			new Error("No default defined for $cfgId!", 1);
+		}
+
+		return $default;
+	}
+
+	public static function getDefaultValue($cfgId){
+		switch ($cfgId) {
+
+			/*
+			 * Project configuration
+			 */
+			case 'CFG_PROJECT_DIR':
+				return dirname(dirname(__DIR__));
+			case 'PROJ_NAMESPACE_ROOT':
+				return "";
+			case 'CFG_DIR':
+				return "";
+			case 'CFG_SERVER_INIT_FILE':
+				return "";
+			case 'DIR_3RDPARTY':
+				return "";
+
+			/*
+			 * Server configuration
+			 */
+			case 'HTTP_RUN':
+				return "/ttDemo/TToolbox/run";
+			case 'HTTP_SKIN':
+				return "/ttDemo/TTconfig/skins/skin1";
+			case 'HTTP_3RDPARTY':
+				return "/ttDemo/thirdparty";
+			case 'CFG_PLATFORM':
+				return self::PLATFORM_UNKNOWN;
+			case 'DEVMODE':
+				return false;
+
+			default:
+				return self::$DEFAULT_VALUE_NOT_FOUND;
+		}
+	}
 
 	/**
 	 * @var Config $instance
@@ -37,9 +105,6 @@ class Config {
 
 	public static $DEVMODE = false;
 
-	const PLATFORM_UNKNOWN = 0;
-	const PLATFORM_WINDOWS = 1;
-	const PLATFORM_LINUX = 2;
 
 	private static $platform = Config::PLATFORM_UNKNOWN;
 

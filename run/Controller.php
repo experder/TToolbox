@@ -19,7 +19,7 @@ class Controller {
 	 * @return string HTML
 	 */
 	public function runWeb(){
-		new Error("runWeb is not defined in "."");//TODO:Dertermine class/file
+		new Error("runWeb is not defined in ".get_class());
 		return "";
 	}
 

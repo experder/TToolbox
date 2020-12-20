@@ -78,7 +78,6 @@ class Page {
 		$head = "\n<head>\n$head\n</head>";
 
 		$messages = $this->messagesToHtml();
-		$messages = $messages?"<div class='messages'>\n$messages\n</div>":"";
 
 		$body = $this->getBodyHtml();
 		$body = "\n<div class='inner_body'>\n$body\n</div>";
@@ -102,12 +101,16 @@ class Page {
 		return self::$messages;
 	}
 
-	public function messagesToHtml(){
+	public function messagesToHtml($surroundingDiv = true){
 		$html = array();
 		foreach (self::getMessages() as $message){
 			$html[] = $message->toHtml();
 		}
-		return implode("\n", $html);
+		$result = implode("\n", $html);
+		if($surroundingDiv){
+			$result = $result?"<div class='messages'>\n$result\n</div>":"";
+		}
+		return $result;
 	}
 
 	public function deliver(){

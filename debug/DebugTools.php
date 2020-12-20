@@ -18,7 +18,6 @@ class DebugTools {
 	 * @return string[]
 	 */
 	public static function backtrace($cut_from_the_start = 0) {
-		//TODO:Andy other paths that schould use $cut_from_the_start?
 		$caller = array();
 		$backtrace = debug_backtrace();
 		if (!$backtrace || !is_array($backtrace)) {

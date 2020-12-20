@@ -8,7 +8,7 @@
 
 namespace tt\html\form;
 
-use tt\config\Config;
+use tt\core\Config;
 use tt\html\Html;
 use tt\service\Request;
 use tt\service\ServiceStrings;
@@ -95,7 +95,7 @@ abstract class Formfield {
 		$tooltip = $this->tooltip;
 
 		//Developers see the fieldname
-		if (Config::$DEVMODE) $tooltip .= " [" . $this->name . "]";
+		if (Config::getConfig('DEVMODE')) $tooltip .= " [" . $this->name . "]";
 
 		$title = $tooltip ? " title='" . ServiceStrings::escape_value_html($tooltip) . "'" : "";
 

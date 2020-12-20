@@ -36,7 +36,7 @@ class Autoloader {
 	private function register(){
 		spl_autoload_register(function ($class_name) {
 			require_once dirname(__DIR__).'/service/ServiceStrings.php';
-			require_once dirname(__DIR__).'/config/Config.php';
+			require_once dirname(__DIR__).'/core/Config.php';
 			$class_name = ServiceStrings::classnameSafe($class_name);
 
 			/*
@@ -96,7 +96,7 @@ class Autoloader {
 
 		$name = $matches[1];
 
-		$file = str_replace('\\', '/', CFG::getProjectDir() . '/' . $name . '.php');
+		$file = str_replace('\\', '/', \tt\core\Config::getConfig('CFG_PROJECT_DIR') . '/' . $name . '.php');
 
 		return $file;
 	}
