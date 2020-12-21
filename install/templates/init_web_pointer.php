@@ -5,4 +5,6 @@
  */
 if (true) exit;/*
  * TPLDOCEND*/
-require_once dirname(__DIR__).'/TTconfig/init_web.php';
+
+#require_once dirname(__DIR__).'/TTconfig/init_web.php';
+#INIT_WEB_PATH

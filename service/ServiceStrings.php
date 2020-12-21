@@ -33,11 +33,11 @@ class ServiceStrings {
 	 *
 	 * !!! WARNING! Keys that are a subset of other keys must be defined AFTER the other:
 	 * Example 1:
-	 * ServiceStrings::replace_byArray("dev dev1", array("dev1"=>"B","dev"=>"A"));
-	 * => results in "A B"
-	 * Example 2:
 	 * ServiceStrings::replace_byArray("dev dev1", array("dev"=>"A","dev1"=>"B"));
 	 * => results in "A A1"
+	 * Example 2:
+	 * ServiceStrings::replace_byArray("dev dev1", array("dev1"=>"B","dev"=>"A"));
+	 * => results in "A B"
 	 *
 	 * @param array  $substitutions An associative array containing the substitutions.
 	 * @param string $string

@@ -9,6 +9,8 @@
 namespace tt\install;
 
 use tt\core\Autoloader;
+use tt\html\form\Form;
+use tt\service\Request;
 use tt\service\Templates;
 
 class Installer {
@@ -17,16 +19,19 @@ class Installer {
 		$file = dirname(__DIR__).'/init_web_pointer.php';
 
 		if(!file_exists($file)){
-			require_once dirname(__DIR__).'/autoload/Autoloader.php';
+			require_once dirname(__DIR__).'/core/Autoloader.php';
+			require_once dirname(__DIR__).'/html/form/Form.php';
 			Autoloader::init();
 
-			if(!isset($_REQUEST['createWebPointer'])) {
-				//TODO:POST wäre viel besser!
-				//Bsp: .../TToolbox/run/?c=ttdemo\demo\DemoCss
-				self::startWizard("File not found. $file", "<a href='?createWebPointer'>Create file</a>");
+			if(!Request::cmd('createWebPointer')) {
+				$form = new Form("createWebPointer", "", "Create file");
+				//TODO:...
+				self::startWizard("File not found. $file", $form);
 			}
 
-			Templates::create_file($file, dirname(__DIR__).'/init_web_pointer_template.php', array());
+			Templates::create_file($file, __DIR__.'/templates/init_web_pointer.phpX', array(
+				"#INIT_WEB_PATH"=>"",//TODO:...
+			));
 		}
 
 		require_once $file;

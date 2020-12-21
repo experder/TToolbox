@@ -74,6 +74,7 @@ class Autoloader {
 			/*
 			 * Case PROJECT
 			 */
+			//TODO: If PROJ_NAMESPACE_ROOT is set:
 			if($file = Autoloader::classnameMatchesProjectNamespace($class_name)){
 				if (file_exists($file)){
 					require_once $file;

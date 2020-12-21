@@ -35,12 +35,12 @@ class Templates {
 			new Error("Template file \"$file\" could not be loaded.");
 		}
 
-		//Replacements:
-		$content = ServiceStrings::replace_byArray($content, $replacements);
-
 		//Remove TPLDOC:
 		/** https://github.com/experder/T2/blob/master/help/dev_regex.md */
 		$content = preg_replace("/\\/\\*\\*TPLDOCSTART.*?TPLDOCEND\\*\\/\\R?/s", "", $content);
+
+		//Replacements:
+		$content = ServiceStrings::replace_byArray($content, $replacements);
 
 		return $content;
 	}

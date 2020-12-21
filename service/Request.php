@@ -26,4 +26,13 @@ class Request {
 		return $val;
 	}
 
+	/**
+	 * Checks, if the $_REQUEST value of "cmd" is set to command $cmd.
+	 * @param string $cmd
+	 * @return bool
+	 */
+	public static function cmd($cmd) {
+		return (isset($_REQUEST["cmd"]) && ($_REQUEST["cmd"] == $cmd));
+	}
+
 }

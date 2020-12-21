@@ -44,7 +44,7 @@ class Form {
 		$this->method = $method;
 
 		if ($CMD_) {
-			$this->fields[] = new Formfield_hidden("cmd", $CMD_);
+			$this->fields[] = new FormfieldHidden("cmd", $CMD_);
 		}
 
 		if ($submit_text !== false) {
