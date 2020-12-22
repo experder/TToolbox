@@ -10,7 +10,7 @@ namespace tt\core;
 
 use tt\debug\Error;
 use tt\core\page\Page;
-use tt\service\ServiceEnv;
+use tt\install\Installer;
 
 class Config {
 
@@ -93,18 +93,13 @@ class Config {
 		require_once dirname(__DIR__).'/core/Autoloader.php';
 		Autoloader::init();
 
-		self::initServerCfg();
+		Installer::requireServerInit();
 
 		$page = Page::getInstance();
 
 		User::initSession();
 
 		return $page;
-	}
-
-	public static function initServerCfg(){
-		//TODO: Use installer!
-		ServiceEnv::requireFile(self::get(self::CFG_SERVER_INIT_FILE), "Server specific config file not found.");
 	}
 
 }
