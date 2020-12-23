@@ -8,7 +8,6 @@
 
 namespace tt\core;
 
-use tt\core\Config;
 use tt\debug\Error;
 use tt\service\ServiceEnv;
 use tt\service\ServiceStrings;
@@ -37,54 +36,67 @@ class Autoloader {
 			require_once dirname(__DIR__).'/core/Config.php';
 			$class_name = ServiceStrings::classnameSafe($class_name);
 
-			/*
-			 * Case API
-			 * You can override any class defined in tt/api.
-			 * Just place a file with the same name in the project's config/api folder.
-			 */
-			if (preg_match("/^tt\\\\api\\\\(.*)\$/", $class_name, $matches)){
-				$name_api = $matches[1];
-				$file_api = Config::get(Config::CFG_DIR).'/api/'.$name_api.".php";
-				if (file_exists($file_api)){
-					require_once dirname(__DIR__) . '/service/ServiceEnv.php';
-					require_once dirname(__DIR__) . '/debug/Error.php';
+			// Case API
+			// You can override any class defined in tt/api.
+			// Just place a file with the same name in the project's config/api folder (CFG_DIR.'/api').
+			if (Autoloader::loadApiClass($class_name)) return true;
 
-					require_once $file_api;
+			// Case TT
+			if (Autoloader::loadTtNamespace($class_name)) return true;
 
-					if (!ServiceEnv::reflectionInstanceof($class_name, "tt\\api_default\\$name_api")) {
-						new Error("TT API class '$class_name' ($file_api) does not extend '\\tt\\api_default\\$name_api'!");
-					}
-
-					return true;
-				}
-			}
-
-			/*
-			 * Case TT
-			 */
-			if (preg_match("/^tt\\\\(.*)/", $class_name, $matches)){
-				$name = $matches[1];
-				$file = dirname(__DIR__) . '/' . str_replace('\\', '/', $name) . '.php';
-				if (file_exists($file)){
-					require_once $file;
-					return true;
-				}
-			}
-
-			/*
-			 * Case PROJECT
-			 */
-			//TODO: If PROJ_NAMESPACE_ROOT is set:
-			if($file = Autoloader::classnameMatchesProjectNamespace($class_name)){
-				if (file_exists($file)){
-					require_once $file;
-					return true;
-				}
-			}
+			// Case PROJECT
+			if (Autoloader::loadProjectNamespace($class_name)) return true;
 
 			return Autoloader::notFound($class_name, 2);
 		});
 
+	}
+
+	private static function loadApiClass($class_name) {
+		if (!preg_match("/^tt\\\\api\\\\(.*)\$/", $class_name, $matches))return false;
+
+		$name_api = $matches[1];
+
+		$file_api = Config::get(Config::CFG_DIR).'/api/'.$name_api.".php";
+		if (!file_exists($file_api))return false;
+
+		require_once $file_api;
+
+		require_once dirname(__DIR__) . '/service/ServiceEnv.php';
+		if (!ServiceEnv::reflectionInstanceof($class_name, "tt\\api_default\\$name_api")) {
+			require_once dirname(__DIR__) . '/debug/Error.php';
+			new Error("TT API class '$class_name' ($file_api) does not extend '\\tt\\api_default\\$name_api'!");
+		}
+
+		return true;
+	}
+
+	private static function loadTtNamespace($class_name) {
+		if (!preg_match("/^tt\\\\(.*)/", $class_name, $matches))return false;
+
+		$name = $matches[1];
+
+		$file = dirname(__DIR__) . '/' . str_replace('\\', '/', $name) . '.php';
+
+		if (!file_exists($file))return false;
+
+		require_once $file;
+
+		return true;
+	}
+
+	private static function loadProjectNamespace($class_name) {
+		if (Config::getIfSet(Config::PROJ_NAMESPACE_ROOT, false) === false) return false;
+
+		$file = Autoloader::classnameMatchesProjectNamespace($class_name);
+
+		if (!$file) return false;
+
+		if (!file_exists($file))return false;
+
+		require_once $file;
+
+		return true;
 	}
 
 	public static function classnameMatchesProjectNamespace($classname){

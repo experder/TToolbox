@@ -38,7 +38,7 @@ class Config {
 		self::$settings[$cfgId] = $value;
 	}
 
-	public static function get($cfgId){
+	public static function getIfSet($cfgId, $else){
 
 		if(isset(self::$settings[$cfgId])){
 			return self::$settings[$cfgId];
@@ -48,8 +48,15 @@ class Config {
 			return constant($cfgId);
 		}
 
-		$default = self::getDefaultValue($cfgId);
+		return $else;
+	}
 
+	public static function get($cfgId){
+
+		$value = self::getIfSet($cfgId, self::DEFAULT_VALUE_NOT_FOUND);
+		if ($value!==self::DEFAULT_VALUE_NOT_FOUND)return $value;
+
+		$default = self::getDefaultValue($cfgId);
 		if($default===self::DEFAULT_VALUE_NOT_FOUND){
 			new Error("No default defined for $cfgId!", 1);
 		}
