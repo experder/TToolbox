@@ -128,7 +128,8 @@ The file <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md
 		if(!Request::cmd('createInitWeb')) {
 			$form = new Form("createInitWeb", "", "Create init_web.php");
 
-			$form->addField(new FormfieldText("TToolbox", "Relative path to TToolbox", "dirname(__DIR__).'/TToolbox'"));
+			$suggest = "dirname(__DIR__).'/".basename(dirname(__DIR__))."'";
+			$form->addField(new FormfieldText("TToolbox", "Relative path to TToolbox", $suggest));
 
 			$suggest = strtolower(basename(dirname(dirname(__DIR__))));
 			$form->addField(new FormfieldText("PROJ_NAMESPACE_ROOT", "Project's root namespace", $suggest));
