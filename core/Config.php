@@ -8,8 +8,8 @@
 
 namespace tt\core;
 
-use tt\debug\Error;
 use tt\core\page\Page;
+use tt\debug\Error;
 use tt\install\Installer;
 
 class Config {
@@ -67,28 +67,30 @@ class Config {
 	public static function getDefaultValue($cfgId){
 		switch ($cfgId) {
 
-			case self::CFG_PROJECT_DIR:
-				return dirname(dirname(__DIR__));
-			case self::PROJ_NAMESPACE_ROOT:
-				return self::DEFAULT_VALUE_NOT_FOUND;
-			case self::CFG_DIR:
-				return self::get(self::CFG_PROJECT_DIR).'/TTconfig';
-			case self::CFG_SERVER_INIT_FILE:
-				return self::get(self::CFG_DIR).'/init_server.php';
-			case self::DIR_3RDPARTY:
-				return self::get(self::CFG_PROJECT_DIR).'/thirdparty';
-			case self::HTTP_ROOT:
-				return self::DEFAULT_VALUE_NOT_FOUND;
-			case self::HTTP_RUN:
-				return self::get(self::HTTP_ROOT).'/'.basename(dirname(__DIR__)).'/run';
-			case self::HTTP_SKIN:
-				return self::get(self::HTTP_ROOT).'/TTconfig/skins/skin1';
-			case self::HTTP_3RDPARTY:
-				return self::get(self::HTTP_ROOT)."/thirdparty";
-			case self::CFG_PLATFORM:
-				return self::PLATFORM_UNKNOWN;
 			case self::DEVMODE:
 				return false;
+			case self::CFG_PLATFORM:
+				return self::PLATFORM_UNKNOWN;
+
+			/*
+			 * init_web.php
+			 */
+			case self::CFG_PROJECT_DIR:
+				return dirname(dirname(__DIR__));
+			case self::CFG_SERVER_INIT_FILE:
+				return self::get(self::CFG_DIR) . '/init_server.php';
+			case self::DIR_3RDPARTY:
+				return self::get(self::CFG_PROJECT_DIR) . '/thirdparty';
+
+			/*
+			 * CFG_SERVER_INIT_FILE (init_server.php)
+			 */
+			case self::HTTP_RUN:
+				return self::get(self::HTTP_ROOT) . '/' . basename(dirname(__DIR__)) . '/run';
+			case self::HTTP_SKIN:
+				return self::get(self::HTTP_ROOT) . '/TTconfig/skins/skin1';
+			case self::HTTP_3RDPARTY:
+				return self::get(self::HTTP_ROOT) . "/thirdparty";
 
 			default:
 				return self::DEFAULT_VALUE_NOT_FOUND;
