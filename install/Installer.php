@@ -12,6 +12,7 @@ use tt\core\Autoloader;
 use tt\core\Config;
 use tt\core\page\Message;
 use tt\html\form\Form;
+use tt\html\form\FormfieldPassword;
 use tt\html\form\FormfieldRadio;
 use tt\html\form\FormfieldRadioOption;
 use tt\html\form\FormfieldText;
@@ -77,7 +78,7 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 			$form->addField(new FormfieldText("DB_HOST", "DB host", "localhost"));
 			$form->addField(new FormfieldText("DB_NAME", "DB name", "mytt"));
 			$form->addField(new FormfieldText("DB_USER", "DB user", "root"));
-			$form->addField(new FormfieldText("DB_PASS", "DB pass"));
+			$form->addField(new FormfieldPassword("DB_PASS", "DB pass"));
 
 			$form->addField(new FormfieldRadio("DEVMODE", array(
 				new FormfieldRadioOption("on", "Development"),
