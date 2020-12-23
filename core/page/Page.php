@@ -38,17 +38,15 @@ class Page {
 		return self::$instance;
 	}
 
-	//TODO: not static!
-	public static function addMessage(Message $message){
+	public function addMessage(Message $message){
 		self::$messages[] = $message;
 	}
 
 	/**
 	 * @param string $type Message::TYPE_
 	 * @param string $message
-	 * TODO: Not static!
 	 */
-	public static function addMessageText($type, $message){
+	public function addMessageText($type, $message){
 		self::$messages[] = new Message($type, $message);
 	}
 

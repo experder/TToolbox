@@ -36,14 +36,14 @@ class Database {
 	private $dbname;
 	private $host;
 
-	/** @var Database $singleton */
-	static private $singleton = null;
+	/** @var Database $primary */
+	static private $primary = null;
 
-	public static function getSingleton() {
-		if (self::$singleton === null) {
+	public static function getPrimary() {
+		if (self::$primary === null) {
 			new Error("ERROR_DB_NOT_INITIALIZED");
 		}
-		return self::$singleton;
+		return self::$primary;
 	}
 
 	/**
@@ -80,13 +80,13 @@ class Database {
 
 	public static function init($host, $dbname, $user, $password) {
 
-		if (self::$singleton !== null) {
+		if (self::$primary !== null) {
 			new Error("Database is already initialized!");
 		}
 
-		self::$singleton = new Database($host, $dbname, $user, $password);
+		self::$primary = new Database($host, $dbname, $user, $password);
 
-		return self::$singleton;
+		return self::$primary;
 	}
 
 

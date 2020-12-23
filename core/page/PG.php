@@ -6,19 +6,20 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\core;
+namespace tt\core\page;
 
-use tt\api\Session;
-use tt\core\page\PG;
-use tt\service\ServiceEnv;
+class PG {
 
-class User {
+	public static function addMessage(Message $message){
+		Page::getInstance()->addMessage($message);
+	}
 
-	public static function initSession(){
-		return;//disabled for the moment
-		if (ServiceEnv::isSapiWeb() && !ServiceEnv::$response_is_expected_to_be_json){
-			PG::echoAndQuit(Session::getLoginHtml());
-		}
+	public static function addMessageText($type, $message){
+		Page::getInstance()->addMessageText($type, $message);
+	}
+
+	public static function echoAndQuit($html=""){
+		Page::getInstance()->echoAndQuit($html);
 	}
 
 }
