@@ -80,7 +80,7 @@ class Config {
 			case self::HTTP_ROOT:
 				return self::DEFAULT_VALUE_NOT_FOUND;
 			case self::HTTP_RUN:
-				return self::get(self::HTTP_ROOT).'/TToolbox/run';
+				return self::get(self::HTTP_ROOT).'/'.basename(dirname(__DIR__)).'/run';
 			case self::HTTP_SKIN:
 				return self::get(self::HTTP_ROOT).'/TTconfig/skins/skin1';
 			case self::HTTP_3RDPARTY:
