@@ -29,7 +29,7 @@ class Fieldset extends Formfield {
 
 	protected function toHtml() {
 		return "<fieldset>\n"
-			.($this->title===null?"":"<legend>$this->title</legend>\n")
+			. ($this->title === null ? "" : "<legend>$this->title</legend>\n")
 			. $this->inner_html()
 			. "\n</fieldset>";
 	}

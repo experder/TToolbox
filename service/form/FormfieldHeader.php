@@ -10,19 +10,19 @@ namespace tt\service\form;
 
 class FormfieldHeader extends Formfield {
 
-	public function __construct($value, $title="", $more_params = array()) {
+	public function __construct($value, $title = "", $more_params = array()) {
 		parent::__construct("header", "", $value, false, $more_params);
 		$this->setTitle($title);
 	}
 
-	public function setTitle($title = null){
+	public function setTitle($title = null) {
 		$this->title = $title;
 	}
 
 	protected function toHtml() {
 		return "<div" . $this->getParams_outer() . ">\n"
-			. ($this->title===null?"":"\t<label>$this->title</label>\n")
-			. "\t".$this->inner_html()."\n"
+			. ($this->title === null ? "" : "\t<label>$this->title</label>\n")
+			. "\t" . $this->inner_html() . "\n"
 			. "</div>";
 	}
 

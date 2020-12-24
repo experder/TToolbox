@@ -79,11 +79,11 @@ abstract class Formfield {
 			. "</div>";
 	}
 
-	public function setOuterId($id){
+	public function setOuterId($id) {
 		$this->outer_id = $id;
 	}
 
-	public function setTooltip($tooltip){
+	public function setTooltip($tooltip) {
 		$this->tooltip = $tooltip;
 	}
 
@@ -99,8 +99,8 @@ abstract class Formfield {
 
 		$title = $tooltip ? " title='" . ServiceStrings::escape_value_html($tooltip) . "'" : "";
 
-		if($this->tooltip){
-			$title.=" class='tooltipped'";
+		if ($this->tooltip) {
+			$title .= " class='tooltipped'";
 		}
 
 		return $title;
@@ -124,16 +124,16 @@ abstract class Formfield {
 		if ($name && $this->name) {
 			$params["name"] = $this->name;
 		}
-		if ($value && $this->value!==null) {
+		if ($value && $this->value !== null) {
 			$params["value"] = $this->value;
 		}
 		if ($this->id) {
 			$params["id"] = $this->id;
 		}
 		if ($this->cssClasses) {
-			if(!isset($params["class"]))$params["class"]="";
-			foreach ($this->cssClasses as $class){
-				$params["class"] .= " ".$class;
+			if (!isset($params["class"])) $params["class"] = "";
+			foreach ($this->cssClasses as $class) {
+				$params["class"] .= " " . $class;
 			}
 		}
 

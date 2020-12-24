@@ -9,5 +9,5 @@ if (true) exit;/*
 #require_once dirname(__DIR__).'/TTconfig/init_web.php';
 #require_once '#INIT_WEB_PATH';
 
-require_once __DIR__.'/install/Installer.php';
+require_once __DIR__ . '/install/Installer.php';
 \tt\install\Installer::requireInitWeb('#INIT_WEB_PATH');

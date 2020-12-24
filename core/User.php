@@ -14,9 +14,9 @@ use tt\service\ServiceEnv;
 
 class User {
 
-	public static function initSession(){
+	public static function initSession() {
 		return;//disabled for the moment
-		if (ServiceEnv::isSapiWeb() && !ServiceEnv::$response_is_expected_to_be_json){
+		if (ServiceEnv::isSapiWeb() && !ServiceEnv::$response_is_expected_to_be_json) {
 			PG::echoAndQuit(Session::getLoginHtml());
 		}
 	}

@@ -59,11 +59,12 @@ class Form {
 	public function add_field(Formfield $formfield) {
 		$this->fields[] = $formfield;
 	}
+
 	public function addField(Formfield $formfield) {
 		$this->fields[] = $formfield;
 	}
 
-	public function addClientAccordion($content, $title=""){
+	public function addClientAccordion($content, $title = "") {
 		$id = Page::get_next_global_id("acc");
 		$this->add_field($header = new Formfield_header2(Html::BUTTON("&nbsp;+&nbsp;", "expand_$id();"), $title));
 		$header->setOuterId($id);

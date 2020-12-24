@@ -31,14 +31,14 @@ class Page {
 	/**
 	 * @return Page
 	 */
-	public static function getInstance(){
-		if(self::$instance===null){
+	public static function getInstance() {
+		if (self::$instance === null) {
 			self::$instance = new Page();
 		}
 		return self::$instance;
 	}
 
-	public function addMessage(Message $message){
+	public function addMessage(Message $message) {
 		self::$messages[] = $message;
 	}
 
@@ -46,7 +46,7 @@ class Page {
 	 * @param string $type Message::TYPE_
 	 * @param string $message
 	 */
-	public function addMessageText($type, $message){
+	public function addMessageText($type, $message) {
 		self::$messages[] = new Message($type, $message);
 	}
 
@@ -71,68 +71,68 @@ class Page {
 		return $this;
 	}
 
-	public function getHtml(){
+	public function getHtml() {
 		$head = $this->getMainCss();
-		$head .= "\n".$this->getJs();
+		$head .= "\n" . $this->getJs();
 		$head = "\n<head>\n$head\n</head>";
 
 		$messages = $this->messagesToHtml();
 
 		$body = $this->getBodyHtml();
 		$body = "\n<div class='inner_body'>\n$body\n</div>";
-		$body = $messages.$body;
+		$body = $messages . $body;
 		$body = "\n<body>\n$body\n</body>\n";
 
-		$html = $head.$body;
+		$html = $head . $body;
 		$html = "<!DOCTYPE html><html>$html</html>";
 		return $html;
 	}
 
-	public function getBodyHtml(){
-		$html="";
+	public function getBodyHtml() {
+		$html = "";
 		foreach ($this->html_nodes as $node) {
 			$html .= $node;
 		}
 		return $html;
 	}
 
-	public function getMessages(){
+	public function getMessages() {
 		return self::$messages;
 	}
 
-	public function messagesToHtml($surroundingDiv = true){
+	public function messagesToHtml($surroundingDiv = true) {
 		$html = array();
-		foreach (self::getMessages() as $message){
+		foreach (self::getMessages() as $message) {
 			$html[] = $message->toHtml();
 		}
 		$result = implode("\n", $html);
-		if($surroundingDiv){
-			$result = $result?"<div class='messages'>\n$result\n</div>":"";
+		if ($surroundingDiv) {
+			$result = $result ? "<div class='messages'>\n$result\n</div>" : "";
 		}
 		return $result;
 	}
 
-	public function deliver(){
+	public function deliver() {
 		echo $this->getHtml();
 		exit;
 	}
 
-	public function getMainCss(){
+	public function getMainCss() {
 		$css = array();
 		$HTTP_SKIN = Config::get(Config::HTTP_SKIN);
-		$css[] = "<link href=\"".$HTTP_SKIN."/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
+		$css[] = "<link href=\"" . $HTTP_SKIN . "/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
 		return implode("\n", $css);
 	}
 
-	public function getJs(){
+	public function getJs() {
 		$js = array();
-		if(defined('HTTP_3RDPARTY')){
-			$js[] = ($j=new Jquery())->getScriptReferenceHtml();
+		if (defined('HTTP_3RDPARTY')) {
+			$js[] = ($j = new Jquery())->getScriptReferenceHtml();
 		}
 		return implode("\n", $js);
 	}
 
-	public static function echoAndQuit($html=""){
+	public static function echoAndQuit($html = "") {
 		Page::getInstance()
 			->add($html)
 			->deliver();

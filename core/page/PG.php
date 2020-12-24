@@ -10,15 +10,15 @@ namespace tt\core\page;
 
 class PG {
 
-	public static function addMessage(Message $message){
+	public static function addMessage(Message $message) {
 		Page::getInstance()->addMessage($message);
 	}
 
-	public static function addMessageText($type, $message){
+	public static function addMessageText($type, $message) {
 		Page::getInstance()->addMessageText($type, $message);
 	}
 
-	public static function echoAndQuit($html=""){
+	public static function echoAndQuit($html = "") {
 		Page::getInstance()->echoAndQuit($html);
 	}
 

@@ -8,13 +8,13 @@
 
 namespace tt\run;
 
-use tt\service\Error;
 use tt\install\Installer;
+use tt\service\Error;
 
-require_once dirname(__DIR__).'/install/Installer.php';
+require_once dirname(__DIR__) . '/install/Installer.php';
 Installer::requireWebPointer();
 
-if(!isset($_REQUEST["c"])){
+if (!isset($_REQUEST["c"])) {
 	new Error("No controller given! [ /?c= ]");
 }
 

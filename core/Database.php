@@ -52,13 +52,13 @@ class Database {
 	 * @param string $user
 	 * @param string $password
 	 */
-	public function __construct($host, $dbname, $user, $password, $init_pdo=true) {
+	public function __construct($host, $dbname, $user, $password, $init_pdo = true) {
 		$this->host = $host;
 		$this->dbname = $dbname;
-		if($init_pdo)$this->initPdo($user, $password);
+		if ($init_pdo) $this->initPdo($user, $password);
 	}
 
-	public function initPdo($user, $password){
+	public function initPdo($user, $password) {
 		try {
 			$this->pdo = new \PDO("mysql:host=" . $this->host . ";dbname=" . $this->dbname, $user, $password);
 			$this->pdo->query('SET NAMES utf8');

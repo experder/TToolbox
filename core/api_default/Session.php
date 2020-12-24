@@ -15,8 +15,8 @@ use tt\service\Html;
 
 class Session {
 
-	public static function getLoginHtml(){
-		$html="";
+	public static function getLoginHtml() {
+		$html = "";
 
 		$form = new Form();
 		$form->addField(new FormfieldText("name", "User"));

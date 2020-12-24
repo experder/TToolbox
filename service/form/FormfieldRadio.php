@@ -39,8 +39,8 @@ class FormfieldRadio extends Formfield {
 		if ($this->options === false) {
 			new Error("Options must be an array of FormfieldRadioOption!");
 		}
-		foreach ($options as $option){
-			$option->name = $name." = ".$option->getValue();
+		foreach ($options as $option) {
+			$option->name = $name . " = " . $option->getValue();
 		}
 		$this->outer_class = "radio";
 	}

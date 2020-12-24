@@ -22,56 +22,56 @@ use tt\service\Templates;
 
 class Installer {
 
-	public static function requireWebPointer(){
-		$file = dirname(__DIR__).'/init_web_pointer.php';
+	public static function requireWebPointer() {
+		$file = dirname(__DIR__) . '/init_web_pointer.php';
 
-		if(!file_exists($file)){
+		if (!file_exists($file)) {
 			self::promptWebPointer($file);
 		}
 
 		require_once $file;
 	}
 
-	private static function promptWebPointer($file){
-		require_once dirname(__DIR__).'/core/Autoloader.php';
+	private static function promptWebPointer($file) {
+		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
 
-		if(!Request::cmd('createWebPointer')) {
+		if (!Request::cmd('createWebPointer')) {
 			$form = new Form("createWebPointer", "", "Create init_web_pointer.php");
 			$suggest = "dirname(__DIR__).'/TTconfig/init_web.php'";
 			$form->addField(new FormfieldText("val_webpath", "Path to init_web.php", $suggest));
 			self::startWizard(
-				($m=new Message(Message::TYPE_INFO, "
+				($m = new Message(Message::TYPE_INFO, "
 The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (located in <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>CFG_DIR</a>).
 						"))->toHtml()
 				. $form
 			);
 		}
 
-		Templates::create_file($file, __DIR__.'/templates/init_web_pointer.php', array(
-			"'#INIT_WEB_PATH'"=>$_REQUEST["val_webpath"],
+		Templates::create_file($file, __DIR__ . '/templates/init_web_pointer.php', array(
+			"'#INIT_WEB_PATH'" => $_REQUEST["val_webpath"],
 		));
 	}
 
-	public static function requireServerInit(){
+	public static function requireServerInit() {
 		$file = Config::get(Config::CFG_SERVER_INIT_FILE);
 
-		if(!file_exists($file)){
+		if (!file_exists($file)) {
 			self::promptServerInit($file);
 		}
 
 		require_once $file;
 	}
 
-	private static function promptServerInit($file){
-		if(!Request::cmd('createInitServer')) {
+	private static function promptServerInit($file) {
+		if (!Request::cmd('createInitServer')) {
 			$form = new Form("createInitServer", "", "Create init_server.php");
 
 			$form->addField(new FormfieldText("SERVERNAME", "Servername", "mydevserver"));
 
 			$suggest = dirname($_SERVER['SCRIPT_NAME']);
-			if(($p=strpos($suggest, '/TToolbox'))!==false){
-				$suggest=substr($suggest,0,$p);
+			if (($p = strpos($suggest, '/TToolbox')) !== false) {
+				$suggest = substr($suggest, 0, $p);
 			}
 			$form->addField(new FormfieldText("HTTP_ROOT", "Web root path (<a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>HTTP_ROOT</a>)", $suggest));
 
@@ -83,16 +83,16 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 			$form->addField(new FormfieldRadio("DEVMODE", array(
 				new FormfieldRadioOption("on", "Development"),
 				new FormfieldRadioOption("off", "Production"),
-			),"off"));
+			), "off"));
 
 			$platform = "PLATFORM_UNKNOWN";
-			if(PHP_OS=='WINNT')$platform = "PLATFORM_WINDOWS";
-			if(PHP_OS=='Linux')$platform = "PLATFORM_LINUX";
+			if (PHP_OS == 'WINNT') $platform = "PLATFORM_WINDOWS";
+			if (PHP_OS == 'Linux') $platform = "PLATFORM_LINUX";
 			$form->addField(new FormfieldRadio("PLATFORM", array(
 				new FormfieldRadioOption("PLATFORM_UNKNOWN", "Platform unknown"),
 				new FormfieldRadioOption("PLATFORM_WINDOWS", "Windows"),
 				new FormfieldRadioOption("PLATFORM_LINUX", "Linux"),
-			),$platform));
+			), $platform));
 
 			self::startWizard(
 				($m = new Message(Message::TYPE_INFO, "
@@ -102,34 +102,34 @@ The file <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md
 			);
 		}
 
-		Templates::create_file($file, __DIR__.'/templates/init_server.php', array(
-			"#HTTP_ROOT"=>$_REQUEST["HTTP_ROOT"],
-			"#SERVERNAME"=>$_REQUEST["SERVERNAME"],
-			"#DB_HOST"=>$_REQUEST["DB_HOST"],
-			"#DB_NAME"=>$_REQUEST["DB_NAME"],
-			"#DB_USER"=>$_REQUEST["DB_USER"],
-			"#DB_PASS"=>$_REQUEST["DB_PASS"],
-			"'#DEVMODE'"=>$_REQUEST["DEVMODE"]=='on'?'true':'false',
-			"'#PLATFORM'"=>'\tt\core\Config::'.$_REQUEST["PLATFORM"],
+		Templates::create_file($file, __DIR__ . '/templates/init_server.php', array(
+			"#HTTP_ROOT" => $_REQUEST["HTTP_ROOT"],
+			"#SERVERNAME" => $_REQUEST["SERVERNAME"],
+			"#DB_HOST" => $_REQUEST["DB_HOST"],
+			"#DB_NAME" => $_REQUEST["DB_NAME"],
+			"#DB_USER" => $_REQUEST["DB_USER"],
+			"#DB_PASS" => $_REQUEST["DB_PASS"],
+			"'#DEVMODE'" => $_REQUEST["DEVMODE"] == 'on' ? 'true' : 'false',
+			"'#PLATFORM'" => '\tt\core\Config::' . $_REQUEST["PLATFORM"],
 		));
 	}
 
-	public static function requireInitWeb($file){
-		if(!file_exists($file)){
+	public static function requireInitWeb($file) {
+		if (!file_exists($file)) {
 			self::promptInitWeb($file);
 		}
 
 		require_once $file;
 	}
 
-	private static function promptInitWeb($file){
-		require_once dirname(__DIR__).'/core/Autoloader.php';
+	private static function promptInitWeb($file) {
+		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
 
-		if(!Request::cmd('createInitWeb')) {
+		if (!Request::cmd('createInitWeb')) {
 			$form = new Form("createInitWeb", "", "Create init_web.php");
 
-			$suggest = "dirname(__DIR__).'/".basename(dirname(__DIR__))."'";
+			$suggest = "dirname(__DIR__).'/" . basename(dirname(__DIR__)) . "'";
 			$form->addField(new FormfieldText("TToolbox", "Relative path to TToolbox", $suggest));
 
 			$suggest = strtolower(basename(dirname(dirname(__DIR__))));
@@ -143,27 +143,27 @@ The file <b>$file</b> contains project specific settings.
 			);
 		}
 
-		Templates::create_file($file, __DIR__.'/templates/init_web.php', array(
-			"'#TToolbox'"=>$_REQUEST["TToolbox"],
-			"#PROJ_NAMESPACE_ROOT"=>$_REQUEST["PROJ_NAMESPACE_ROOT"],
+		Templates::create_file($file, __DIR__ . '/templates/init_web.php', array(
+			"'#TToolbox'" => $_REQUEST["TToolbox"],
+			"#PROJ_NAMESPACE_ROOT" => $_REQUEST["PROJ_NAMESPACE_ROOT"],
 		));
 	}
 
-	public static function startWizard($html){
+	public static function startWizard($html) {
 		echo self::wizardHtml($html);
 		exit;
 	}
 
-	public static function wizardHtml($body){
-		$css = file_get_contents(__DIR__."/wizard.css");
+	public static function wizardHtml($body) {
+		$css = file_get_contents(__DIR__ . "/wizard.css");
 		$head = "<style>$css</style>";
 		$head = "<head>$head</head>";
 
 		$html = "";
-		$html.=Html::H1("Install wizard");
-		$html.=$body;
+		$html .= Html::H1("Install wizard");
+		$html .= $body;
 
-		$html = $head.$html;
+		$html = $head . $html;
 		$html = "<!DOCTYPE html><html>$html</html>";
 
 		return $html;

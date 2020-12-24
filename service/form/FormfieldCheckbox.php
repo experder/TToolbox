@@ -17,10 +17,10 @@ class FormfieldCheckbox extends Formfield {
 
 	protected function toHtml() {
 		return "<div" . $this->getParams_outer() . ">"
-			. "<label ".$this->getTitle().">"
+			. "<label " . $this->getTitle() . ">"
 			. $this->inner_html()
-				.$this->getLabel()
-			."</label>"
+			. $this->getLabel()
+			. "</label>"
 			. "</div>";
 	}
 

@@ -47,7 +47,7 @@ class ServiceStrings {
 		return str_replace(array_keys($substitutions), array_values($substitutions), $string);
 	}
 
-	public static function classnameSafe($string){
+	public static function classnameSafe($string) {
 		return $string;//preg_replace("/[^a-z0-9\\\\_]i/", "", $string);
 	}
 

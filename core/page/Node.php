@@ -7,6 +7,7 @@
  */
 
 namespace tt\core\page;
+
 use tt\service\Error;
 
 /**
@@ -29,7 +30,7 @@ class Node {
 		if (is_array($this->node)) {
 			$strval = "";
 			foreach ($this->node as $n) {
-				$strval.=$n;
+				$strval .= $n;
 			}
 			return $strval;
 		}
@@ -41,10 +42,10 @@ class Node {
 	 *                    numbers are also allowed, NULL is also allowed,
 	 *                    arrays of $nodes are also allowed.
 	 */
-	public static function check_type($node, $cutBacktrace=0){
+	public static function check_type($node, $cutBacktrace = 0) {
 		if (is_array($node)) {
 			foreach ($node as $n) {
-				self::check_type($n, $cutBacktrace+1);
+				self::check_type($n, $cutBacktrace + 1);
 			}
 			return;
 		}
@@ -58,7 +59,7 @@ class Node {
 			if (is_bool($node)) {
 				$hint = "\nBooleans need to be converted.\nExample: \$page->add(\$ok?'Yes':'No');";
 			}
-			new Error("Invalid node!".$hint, $cutBacktrace+1);
+			new Error("Invalid node!" . $hint, $cutBacktrace + 1);
 		}
 	}
 

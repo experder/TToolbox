@@ -21,7 +21,7 @@ class ServiceEnv {
 	 * @param string $superclass
 	 * @return bool
 	 */
-	public static function reflectionInstanceof($subclass, $superclass){
+	public static function reflectionInstanceof($subclass, $superclass) {
 		try {
 			$ref_sub = new \ReflectionClass($subclass);
 			$ref_super = new \ReflectionClass($superclass);
@@ -32,23 +32,24 @@ class ServiceEnv {
 		return $ref_sub->isSubclassOf($ref_super);
 	}
 
-	public static function isSapiCLI(){
+	public static function isSapiCLI() {
 		return php_sapi_name() == 'cli';
 	}
-	public static function isSapiWeb(){
+
+	public static function isSapiWeb() {
 		return php_sapi_name() != 'cli';
 	}
 
 	/**
 	 * @return bool Output buffer is not empty. Returns false if no buffering is active.
 	 */
-	public static function responseSent(){
-		return ob_get_length()!=0;
+	public static function responseSent() {
+		return ob_get_length() != 0;
 	}
 
-	public static function requireFile($file, $errormsg){
+	public static function requireFile($file, $errormsg) {
 
-		if (!file_exists($file)){
+		if (!file_exists($file)) {
 			new Error($errormsg);
 		}
 

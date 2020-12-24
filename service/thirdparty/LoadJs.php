@@ -16,21 +16,21 @@ class LoadJs {
 	protected $scriptRef = null;
 
 	public function __construct() {
-		if(!defined('HTTP_3RDPARTY')){
+		if (!defined('HTTP_3RDPARTY')) {
 			new Error("Please define HTTP_3RDPARTY!");
 		}
 	}
 
-	public function getScriptRef(){
+	public function getScriptRef() {
 		return $this->scriptRef;
 	}
 
-	public function getScriptReferenceHtml(){
-		if($this->getScriptRef()===null){
-			new Error("No script reference given for ".get_class()."!\nprotected \$scriptRef = 'jquery/jquery.min.js';");
+	public function getScriptReferenceHtml() {
+		if ($this->getScriptRef() === null) {
+			new Error("No script reference given for " . get_class() . "!\nprotected \$scriptRef = 'jquery/jquery.min.js';");
 		}
 		$HTTP_3RDPARTY = Config::get(Config::HTTP_3RDPARTY);
-		return "<script src=\"".$HTTP_3RDPARTY."/".$this->getScriptRef()."\"></script>";
+		return "<script src=\"" . $HTTP_3RDPARTY . "/" . $this->getScriptRef() . "\"></script>";
 	}
 
 }

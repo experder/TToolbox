@@ -9,8 +9,8 @@
 namespace tt\core;
 
 use tt\core\page\Page;
-use tt\service\Error;
 use tt\install\Installer;
+use tt\service\Error;
 
 class Config {
 
@@ -34,37 +34,37 @@ class Config {
 	const DEVMODE = 'DEVMODE';
 	const HTTP_ROOT = 'HTTP_ROOT';
 
-	public static function set($cfgId, $value){
+	public static function set($cfgId, $value) {
 		self::$settings[$cfgId] = $value;
 	}
 
-	public static function getIfSet($cfgId, $else){
+	public static function getIfSet($cfgId, $else) {
 
-		if(isset(self::$settings[$cfgId])){
+		if (isset(self::$settings[$cfgId])) {
 			return self::$settings[$cfgId];
 		}
 
-		if(defined($cfgId)){
+		if (defined($cfgId)) {
 			return constant($cfgId);
 		}
 
 		return $else;
 	}
 
-	public static function get($cfgId){
+	public static function get($cfgId) {
 
 		$value = self::getIfSet($cfgId, self::DEFAULT_VALUE_NOT_FOUND);
-		if ($value!==self::DEFAULT_VALUE_NOT_FOUND)return $value;
+		if ($value !== self::DEFAULT_VALUE_NOT_FOUND) return $value;
 
 		$default = self::getDefaultValue($cfgId);
-		if($default===self::DEFAULT_VALUE_NOT_FOUND){
+		if ($default === self::DEFAULT_VALUE_NOT_FOUND) {
 			new Error("No default defined for $cfgId!", 1);
 		}
 
 		return $default;
 	}
 
-	public static function getDefaultValue($cfgId){
+	public static function getDefaultValue($cfgId) {
 		switch ($cfgId) {
 
 			case self::DEVMODE:
@@ -97,9 +97,9 @@ class Config {
 		}
 	}
 
-	public static function startWeb(){
+	public static function startWeb() {
 
-		require_once dirname(__DIR__).'/core/Autoloader.php';
+		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
 
 		Installer::requireServerInit();

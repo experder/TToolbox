@@ -23,8 +23,8 @@ class Message {
 		$this->message = $message;
 	}
 
-	public function toHtml(){
-		return "<div class='message $this->type'>".$this->message."</div>";
+	public function toHtml() {
+		return "<div class='message $this->type'>" . $this->message . "</div>";
 	}
 
 }

@@ -17,8 +17,8 @@ class Autoloader {
 	private static $initialized = false;
 	private static $abort_on_error = true;
 
-	public static function init(){
-		if(self::$initialized)return;
+	public static function init() {
+		if (self::$initialized) return;
 
 		$autloloader = new Autoloader();
 		$autloloader->register();
@@ -26,14 +26,14 @@ class Autoloader {
 		self::$initialized = true;
 	}
 
-	public static function multipleAutoloader(){
+	public static function multipleAutoloader() {
 		self::$abort_on_error = false;
 	}
 
-	private function register(){
+	private function register() {
 		spl_autoload_register(function ($class_name) {
-			require_once dirname(__DIR__).'/service/ServiceStrings.php';
-			require_once dirname(__DIR__).'/core/Config.php';
+			require_once dirname(__DIR__) . '/service/ServiceStrings.php';
+			require_once dirname(__DIR__) . '/core/Config.php';
 			$class_name = ServiceStrings::classnameSafe($class_name);
 
 			// Case API
@@ -53,12 +53,12 @@ class Autoloader {
 	}
 
 	private static function loadApiClass($class_name) {
-		if (!preg_match("/^tt\\\\api\\\\(.*)\$/", $class_name, $matches))return false;
+		if (!preg_match("/^tt\\\\api\\\\(.*)\$/", $class_name, $matches)) return false;
 
 		$name_api = $matches[1];
 
-		$file_api = Config::get(Config::CFG_DIR).'/api/'.$name_api.".php";
-		if (!file_exists($file_api))return false;
+		$file_api = Config::get(Config::CFG_DIR) . '/api/' . $name_api . ".php";
+		if (!file_exists($file_api)) return false;
 
 		require_once $file_api;
 
@@ -72,13 +72,13 @@ class Autoloader {
 	}
 
 	private static function loadTtNamespace($class_name) {
-		if (!preg_match("/^tt\\\\(.*)/", $class_name, $matches))return false;
+		if (!preg_match("/^tt\\\\(.*)/", $class_name, $matches)) return false;
 
 		$name = $matches[1];
 
 		$file = dirname(__DIR__) . '/' . str_replace('\\', '/', $name) . '.php';
 
-		if (!file_exists($file))return false;
+		if (!file_exists($file)) return false;
 
 		require_once $file;
 
@@ -92,18 +92,18 @@ class Autoloader {
 
 		if (!$file) return false;
 
-		if (!file_exists($file))return false;
+		if (!file_exists($file)) return false;
 
 		require_once $file;
 
 		return true;
 	}
 
-	public static function classnameMatchesProjectNamespace($classname){
+	public static function classnameMatchesProjectNamespace($classname) {
 
 		$PROJ_NAMESPACE_ROOT = Config::get(Config::PROJ_NAMESPACE_ROOT);
 
-		if (!preg_match("/^$PROJ_NAMESPACE_ROOT\\\\(.*)\$/", $classname, $matches))return false;
+		if (!preg_match("/^$PROJ_NAMESPACE_ROOT\\\\(.*)\$/", $classname, $matches)) return false;
 
 		$name = $matches[1];
 
@@ -112,10 +112,10 @@ class Autoloader {
 		return $file;
 	}
 
-	private static function notFound($class, $cutBacktrace=0) {
-		if(!Autoloader::$abort_on_error)return false;
+	private static function notFound($class, $cutBacktrace = 0) {
+		if (!Autoloader::$abort_on_error) return false;
 		require_once dirname(__DIR__) . '/debug/Error.php';
-		new Error("Can't autoload \"$class\"!",$cutBacktrace+1);
+		new Error("Can't autoload \"$class\"!", $cutBacktrace + 1);
 		return null;
 	}
 

@@ -17,22 +17,22 @@ class ServiceFiles {
 	 * @param string $path Original path
 	 * @return string Resolved path
 	 */
-	public static function cleanupRelativePath($path){
+	public static function cleanupRelativePath($path) {
 
 		//Windows:
 		$path = ServiceFiles::windowsPath($path);
 
 		$loop = true;
-		while ($loop){
+		while ($loop) {
 			$path_before = $path;
-			$path=preg_replace("/\\/[a-z0-9_]+\\/\\.\\.\\//i", "/", $path);
-			$loop = $path!=$path_before;
+			$path = preg_replace("/\\/[a-z0-9_]+\\/\\.\\.\\//i", "/", $path);
+			$loop = $path != $path_before;
 		}
 
 		return $path;
 	}
 
-	public static function windowsPath($path){
+	public static function windowsPath($path) {
 		$path = preg_replace("/\\\\/", "/", $path);
 		return $path;
 	}
