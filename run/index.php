@@ -8,7 +8,7 @@
 
 namespace tt\run;
 
-use tt\debug\Error;
+use tt\service\Error;
 use tt\install\Installer;
 
 require_once dirname(__DIR__).'/install/Installer.php';

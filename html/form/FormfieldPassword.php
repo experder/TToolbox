@@ -8,6 +8,9 @@
 
 namespace tt\html\form;
 
+/**
+ * @deprecated
+ */
 class FormfieldPassword extends Formfield {
 
 	public function __construct($name, $title = null, $value = null, $val_from_request = true, $more_params = array()) {

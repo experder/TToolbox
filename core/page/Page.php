@@ -9,7 +9,7 @@
 namespace tt\core\page;
 
 use tt\core\Config;
-use tt\thirdparty\Jquery;
+use tt\service\thirdparty\Jquery;
 
 class Page {
 

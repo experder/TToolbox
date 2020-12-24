@@ -7,12 +7,9 @@
  */
 
 namespace tt\core\page;
-use tt\debug\Error;
+use tt\service\Error;
 
 /**
- * Class Node
- * @package t2\core
- *
  * Represents a node of the HTML DOM tree.
  */
 class Node {

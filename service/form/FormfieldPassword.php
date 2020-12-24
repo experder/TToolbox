@@ -6,12 +6,9 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\html\form;
+namespace tt\service\form;
 
-/**
- * @deprecated
- */
-class FormfieldText extends Formfield {
+class FormfieldPassword extends Formfield {
 
 	public function __construct($name, $title = null, $value = null, $val_from_request = true, $more_params = array()) {
 		parent::__construct($name, $title, $value, $val_from_request, $more_params);
@@ -19,7 +16,7 @@ class FormfieldText extends Formfield {
 	}
 
 	public function inner_html() {
-		return "<input type='text'" . $this->getParams_inner() . " />";
+		return "<input type='password'" . $this->getParams_inner() . " />";
 	}
 
 }

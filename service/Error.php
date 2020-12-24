@@ -6,12 +6,11 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\debug;
+namespace tt\service;
 
 use tt\core\page\Message;
 use tt\core\page\Page;
 use tt\core\page\PG;
-use tt\service\ServiceEnv;
 
 class Error {
 

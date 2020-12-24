@@ -6,20 +6,26 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\html\form;
+namespace tt\service\form;
 
-/**
- * @deprecated
- */
-class FormfieldText extends Formfield {
+class FormfieldCheckbox extends Formfield {
 
 	public function __construct($name, $title = null, $value = null, $val_from_request = true, $more_params = array()) {
 		parent::__construct($name, $title, $value, $val_from_request, $more_params);
-		$this->cssClasses[] = "form-control";
+		$this->outer_class = "checkbox";
+	}
+
+	protected function toHtml() {
+		return "<div" . $this->getParams_outer() . ">"
+			. "<label ".$this->getTitle().">"
+			. $this->inner_html()
+				.$this->getLabel()
+			."</label>"
+			. "</div>";
 	}
 
 	public function inner_html() {
-		return "<input type='text'" . $this->getParams_inner() . " />";
+		return "<input type='checkbox' " . ($this->value ? " checked" : "") . $this->getParams_inner() . "/>";
 	}
 
 }

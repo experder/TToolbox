@@ -10,7 +10,7 @@ namespace tt\run;
 
 use tt\core\Autoloader;
 use tt\core\Config;
-use tt\debug\Error;
+use tt\service\Error;
 use tt\core\page\Page;
 use tt\service\ServiceEnv;
 use tt\service\ServiceStrings;

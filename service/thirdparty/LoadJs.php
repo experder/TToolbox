@@ -6,10 +6,10 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\thirdparty;
+namespace tt\service\thirdparty;
 
 use tt\core\Config;
-use tt\debug\Error;
+use tt\service\Error;
 
 class LoadJs {
 

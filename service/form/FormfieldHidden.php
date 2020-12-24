@@ -6,13 +6,10 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\html\form;
+namespace tt\service\form;
 
 use tt\service\Error;
 
-/**
- * @deprecated
- */
 class FormfieldHidden extends Formfield {
 
 	public function __construct($name, $value) {

@@ -9,7 +9,7 @@
 namespace tt\core;
 
 use tt\core\page\Page;
-use tt\debug\Error;
+use tt\service\Error;
 use tt\install\Installer;
 
 class Config {

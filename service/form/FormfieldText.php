@@ -6,11 +6,8 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\html\form;
+namespace tt\service\form;
 
-/**
- * @deprecated
- */
 class FormfieldText extends Formfield {
 
 	public function __construct($name, $title = null, $value = null, $val_from_request = true, $more_params = array()) {

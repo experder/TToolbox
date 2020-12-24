@@ -8,8 +8,7 @@
 
 namespace tt\service;
 
-use tt\config\Config;
-use tt\debug\Error;
+use tt\core\Config;
 
 class ServiceFiles {
 
@@ -58,8 +57,10 @@ class ServiceFiles {
 		}
 		if ($success === false) {
 			new Error("Couldn't store file \"$filename\". Please check rights."
-				. (Config::isPlatformWindows() ? "" : "\nTry this:\nsudo chmod 777 '" . dirname($filename) . "' -R")
-			#	. (Config::isPlatformLinux() ? "" : "\n(???)")//What to to on windows?
+				. (
+				(($p = Config::get(Config::CFG_PLATFORM)) == Config::PLATFORM_UNKNOWN
+					|| $p == Config::PLATFORM_LINUX
+				) ? "\nTry this:\nsudo chmod 777 '" . dirname($filename) . "' -R" : "")
 			);
 		}
 		return $success;

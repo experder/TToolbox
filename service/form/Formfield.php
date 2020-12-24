@@ -6,7 +6,7 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\html\form;
+namespace tt\service\form;
 
 use tt\core\Config;
 use tt\service\Html;
@@ -16,7 +16,6 @@ use tt\service\ServiceStrings;
 /**
  * Class Formfield
  * Generic class representing all formfields.
- * @deprecated
  */
 abstract class Formfield {
 

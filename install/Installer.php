@@ -16,7 +16,7 @@ use tt\html\form\FormfieldPassword;
 use tt\html\form\FormfieldRadio;
 use tt\html\form\FormfieldRadioOption;
 use tt\html\form\FormfieldText;
-use tt\html\Html;
+use tt\service\Html;
 use tt\service\Request;
 use tt\service\Templates;
 

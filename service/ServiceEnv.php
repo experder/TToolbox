@@ -8,8 +8,6 @@
 
 namespace tt\service;
 
-use tt\debug\Error;
-
 class ServiceEnv {
 
 	/**

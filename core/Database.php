@@ -8,7 +8,7 @@
 
 namespace tt\core;
 
-use tt\debug\Error;
+use tt\service\Error;
 
 class Database {
 

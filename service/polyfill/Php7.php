@@ -6,7 +6,7 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\polyfill;
+namespace tt\service\polyfill;
 
 /**
  * Features that have been introduced in PHP 7
@@ -14,7 +14,7 @@ namespace tt\polyfill;
 class Php7 {
 
 	/**
-	 * Example: $session_id = bin2hex(\tt\polyfill\Php7::random_bytes(10));
+	 * Example: $session_id = bin2hex(\tt\service\polyfill\Php7::random_bytes(10));
 	 *
 	 * @param int $length
 	 * @return string
