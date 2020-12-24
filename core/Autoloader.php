@@ -26,7 +26,7 @@ class Autoloader {
 		self::$initialized = true;
 	}
 
-	public function multipleAutoloader(){
+	public static function multipleAutoloader(){
 		self::$abort_on_error = false;
 	}
 
