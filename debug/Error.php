@@ -37,7 +37,20 @@ class Error {
 
 		PG::addMessageText(Message::TYPE_ERROR, $text_html);
 
-		//TODO:Handle response types
+		/*
+		 * Output depending on the response type
+		 */
+
+		if(ServiceEnv::isSapiCLI()){
+			echo $this->getTextPlain();
+			exit;
+		}
+
+		if(ServiceEnv::$response_is_expected_to_be_json){
+			echo $this->getJson();
+			exit;
+		}
+
 		Page::getInstance()->deliver();
 	}
 

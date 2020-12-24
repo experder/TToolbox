@@ -12,4 +12,6 @@ class Jquery extends LoadJs {
 
 	protected $scriptRef = 'jquery341/jquery.min.js';
 
+	//TODO:Load from web
+
 }

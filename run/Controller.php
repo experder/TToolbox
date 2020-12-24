@@ -12,6 +12,7 @@ use tt\core\Autoloader;
 use tt\core\Config;
 use tt\debug\Error;
 use tt\core\page\Page;
+use tt\service\ServiceEnv;
 use tt\service\ServiceStrings;
 
 class Controller {
@@ -36,6 +37,7 @@ class Controller {
 	 * @return array JSON
 	 */
 	public function runAjax(){
+		ServiceEnv::$response_is_expected_to_be_json = true;
 		new Error("runAjax is not defined in "."");
 		return null;
 	}
