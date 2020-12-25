@@ -34,7 +34,9 @@ class Templates {
 		}
 
 		//Remove TPLDOC:
-		/** https://github.com/experder/T2/blob/master/help/dev_regex.md */
+		/** https://github.com/experder/TToolbox/blob/master/docs/dev_regex.md */
+		// \R    line break: matches \n, \r and \r\n
+		// /s    PCRE_DOTALL ("...a dot metacharacter in the pattern matches all characters, including newlines.")
 		$content = preg_replace("/\\/\\*\\*TPLDOCSTART.*?TPLDOCEND\\*\\/\\R?/s", "", $content);
 
 		//Replacements:
@@ -59,11 +61,7 @@ class Templates {
 			return self::RETURN_FILE_EXISTS;
 		}
 		$content = self::load($template_file, $keyVals);
-		$success = ServiceFiles::save($target_file, $content);
-		if ($success === false) {
-			new Error("Couldn't store file \"$target_file\". Please check rights."
-				."\nTry this:\nsudo chmod 777 '" . dirname($target_file) . "' -R");
-		}
+		ServiceFiles::save($target_file, $content);
 		return self::RETURN_OK;
 	}
 

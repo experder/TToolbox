@@ -16,15 +16,18 @@ class FormfieldRadioOption extends Formfield {
 	 * @param string $title
 	 * @param string $ttoltip
 	 */
-	public function __construct($value, $title, $ttoltip="") {
+	public function __construct($value, $title, $ttoltip = "") {
 		parent::__construct(null, $title, $value);
 		$this->tooltip = $ttoltip;
 	}
 
 	public function toFormHtml($name, $checked_val = null) {
 		$checked = ($this->value == $checked_val ? "checked" : "");
-		return "<label ".$this->getTitle()."><input type='radio' $checked name='$name' value='$this->value'/>".$this->getLabel()."</label>";
+		$label = "<input type='radio' $checked name='$name' value='$this->value'/>" . $this->getLabel();
+		return "<label " . $this->getTitle() . ">" . $label . "</label>";
 	}
 
-	protected function inner_html() {/*NOT IN USE*/}
+	protected function inner_html() {
+		/*NOT IN USE*/
+	}
 }
