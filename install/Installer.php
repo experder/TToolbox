@@ -129,7 +129,7 @@ The file <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md
 		if (!Request::cmd('createInitWeb')) {
 			$form = new Form("createInitWeb", "", "Create init_web.php");
 
-			$suggest = "dirname(__DIR__).'/" . basename(dirname(__DIR__)) . "'";
+			$suggest = "dirname(__DIR__) . '/" . basename(dirname(__DIR__)) . "'";
 			$form->addField(new FormfieldText("TToolbox", "Relative path to TToolbox", $suggest));
 
 			$suggest = strtolower(basename(dirname(dirname(__DIR__))));

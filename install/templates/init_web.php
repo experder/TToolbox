@@ -6,7 +6,7 @@
 if (true) exit;/*
  * TPLDOCEND*/
 
-require_once '#TToolbox'.'/core/Config.php';
+require_once '#TToolbox' . '/core/Config.php';
 \tt\core\Config::set(\tt\core\Config::PROJ_NAMESPACE_ROOT, '#PROJ_NAMESPACE_ROOT');
 \tt\core\Config::set(\tt\core\Config::CFG_DIR, __DIR__);
 /*
