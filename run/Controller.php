@@ -29,7 +29,7 @@ class Controller {
 	 * @return string plaintext
 	 */
 	public function runCli() {
-		new Error("runCli is not defined in " . "");
+		new Error("runCli is not defined in " . get_class());
 		return "";
 	}
 
@@ -38,14 +38,13 @@ class Controller {
 	 */
 	public function runAjax() {
 		ServiceEnv::$response_is_expected_to_be_json = true;
-		new Error("runAjax is not defined in " . "");
+		new Error("runAjax is not defined in " . get_class());
 		return null;
 	}
 
 	public static function getWebUrl($controllerClass) {
-		//TODO define alias/rewrite in server_init and use here
-		$HTTP_RUN = Config::get(Config::HTTP_RUN);
-		return $HTTP_RUN . '/?c=' . $controllerClass;
+		$controllerClass = str_replace('\\', '/', $controllerClass);
+		return Config::get(Config::RUN_ALIAS) . $controllerClass;
 	}
 
 	public static function getWebLink($controllerClass, $linkTitle = null) {
@@ -54,6 +53,7 @@ class Controller {
 	}
 
 	public static function run($controllerClass) {
+		$controllerClass = str_replace('/', '\\', $controllerClass);
 		$controllerClass = ServiceStrings::classnameSafe($controllerClass);
 		if (!$controllerClass) new Error("No qualified controller classname given!");
 
@@ -62,7 +62,7 @@ class Controller {
 		if ($file === false) {
 			$PROJ_NAMESPACE_ROOT = Config::get(Config::PROJ_NAMESPACE_ROOT);
 			new Error("No class definition found for '$controllerClass'!"
-				. " (must start with '$PROJ_NAMESPACE_ROOT')"
+				. " (must start with '$PROJ_NAMESPACE_ROOT\\')"
 			);
 		}
 

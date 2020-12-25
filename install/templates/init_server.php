@@ -21,6 +21,9 @@ if (true) exit;/*
 \tt\core\Config::set(\tt\core\Config::HTTP_3RDPARTY, \tt\core\Config::get(\tt\core\Config::HTTP_ROOT).'/thirdparty');
 /**/
 
+#\tt\core\Config::set(\tt\core\Config::RUN_ALIAS, \tt\core\Config::get(\tt\core\Config::HTTP_RUN) . '/?c=');
+\tt\core\Config::set(\tt\core\Config::RUN_ALIAS, '#RUNALIAS');
+
 \tt\core\Config::set(\tt\core\Config::CFG_PLATFORM, '#PLATFORM');
 
 \tt\core\Config::set(\tt\core\Config::DEVMODE, '#DEVMODE');

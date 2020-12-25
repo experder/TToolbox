@@ -33,6 +33,8 @@ class Config {
 	const CFG_PLATFORM = 'CFG_PLATFORM';
 	const DEVMODE = 'DEVMODE';
 	const HTTP_ROOT = 'HTTP_ROOT';
+	const RUN_ALIAS = 'RUN_ALIAS';
+
 
 	public static function set($cfgId, $value) {
 		self::$settings[$cfgId] = $value;

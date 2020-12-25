@@ -94,6 +94,9 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 				new FormfieldRadioOption("PLATFORM_LINUX", "Linux"),
 			), $platform));
 
+			$suggest = "\\tt\\core\\Config::get(\\tt\\core\\Config::HTTP_RUN) . '/?c='";
+			$form->addField(new FormfieldText("RUNALIAS", "run alias", $suggest));
+
 			self::startWizard(
 				($m = new Message(Message::TYPE_INFO, "
 The file <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>CFG_SERVER_INIT_FILE</a> (<b>$file</b>) contains server specific settings.
@@ -111,6 +114,7 @@ The file <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md
 			"#DB_PASS" => $_REQUEST["DB_PASS"],
 			"'#DEVMODE'" => $_REQUEST["DEVMODE"] == 'on' ? 'true' : 'false',
 			"'#PLATFORM'" => '\tt\core\Config::' . $_REQUEST["PLATFORM"],
+			"'#RUNALIAS'" => $_REQUEST["RUNALIAS"],
 		));
 	}
 
