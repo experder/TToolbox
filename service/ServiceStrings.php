@@ -48,7 +48,9 @@ class ServiceStrings {
 	}
 
 	public static function classnameSafe($string) {
-		return $string;//preg_replace("/[^a-z0-9\\\\_]i/", "", $string);
+		//https://www.php.net/manual/en/language.oop5.basic.php
+		//('\' for namespaces)
+		return preg_replace("/[^\\\\a-z0-9_\\x80-\\xff]/i", "", $string);
 	}
 
 }
