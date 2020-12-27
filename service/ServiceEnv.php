@@ -56,4 +56,20 @@ class ServiceEnv {
 		require_once $file;
 	}
 
+	public static function requestValue($key, $default = null) {
+		if (isset($_REQUEST[$key])) {
+			return $_REQUEST[$key];
+		}
+		return $default;
+	}
+
+	/**
+	 * Checks, if the $_REQUEST value of "cmd" is set to command $cmd.
+	 * @param string $cmd
+	 * @return bool
+	 */
+	public static function requestCmd($cmd) {
+		return (isset($_REQUEST["cmd"]) && ($_REQUEST["cmd"] == $cmd));
+	}
+
 }

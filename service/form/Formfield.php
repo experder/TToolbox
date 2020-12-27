@@ -10,7 +10,7 @@ namespace tt\service\form;
 
 use tt\core\Config;
 use tt\service\Html;
-use tt\service\Request;
+use tt\service\ServiceEnv;
 use tt\service\ServiceStrings;
 
 /**
@@ -57,7 +57,7 @@ abstract class Formfield {
 		//Title: If set to null, the fieldname is used as label.
 		$this->title = ($title === null ? $name : $title);
 
-		$this->value = $val_from_request ? Request::value($name, $value) : $value;
+		$this->value = $val_from_request ? ServiceEnv::requestValue($name, $value) : $value;
 
 		$this->more_params = $more_params;
 	}

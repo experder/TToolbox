@@ -53,20 +53,13 @@ class Form {
 
 	}
 
-	/**
-	 * @deprecated TODO Use addField instead.
-	 */
-	public function add_field(Formfield $formfield) {
-		$this->fields[] = $formfield;
-	}
-
 	public function addField(Formfield $formfield) {
 		$this->fields[] = $formfield;
 	}
 
 	public function addClientAccordion($content, $title = "") {
 		$id = Page::get_next_global_id("acc");
-		$this->add_field($header = new Formfield_header2(Html::BUTTON("&nbsp;+&nbsp;", "expand_$id();"), $title));
+		$this->addField($header = new Formfield_header2(Html::BUTTON("&nbsp;+&nbsp;", "expand_$id();"), $title));
 		$header->setOuterId($id);
 		$content = Strings::escapeJsQuotation($content);
 		$content = str_replace("{{c}}", "'+(count_$id)+'", $content);

@@ -11,13 +11,13 @@ namespace tt\install;
 use tt\core\Autoloader;
 use tt\core\Config;
 use tt\core\page\Message;
-use tt\html\form\Form;
-use tt\html\form\FormfieldPassword;
-use tt\html\form\FormfieldRadio;
-use tt\html\form\FormfieldRadioOption;
-use tt\html\form\FormfieldText;
+use tt\service\form\Form;
+use tt\service\form\FormfieldPassword;
+use tt\service\form\FormfieldRadio;
+use tt\service\form\FormfieldRadioOption;
+use tt\service\form\FormfieldText;
 use tt\service\Html;
-use tt\service\Request;
+use tt\service\ServiceEnv;
 use tt\service\Templates;
 
 class Installer {
@@ -36,7 +36,7 @@ class Installer {
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
 
-		if (!Request::cmd('createWebPointer')) {
+		if (!ServiceEnv::requestCmd('createWebPointer')) {
 			$form = new Form("createWebPointer", "", "Create init_web_pointer.php");
 			$suggest = "dirname(__DIR__).'/TTconfig/init_web.php'";
 			$form->addField(new FormfieldText("val_webpath", "Path to init_web.php", $suggest));
@@ -64,7 +64,7 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 	}
 
 	private static function promptServerInit($file) {
-		if (!Request::cmd('createInitServer')) {
+		if (!ServiceEnv::requestCmd('createInitServer')) {
 			$form = new Form("createInitServer", "", "Create init_server.php");
 
 			$form->addField(new FormfieldText("SERVERNAME", "Servername", "mydevserver"));
@@ -130,7 +130,7 @@ The file <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
 
-		if (!Request::cmd('createInitWeb')) {
+		if (!ServiceEnv::requestCmd('createInitWeb')) {
 			$form = new Form("createInitWeb", "", "Create init_web.php");
 
 			$suggest = "dirname(__DIR__) . '/" . basename(dirname(__DIR__)) . "'";
