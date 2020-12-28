@@ -21,7 +21,7 @@ class Controller {
 	 * @return string HTML
 	 */
 	public function runWeb() {
-		new Error("runWeb is not defined in " . get_class());
+		new Error("runWeb is not defined in " . get_class($this));
 		return "";
 	}
 
@@ -29,7 +29,7 @@ class Controller {
 	 * @return string plaintext
 	 */
 	public function runCli() {
-		new Error("runCli is not defined in " . get_class());
+		new Error("runCli is not defined in " . get_class($this));
 		return "";
 	}
 
@@ -38,7 +38,7 @@ class Controller {
 	 */
 	public function runAjax() {
 		ServiceEnv::$response_is_expected_to_be_json = true;
-		new Error("runAjax is not defined in " . get_class());
+		new Error("runAjax is not defined in " . get_class($this));
 		return null;
 	}
 

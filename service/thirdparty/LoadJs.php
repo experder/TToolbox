@@ -9,25 +9,43 @@
 namespace tt\service\thirdparty;
 
 use tt\core\Config;
+use tt\install\Installer;
 use tt\service\Error;
 
 class LoadJs {
 
 	protected $scriptRef = null;
+	protected $externalResource = null;
+	protected $downloadTo = null;
+	protected $unzip = false;
 
 	public function __construct() {
-		if (!defined('HTTP_3RDPARTY')) {
-			new Error("Please define HTTP_3RDPARTY!");
+		if(!file_exists(Config::get(Config::DIR_3RDPARTY).'/'.$this->getScriptRef())){
+			$this->downloadPackage();
 		}
 	}
 
+	protected function downloadPackage() {
+		if (($res = $this->getExternalResource()) === null) {
+			new Error("No external resource given for " . get_class($this) . "!"
+				. "\nprotected \$externalResource = 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js';");
+		}
+		$downloadTo = $this->downloadTo;
+		if($downloadTo===null)$downloadTo=$this->scriptRef;
+		Installer::getExternalFile($res, $downloadTo);
+	}
+
+	public function getExternalResource() {
+		return $this->externalResource;
+	}
 	public function getScriptRef() {
 		return $this->scriptRef;
 	}
 
 	public function getScriptReferenceHtml() {
 		if ($this->getScriptRef() === null) {
-			new Error("No script reference given for " . get_class() . "!\nprotected \$scriptRef = 'jquery/jquery.min.js';");
+			new Error("No script reference given for " . get_class($this) . "!"
+				. "\nprotected \$scriptRef = 'jquery341/jquery.min.js';");
 		}
 		$HTTP_3RDPARTY = Config::get(Config::HTTP_3RDPARTY);
 		return "<script src=\"" . $HTTP_3RDPARTY . "/" . $this->getScriptRef() . "\"></script>";

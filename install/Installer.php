@@ -53,6 +53,22 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 		));
 	}
 
+	public static function getExternalFile($url, $toFile) {
+		if (!ServiceEnv::requestCmd('getExternalFile')) {
+
+			$msg = "Downloading <b>$url</b>...";
+
+			self::startWizard(
+				($m = new Message(Message::TYPE_INFO, $msg))->toHtml()
+				."<script>alert('!');</script>"
+			);
+		}
+
+		//TODO:Download...
+
+		return true;
+	}
+
 	public static function requireServerInit() {
 		$file = Config::get(Config::CFG_SERVER_INIT_FILE);
 

@@ -126,9 +126,7 @@ class Page {
 
 	public function getJs() {
 		$js = array();
-		if (defined('HTTP_3RDPARTY')) {
-			$js[] = ($j = new Jquery())->getScriptReferenceHtml();
-		}
+		$js[] = ($j = new Jquery())->getScriptReferenceHtml();
 		return implode("\n", $js);
 	}
 

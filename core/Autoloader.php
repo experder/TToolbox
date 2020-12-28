@@ -36,6 +36,8 @@ class Autoloader {
 			require_once dirname(__DIR__) . '/core/Config.php';
 			$class_name = ServiceStrings::classnameSafe($class_name);
 
+			//TODO:Just define three roots, all with the same behaviour
+
 			// Case API
 			// You can override any class defined in tt/api.
 			// Just place a file with the same name in the project's config/api folder (CFG_DIR.'/api').
