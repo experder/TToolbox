@@ -74,11 +74,9 @@ class Autoloader {
 	}
 
 	private static function loadTtNamespace($class_name) {
-		if (!preg_match("/^tt\\\\(.*)/", $class_name, $matches)) return false;
+		$file = self::classnameMatchesTtNamespace($class_name);
 
-		$name = $matches[1];
-
-		$file = dirname(__DIR__) . '/' . str_replace('\\', '/', $name) . '.php';
+		if (!$file) return false;
 
 		if (!file_exists($file)) return false;
 
@@ -101,6 +99,15 @@ class Autoloader {
 		return true;
 	}
 
+	public static function classnameMatchesTtNamespace($classname) {
+		if (!preg_match("/^tt\\\\(.*)/", $classname, $matches)) return false;
+
+		$name = $matches[1];
+
+		$file = dirname(__DIR__) . '/' . str_replace('\\', '/', $name) . '.php';
+
+		return $file;
+	}
 	public static function classnameMatchesProjectNamespace($classname) {
 
 		$PROJ_NAMESPACE_ROOT = Config::get(Config::PROJ_NAMESPACE_ROOT);

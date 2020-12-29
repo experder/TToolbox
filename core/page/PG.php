@@ -22,4 +22,8 @@ class PG {
 		Page::getInstance()->echoAndQuit($html);
 	}
 
+	public static function deliver() {
+		Page::getInstance()->deliver();
+	}
+
 }

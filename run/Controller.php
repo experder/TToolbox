@@ -17,6 +17,19 @@ use tt\service\ServiceStrings;
 
 class Controller {
 
+	const RUN_TYPE_WEB = 1;
+	const RUN_TYPE_CLI = 2;
+	const RUN_TYPE_API = 3;
+
+	protected $data = array();
+
+	/**
+	 * @param array $data
+	 */
+	public function __construct(array $data) {
+		$this->data = $data;
+	}
+
 	/**
 	 * @return string HTML
 	 */
@@ -52,7 +65,37 @@ class Controller {
 		return "<a href='" . self::getWebUrl($controllerClass) . "'>" . $linkTitle . "</a>";
 	}
 
-	public static function run($controllerClass) {
+	public static function runA() {
+
+		$input = file_get_contents("php://input");
+//		$input = json_encode(array(
+//			"class"=>"tt\\run_api\\Ajax",
+//			"cmd"=>"test1",
+//		));
+
+		$input_data = json_decode($input, true);
+
+		//TODO: Kann wieder weg:
+		if($input_data===null){$input_data = $_POST;}
+
+		$class = isset($input_data["class"])?$input_data["class"]:"tt\\run_api\\Ajax";
+		unset($input_data["class"]);
+
+		self::run($class, self::RUN_TYPE_API, $input_data);
+	}
+
+	public static function runC() {
+
+		if (!isset($_REQUEST["c"])) {
+			new Error("No controller given! [ /?c= ]");
+		}
+
+		unset($_REQUEST["c"]);
+
+		self::run($_REQUEST["c"], self::RUN_TYPE_WEB, $_REQUEST);
+	}
+
+	private static function run($controllerClass, $run_type, $data) {
 		$controllerClass = str_replace('/', '\\', $controllerClass);
 		$controllerClass = ServiceStrings::classnameSafe($controllerClass);
 		if (!$controllerClass) new Error("No qualified controller classname given!");
@@ -60,26 +103,51 @@ class Controller {
 		$file = Autoloader::classnameMatchesProjectNamespace($controllerClass);
 
 		if ($file === false) {
-			$PROJ_NAMESPACE_ROOT = Config::get(Config::PROJ_NAMESPACE_ROOT);
-			new Error("No class definition found for '$controllerClass'!"
-				. " (must start with '$PROJ_NAMESPACE_ROOT\\')"
-			);
+			$file = Autoloader::classnameMatchesTtNamespace($controllerClass);
+		}
+
+		if ($file === false) {
+			new Error("No class definition found for '$controllerClass'!");
 		}
 
 		if (!file_exists($file)) {
 			new Error("File not found: '$file'");
 		}
 
-		$class = new $controllerClass();
+		$class = new $controllerClass($data);
 
 		if (!$class instanceof Controller) {
 			new Error("Controller class '$controllerClass' does not extend 'tt\\run\\Controller'!");
 		}
 
-		$response = $class->runWeb();
+		switch ($run_type){
+			case self::RUN_TYPE_WEB:
 
-		Page::getInstance()->add($response);
-		Page::getInstance()->deliver();
+				$response = $class->runWeb();
+				Page::getInstance()->add($response);
+				Page::getInstance()->deliver();
+
+				break;
+			case self::RUN_TYPE_CLI:
+
+				$response = $class->runCli();
+				echo $response;
+				exit;
+
+				break;
+			case self::RUN_TYPE_API:
+
+				$response = $class->runAjax();
+				$json = json_encode($response);
+				echo $json;
+				exit;
+
+				break;
+			default:
+				new Error("Unknown run type!");
+				break;
+		}
+
 	}
 
 }

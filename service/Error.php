@@ -98,7 +98,7 @@ class Error {
 
 	private function getJson($pretty_print = true) {
 		return json_encode(array(
-			"ok" => "false",
+			"ok" => false,
 			"error_msg" => $this->message,
 			"backtrace" => DebugTools::backtrace(),
 		),
