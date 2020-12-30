@@ -219,7 +219,10 @@ The file <b>$file</b> contains project specific settings.
 		$css = file_get_contents(__DIR__ . "/wizard.css");
 		$head = "<style>$css</style>";
 		$head.=self::$additionalWizardHead;
-		$head.=LoadJs::htmlScript(Config::get(Config::HTTP_TTROOT).'/service/js/core.js');
+
+		if (Config::getIfSet(Config::HTTP_ROOT, false))
+			$head .= LoadJs::htmlScript(Config::get(Config::HTTP_TTROOT) . '/service/js/core.js');
+
 		$head = "<head>$head</head>";
 
 		$html = Html::H1("Install wizard");
