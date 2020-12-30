@@ -27,28 +27,28 @@ class Js {
 	 * @param string       $callbackFunction
 	 * @return string
 	 */
-	public static function ajaxPost($cmd=null, $controller=null, $postData=array(), $callbackFunction=""){
-		if($controller!==null){
-			$postData["class"]=$controller;
+	public static function ajaxPost($cmd = null, $controller = null, $postData = array(), $callbackFunction = "") {
+		if ($controller !== null) {
+			$postData["class"] = $controller;
 		}
-		if($cmd!==null){
-			$postData["cmd"]=$cmd;
+		if ($cmd !== null) {
+			$postData["cmd"] = $cmd;
 		}
-		if(is_array($postData)){
+		if (is_array($postData)) {
 			$dataObj = json_encode($postData);
-		}else{
+		} else {
 			$dataObj = $postData;
 		}
-		$api = Config::get(Config::HTTP_TTROOT)."/run_api/";
+		$api = Config::get(Config::HTTP_TTROOT) . "/run_api/";
 		return "tt_ajax_post('$api',$dataObj,function(data){{$callbackFunction}});";
 	}
 
-	public static function ajaxPostToId($id, $cmd=null, $controller=null, $postData=array(), $responseBody="html", $callbackFunction=""){
-		$callbackFunction = "$('#$id').html(data.$responseBody);".$callbackFunction;
+	public static function ajaxPostToId($id, $cmd = null, $controller = null, $postData = array(), $responseBody = "html", $callbackFunction = "") {
+		$callbackFunction = "$('#$id').html(data.$responseBody);" . $callbackFunction;
 		return self::ajaxPost($cmd, $controller, $postData, $callbackFunction);
 	}
 
-	public static function ajaxPostToMessages($cmd=null, $controller=null, $postData=array(), $responseBody="html", $callbackFunction=""){
+	public static function ajaxPostToMessages($cmd = null, $controller = null, $postData = array(), $responseBody = "html", $callbackFunction = "") {
 		$callbackFunction = "
 		
 			let classname = 'info';
@@ -58,7 +58,7 @@ class Js {
 			let msg = $('<div>',{'class': 'message '+classname}).html(data.$responseBody);
 			$('#tt_pg_messages').append(msg);
 		
-		".$callbackFunction;
+		" . $callbackFunction;
 		return self::ajaxPost($cmd, $controller, $postData, $callbackFunction);
 	}
 

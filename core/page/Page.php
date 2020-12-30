@@ -38,7 +38,7 @@ class Page {
 		if (self::$instance === null) {
 			self::$instance = new Page();
 			self::$instance->addJs(($j = new Jquery())->getScriptReference(), "jQuery");
-			self::$instance->addJs(Config::get(Config::HTTP_TTROOT).'/service/js/core.js', "coreJs");
+			self::$instance->addJs(Config::get(Config::HTTP_TTROOT) . '/service/js/core.js', "coreJs");
 		}
 		return self::$instance;
 	}
@@ -82,7 +82,7 @@ class Page {
 		$head = "\n<head>\n$head\n</head>";
 
 		$messages = $this->messagesToHtml();
-		$messages = "<div class='messages' id='tt_pg_messages'>".($messages?"\n$messages\n":"")."</div>";
+		$messages = "<div class='messages' id='tt_pg_messages'>" . ($messages ? "\n$messages\n" : "") . "</div>";
 
 		$body = $this->getBodyHtml();
 		$body = "\n<div class='inner_body'>\n$body\n</div>";
@@ -127,12 +127,12 @@ class Page {
 		return implode("\n", $css);
 	}
 
-	public function addJs($scriptUrl, $key=null) {
+	public function addJs($scriptUrl, $key = null) {
 		$ok = true;
-		if($key===null){
+		if ($key === null) {
 			$this->jsScripts[] = $scriptUrl;
-		}else{
-			if(isset($this->jsScripts[$key]))$ok=false;
+		} else {
+			if (isset($this->jsScripts[$key])) $ok = false;
 			$this->jsScripts[$key] = $scriptUrl;
 		}
 		return $ok;
@@ -140,7 +140,7 @@ class Page {
 
 	public function getJsHtml() {
 		$html = array();
-		foreach ($this->jsScripts as $script){
+		foreach ($this->jsScripts as $script) {
 			$html[] = LoadJs::htmlScript($script);
 		}
 		return implode("\n", $html);

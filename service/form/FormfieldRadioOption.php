@@ -16,8 +16,8 @@ class FormfieldRadioOption extends Formfield {
 	 * @param string $title
 	 * @param string $ttoltip
 	 */
-	public function __construct($value, $title=null, $ttoltip = "") {
-		parent::__construct(null, $title===null?$value:$title, $value);
+	public function __construct($value, $title = null, $ttoltip = "") {
+		parent::__construct(null, $title === null ? $value : $title, $value);
 		$this->tooltip = $ttoltip;
 	}
 

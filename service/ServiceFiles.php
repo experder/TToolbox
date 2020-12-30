@@ -51,9 +51,9 @@ class ServiceFiles {
 		}
 		$success = false;
 
-		if(is_resource($content)){
+		if (is_resource($content)) {
 			$success = @file_put_contents($filename, $content, $append ? FILE_APPEND : 0);
-		}else{
+		} else {
 			$file = @fopen($filename, $append ? "a" : "w");
 			if ($file !== false) {
 				$success = fwrite($file, $content);

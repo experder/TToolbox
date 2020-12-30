@@ -110,8 +110,8 @@ class Config {
 
 		Installer::requireServerInit();
 
-		if(ServiceEnv::$response_is_expected_to_be_json)$page=null;else
-		$page = Page::getInstance();
+		if (ServiceEnv::$response_is_expected_to_be_json) $page = null; else
+			$page = Page::getInstance();
 
 		User::initSession();
 

@@ -108,6 +108,7 @@ class Autoloader {
 
 		return $file;
 	}
+
 	public static function classnameMatchesProjectNamespace($classname) {
 
 		$PROJ_NAMESPACE_ROOT = Config::get(Config::PROJ_NAMESPACE_ROOT);

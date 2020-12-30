@@ -13,9 +13,9 @@ use tt\run_api\Ajax;
 class Api extends Ajax {
 
 	protected function runCmd() {
-		switch ($this->cmd){
+		switch ($this->cmd) {
 			case "getExternalFile":
-				$data = $this->requiredFieldsFromData(array("url","to_file"));
+				$data = $this->requiredFieldsFromData(array("url", "to_file"));
 				return Installer::doGetExternalFile($data["url"], $data["to_file"]);
 				break;
 			default:

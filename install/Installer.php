@@ -28,9 +28,9 @@ class Installer {
 
 	public static $additionalWizardHead = "";
 
-	public static function requireWebPointer($ajax=false) {
-		if($ajax){
-			require_once dirname(__DIR__).'/service/ServiceEnv.php';
+	public static function requireWebPointer($ajax = false) {
+		if ($ajax) {
+			require_once dirname(__DIR__) . '/service/ServiceEnv.php';
 			ServiceEnv::$response_is_expected_to_be_json = true;
 		}
 		$file = dirname(__DIR__) . '/init_web_pointer.php';
@@ -63,7 +63,7 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 		));
 	}
 
-	public static function getExternalFile($url, $toFile, $onSuccessJs="") {
+	public static function getExternalFile($url, $toFile, $onSuccessJs = "") {
 		if (!ServiceEnv::requestCmd('getExternalFile')) {
 
 			$msg = "Downloading <b>$url</b>...";
@@ -72,16 +72,16 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 
 			self::startWizard(
 				$msg
-				."<script>".Js::ajaxPostToId("download_status_div","getExternalFile","tt\\install\\Api",array(
-					"url"=>$url,
-					"to_file"=>$toFile,
-				),"html","
+				. "<script>" . Js::ajaxPostToId("download_status_div", "getExternalFile", "tt\\install\\Api", array(
+					"url" => $url,
+					"to_file" => $toFile,
+				), "html", "
 				
 					if(data.ok){
 						$onSuccessJs
 					}
 				
-				")."</script>"
+				") . "</script>"
 			);
 		}
 
@@ -89,7 +89,7 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 	}
 
 	public static function doGetExternalFile($url, $toFile) {
-		$bytesWritten = ServiceFiles::save($toFile, fopen($url,'r'));
+		$bytesWritten = ServiceFiles::save($toFile, fopen($url, 'r'));
 
 		$filename = basename($toFile);
 
@@ -205,9 +205,9 @@ The file <b>$file</b> contains project specific settings.
 
 	public static function startWizard($html) {
 
-		if(ServiceEnv::$response_is_expected_to_be_json){
+		if (ServiceEnv::$response_is_expected_to_be_json) {
 			new Error("Start wizard: Not possible!"
-				#.implode("<br>",DebugTools::backtrace())
+			#.implode("<br>",DebugTools::backtrace())
 			);
 		}
 
@@ -218,7 +218,7 @@ The file <b>$file</b> contains project specific settings.
 	public static function wizardHtml($body) {
 		$css = file_get_contents(__DIR__ . "/wizard.css");
 		$head = "<style>$css</style>";
-		$head.=self::$additionalWizardHead;
+		$head .= self::$additionalWizardHead;
 
 		if (Config::getIfSet(Config::HTTP_ROOT, false))
 			$head .= LoadJs::htmlScript(Config::get(Config::HTTP_TTROOT) . '/service/js/core.js');

@@ -20,7 +20,7 @@ class LoadJs {
 	protected $unzip = false;
 
 	public function __construct() {
-		if(!file_exists(Config::get(Config::DIR_3RDPARTY).'/'.$this->getScriptRef())){
+		if (!file_exists(Config::get(Config::DIR_3RDPARTY) . '/' . $this->getScriptRef())) {
 			$this->downloadPackage();
 		}
 	}
@@ -31,14 +31,15 @@ class LoadJs {
 				. "\nprotected \$externalResource = 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js';");
 		}
 		$downloadTo = $this->downloadTo;
-		if($downloadTo===null)$downloadTo=$this->scriptRef;
-		$downloadTo = Config::get(Config::DIR_3RDPARTY).'/'.$downloadTo;
+		if ($downloadTo === null) $downloadTo = $this->scriptRef;
+		$downloadTo = Config::get(Config::DIR_3RDPARTY) . '/' . $downloadTo;
 		Installer::getExternalFile($res, $downloadTo, "setTimeout(function(){location.reload();},2000);");
 	}
 
 	public function getExternalResource() {
 		return $this->externalResource;
 	}
+
 	public function getScriptRef() {
 		return $this->scriptRef;
 	}

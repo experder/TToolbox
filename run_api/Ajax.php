@@ -17,22 +17,22 @@ class Ajax extends Controller {
 	protected $cmd;
 
 	public function runAjax() {
-		if (!isset($this->data["cmd"])){
-			new Error(get_class($this).": No cmd sent!");
+		if (!isset($this->data["cmd"])) {
+			new Error(get_class($this) . ": No cmd sent!");
 		}
 
-		$this->cmd=$this->data["cmd"];
+		$this->cmd = $this->data["cmd"];
 		unset($this->data["cmd"]);
 
 		$response = $this->runCmd();
-		if($response===null){
-			new Error(get_class($this).": Unknown command '$this->cmd'!");
+		if ($response === null) {
+			new Error(get_class($this) . ": Unknown command '$this->cmd'!");
 		}
 		return $response;
 	}
 
 	protected function runCmd() {
-		switch ($this->cmd){
+		switch ($this->cmd) {
 			case "test1":
 				return array(
 					"ok" => true,
@@ -48,11 +48,11 @@ class Ajax extends Controller {
 
 	protected function requiredFieldsFromData($fieldlist) {
 		$fields = array();
-		foreach ($fieldlist as $key){
-			if(!isset($this->data[$key])){
-				new Error(get_class($this)." (cmd:$this->cmd): Required data not received: '$key'");
+		foreach ($fieldlist as $key) {
+			if (!isset($this->data[$key])) {
+				new Error(get_class($this) . " (cmd:$this->cmd): Required data not received: '$key'");
 			}
-			$fields[$key]=$this->data[$key];
+			$fields[$key] = $this->data[$key];
 		}
 		return $fields;
 	}

@@ -71,9 +71,11 @@ class Controller {
 
 		$input_data = json_decode($input, true);
 
-		if($input_data===null){$input_data = $_POST;}
+		if ($input_data === null) {
+			$input_data = $_POST;
+		}
 
-		$class = isset($input_data["class"])?$input_data["class"]:"tt\\run_api\\Ajax";
+		$class = isset($input_data["class"]) ? $input_data["class"] : "tt\\run_api\\Ajax";
 		unset($input_data["class"]);
 
 		self::run($class, self::RUN_TYPE_API, $input_data);
@@ -116,7 +118,7 @@ class Controller {
 			new Error("Controller class '$controllerClass' does not extend 'tt\\run\\Controller'!");
 		}
 
-		switch ($run_type){
+		switch ($run_type) {
 			case self::RUN_TYPE_WEB:
 
 				$response = $class->runWeb();
