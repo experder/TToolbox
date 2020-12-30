@@ -76,7 +76,7 @@ class Form {
 		return $this->toHtml();
 	}
 
-	public function add_button($button) {
+	public function addButton($button) {
 		$this->buttons[] = $button;
 	}
 

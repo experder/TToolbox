@@ -30,9 +30,10 @@ class Ajax extends Controller {
 	protected function runCmd($cmd) {
 		switch ($cmd){
 			case "test1":
-				return array("response1",$this->data);
+				return array("ok"=>true,"html"=>"You have sent:<pre>".print_r($this->data,1)."</pre>");
 				break;
 			default:
+				new Error("Unknown command '$cmd'!");
 				return null;
 				break;
 		}

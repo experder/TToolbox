@@ -10,6 +10,7 @@ namespace tt\core\page;
 
 use tt\core\Config;
 use tt\service\thirdparty\Jquery;
+use tt\service\thirdparty\LoadJs;
 
 class Page {
 
@@ -25,7 +26,13 @@ class Page {
 
 	private $html_nodes = array();
 
+	private $jsScripts;
+
 	private function __construct() {
+		$this->jsScripts = array(
+			"jQuery"=>($j = new Jquery())->getScriptReference(),
+			"coreJs"=>Config::get(Config::HTTP_TTROOT).'/service/js/core.js',
+		);
 	}
 
 	/**
@@ -73,10 +80,11 @@ class Page {
 
 	public function getHtml() {
 		$head = $this->getMainCss();
-		$head .= "\n" . $this->getJs();
+		$head .= "\n" . $this->getJsHtml();
 		$head = "\n<head>\n$head\n</head>";
 
 		$messages = $this->messagesToHtml();
+		$messages = "<div class='messages' id='tt_pg_messages'>".($messages?"\n$messages\n":"")."</div>";
 
 		$body = $this->getBodyHtml();
 		$body = "\n<div class='inner_body'>\n$body\n</div>";
@@ -100,15 +108,12 @@ class Page {
 		return self::$messages;
 	}
 
-	public function messagesToHtml($surroundingDiv = true) {
+	public function messagesToHtml() {
 		$html = array();
 		foreach (self::getMessages() as $message) {
 			$html[] = $message->toHtml();
 		}
 		$result = implode("\n", $html);
-		if ($surroundingDiv) {
-			$result = $result ? "<div class='messages'>\n$result\n</div>" : "";
-		}
 		return $result;
 	}
 
@@ -124,10 +129,23 @@ class Page {
 		return implode("\n", $css);
 	}
 
-	public function getJs() {
-		$js = array();
-		$js[] = ($j = new Jquery())->getScriptReferenceHtml();
-		return implode("\n", $js);
+	public function addJs($scriptUrl, $key=null) {
+		$ok = true;
+		if($key===null){
+			$this->jsScripts[] = $scriptUrl;
+		}else{
+			if(isset($this->jsScripts[$key]))$ok=false;
+			$this->jsScripts[$key] = $scriptUrl;
+		}
+		return $ok;
+	}
+
+	public function getJsHtml() {
+		$html = array();
+		foreach ($this->jsScripts as $script){
+			$html[] = LoadJs::htmlScript($script);
+		}
+		return implode("\n", $html);
 	}
 
 	public static function echoAndQuit($html = "") {

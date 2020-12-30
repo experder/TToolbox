@@ -42,13 +42,17 @@ class LoadJs {
 		return $this->scriptRef;
 	}
 
-	public function getScriptReferenceHtml() {
+	public function getScriptReference() {
 		if ($this->getScriptRef() === null) {
 			new Error("No script reference given for " . get_class($this) . "!"
 				. "\nprotected \$scriptRef = 'jquery341/jquery.min.js';");
 		}
 		$HTTP_3RDPARTY = Config::get(Config::HTTP_3RDPARTY);
-		return "<script src=\"" . $HTTP_3RDPARTY . "/" . $this->getScriptRef() . "\"></script>";
+		return $HTTP_3RDPARTY . "/" . $this->getScriptRef();
+	}
+
+	public static function htmlScript($src) {
+		return "<script src=\"$src\"></script>";
 	}
 
 }

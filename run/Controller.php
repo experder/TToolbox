@@ -90,9 +90,10 @@ class Controller {
 			new Error("No controller given! [ /?c= ]");
 		}
 
+		$c = $_REQUEST["c"];
 		unset($_REQUEST["c"]);
 
-		self::run($_REQUEST["c"], self::RUN_TYPE_WEB, $_REQUEST);
+		self::run($c, self::RUN_TYPE_WEB, $_REQUEST);
 	}
 
 	private static function run($controllerClass, $run_type, $data) {

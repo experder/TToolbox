@@ -27,7 +27,8 @@ class Config {
 	const CFG_DIR = 'CFG_DIR';
 	const CFG_SERVER_INIT_FILE = 'CFG_SERVER_INIT_FILE';
 	const DIR_3RDPARTY = 'DIR_3RDPARTY';
-	const HTTP_RUN = 'HTTP_RUN';
+	const HTTP_TTROOT = 'HTTP_TTROOT';
+	const HTTP_RUN = 'HTTP_RUN';//TODO: Ist das nicht der run alias?
 	const HTTP_SKIN = 'HTTP_SKIN';
 	const HTTP_3RDPARTY = 'HTTP_3RDPARTY';
 	const CFG_PLATFORM = 'CFG_PLATFORM';
@@ -87,8 +88,10 @@ class Config {
 			/*
 			 * CFG_SERVER_INIT_FILE (init_server.php)
 			 */
+			case self::HTTP_TTROOT:
+				return self::get(self::HTTP_ROOT) . '/' . basename(dirname(__DIR__));
 			case self::HTTP_RUN:
-				return self::get(self::HTTP_ROOT) . '/' . basename(dirname(__DIR__)) . '/run';
+				return self::get(self::HTTP_TTROOT) . '/run';
 			case self::HTTP_SKIN:
 				return self::get(self::HTTP_ROOT) . '/TTconfig/skins/skin1';
 			case self::HTTP_3RDPARTY:

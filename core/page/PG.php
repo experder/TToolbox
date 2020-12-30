@@ -26,4 +26,8 @@ class PG {
 		Page::getInstance()->deliver();
 	}
 
+	public static function add($node) {
+		return Page::getInstance()->add($node);
+	}
+
 }

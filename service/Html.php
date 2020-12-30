@@ -150,7 +150,7 @@ class Html {
 		}
 		$html = "";
 		foreach ($params as $key => $value) {
-			$html .= " $key='" . ServiceStrings::escape_value_html($value) . "'";
+			$html .= " $key=\"" . htmlentities($value) . "\"";
 		}
 		return $html;
 	}
