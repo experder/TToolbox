@@ -6,11 +6,22 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\run;
+namespace tt\install;
 
-use tt\install\Installer;
+use tt\run_api\Ajax;
 
-require_once dirname(__DIR__) . '/install/Installer.php';
-Installer::requireWebPointer(true);//TODO: init_ajax instead of init_web!
+class Api extends Ajax {
 
-Controller::runA();
+	protected function runCmd() {
+		switch ($this->cmd){
+			case "getExternalFile":
+				$data = $this->requiredFieldsFromData(array("url","to_file"));
+				return Installer::doGetExternalFile($data["url"], $data["to_file"]);
+				break;
+			default:
+				return null;
+				break;
+		}
+	}
+
+}

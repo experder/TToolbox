@@ -11,6 +11,7 @@ namespace tt\core;
 use tt\core\page\Page;
 use tt\install\Installer;
 use tt\service\Error;
+use tt\service\ServiceEnv;
 
 class Config {
 
@@ -109,6 +110,7 @@ class Config {
 
 		Installer::requireServerInit();
 
+		if(ServiceEnv::$response_is_expected_to_be_json)$page=null;else
 		$page = Page::getInstance();
 
 		User::initSession();

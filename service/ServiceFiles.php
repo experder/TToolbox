@@ -49,11 +49,16 @@ class ServiceFiles {
 		if (!is_dir($dirname)) {
 			mkdir($dirname, 0755, true);
 		}
-		$file = @fopen($filename, $append ? "a" : "w");
 		$success = false;
-		if ($file !== false) {
-			$success = fwrite($file, $content);
-			fclose($file);
+
+		if(is_resource($content)){
+			$success = @file_put_contents($filename, $content, $append ? FILE_APPEND : 0);
+		}else{
+			$file = @fopen($filename, $append ? "a" : "w");
+			if ($file !== false) {
+				$success = fwrite($file, $content);
+				fclose($file);
+			}
 		}
 		if ($success === false) {
 			new Error("Couldn't store file \"$filename\". Please check rights."

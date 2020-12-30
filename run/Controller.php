@@ -68,14 +68,9 @@ class Controller {
 	public static function runA() {
 
 		$input = file_get_contents("php://input");
-//		$input = json_encode(array(
-//			"class"=>"tt\\run_api\\Ajax",
-//			"cmd"=>"test1",
-//		));
 
 		$input_data = json_decode($input, true);
 
-		//TODO: Kann wieder weg:
 		if($input_data===null){$input_data = $_POST;}
 
 		$class = isset($input_data["class"])?$input_data["class"]:"tt\\run_api\\Ajax";

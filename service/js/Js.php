@@ -17,9 +17,9 @@ class Js {
 	 * $dataArray = array(
 	 *     "cmd"=>"test1",
 	 * );
-	 * $funktion = "alert(data.response1);";
-	 * PG::add("<span onclick=\"".htmlentities(Js::ajaxPost(null,null,$dataArray,$funktion))."\" style='cursor:
-	 * pointer'>Ajax test</span>");
+	 * $funktion = "alert(data.html);";
+	 * PG::add("<span onclick=\"".htmlentities(Js::ajaxPost(null,"tt\\run_api\\Ajax",$dataArray,$funktion))."\"
+	 * style='cursor: pointer'>Ajax test</span>");
 	 *
 	 * @param string       $cmd
 	 * @param string       $controller
@@ -29,7 +29,7 @@ class Js {
 	 */
 	public static function ajaxPost($cmd=null, $controller=null, $postData=array(), $callbackFunction=""){
 		if($controller!==null){
-			$postData["controller"]=$controller;
+			$postData["class"]=$controller;
 		}
 		if($cmd!==null){
 			$postData["cmd"]=$cmd;
@@ -43,15 +43,19 @@ class Js {
 		return "tt_ajax_post('$api',$dataObj,function(data){{$callbackFunction}});";
 	}
 
-	public static function ajaxPostToId($id, $responseBody="html", $cmd=null, $controller=null, $postData=array(), $callbackFunction=""){
+	public static function ajaxPostToId($id, $cmd=null, $controller=null, $postData=array(), $responseBody="html", $callbackFunction=""){
 		$callbackFunction = "$('#$id').html(data.$responseBody);".$callbackFunction;
 		return self::ajaxPost($cmd, $controller, $postData, $callbackFunction);
 	}
 
-	public static function ajaxPostToMessages($responseBody="html", $cmd=null, $controller=null, $postData=array(), $callbackFunction=""){
+	public static function ajaxPostToMessages($cmd=null, $controller=null, $postData=array(), $responseBody="html", $callbackFunction=""){
 		$callbackFunction = "
 		
-			let msg = $('<div>',{'class': 'message info'}).html(data.$responseBody);
+			let classname = 'info';
+			if(data.msg_type){
+				classname = data.msg_type;
+			}
+			let msg = $('<div>',{'class': 'message '+classname}).html(data.$responseBody);
 			$('#tt_pg_messages').append(msg);
 		
 		".$callbackFunction;

@@ -32,7 +32,8 @@ class LoadJs {
 		}
 		$downloadTo = $this->downloadTo;
 		if($downloadTo===null)$downloadTo=$this->scriptRef;
-		Installer::getExternalFile($res, $downloadTo);
+		$downloadTo = Config::get(Config::DIR_3RDPARTY).'/'.$downloadTo;
+		Installer::getExternalFile($res, $downloadTo, "setTimeout(function(){location.reload();},2000);");
 	}
 
 	public function getExternalResource() {

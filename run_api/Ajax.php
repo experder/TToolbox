@@ -14,29 +14,47 @@ use tt\service\ServiceEnv;
 
 class Ajax extends Controller {
 
-	public function runAjax() {
-		ServiceEnv::$response_is_expected_to_be_json = true;
+	protected $cmd;
 
+	public function runAjax() {
 		if (!isset($this->data["cmd"])){
-			new Error("No cmd sent!");
+			new Error(get_class($this).": No cmd sent!");
 		}
 
-		$cmd=$this->data["cmd"];
+		$this->cmd=$this->data["cmd"];
 		unset($this->data["cmd"]);
 
-		return $this->runCmd($cmd);
+		$response = $this->runCmd();
+		if($response===null){
+			new Error(get_class($this).": Unknown command '$this->cmd'!");
+		}
+		return $response;
 	}
 
-	protected function runCmd($cmd) {
-		switch ($cmd){
+	protected function runCmd() {
+		switch ($this->cmd){
 			case "test1":
-				return array("ok"=>true,"html"=>"You have sent:<pre>".print_r($this->data,1)."</pre>");
+				return array(
+					"ok" => true,
+					"html" => "You have sent:<pre>" . print_r($this->data, 1) . "</pre>",
+					"msg_type" => isset($this->data["msg_type"]) ? $this->data["msg_type"] : "info",
+				);
 				break;
 			default:
-				new Error("Unknown command '$cmd'!");
 				return null;
 				break;
 		}
+	}
+
+	protected function requiredFieldsFromData($fieldlist) {
+		$fields = array();
+		foreach ($fieldlist as $key){
+			if(!isset($this->data[$key])){
+				new Error(get_class($this)." (cmd:$this->cmd): Required data not received: '$key'");
+			}
+			$fields[$key]=$this->data[$key];
+		}
+		return $fields;
 	}
 
 }

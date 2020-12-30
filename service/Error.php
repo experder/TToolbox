@@ -10,7 +10,6 @@ namespace tt\service;
 
 use tt\core\page\Message;
 use tt\core\page\Page;
-use tt\core\page\PG;
 
 class Error {
 
@@ -34,7 +33,7 @@ class Error {
 
 		$text_html = $this->getTextHtml($cutBacktrace + 1);
 
-		PG::addMessageText(Message::TYPE_ERROR, $text_html);
+		Page::addMessageText(Message::TYPE_ERROR, $text_html);
 
 		/*
 		 * Output depending on the response type

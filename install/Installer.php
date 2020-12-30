@@ -11,18 +11,28 @@ namespace tt\install;
 use tt\core\Autoloader;
 use tt\core\Config;
 use tt\core\page\Message;
+use tt\service\Error;
 use tt\service\form\Form;
 use tt\service\form\FormfieldPassword;
 use tt\service\form\FormfieldRadio;
 use tt\service\form\FormfieldRadioOption;
 use tt\service\form\FormfieldText;
 use tt\service\Html;
+use tt\service\js\Js;
 use tt\service\ServiceEnv;
+use tt\service\ServiceFiles;
 use tt\service\Templates;
+use tt\service\thirdparty\LoadJs;
 
 class Installer {
 
-	public static function requireWebPointer() {
+	public static $additionalWizardHead = "";
+
+	public static function requireWebPointer($ajax=false) {
+		if($ajax){
+			require_once dirname(__DIR__).'/service/ServiceEnv.php';
+			ServiceEnv::$response_is_expected_to_be_json = true;
+		}
 		$file = dirname(__DIR__) . '/init_web_pointer.php';
 
 		if (!file_exists($file)) {
@@ -53,20 +63,44 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 		));
 	}
 
-	public static function getExternalFile($url, $toFile) {
+	public static function getExternalFile($url, $toFile, $onSuccessJs="") {
 		if (!ServiceEnv::requestCmd('getExternalFile')) {
 
 			$msg = "Downloading <b>$url</b>...";
+			$msg = ($m = new Message(Message::TYPE_INFO, $msg))->toHtml();
+			$msg = "<div id='download_status_div'>$msg</div>";
 
 			self::startWizard(
-				($m = new Message(Message::TYPE_INFO, $msg))->toHtml()
-				."<script>alert('!');</script>"
+				$msg
+				."<script>".Js::ajaxPostToId("download_status_div","getExternalFile","tt\\install\\Api",array(
+					"url"=>$url,
+					"to_file"=>$toFile,
+				),"html","
+				
+					if(data.ok){
+						$onSuccessJs
+					}
+				
+				")."</script>"
 			);
 		}
 
-		//TODO:Download...
-
 		return true;
+	}
+
+	public static function doGetExternalFile($url, $toFile) {
+		$bytesWritten = ServiceFiles::save($toFile, fopen($url,'r'));
+
+		$filename = basename($toFile);
+
+		$msg = "Successfully stored file '$filename'.";
+		$msg = ($m = new Message(Message::TYPE_CONFIRM, $msg))->toHtml();
+
+		return array(
+			"ok" => true,
+			"bytes_written" => $bytesWritten,
+			"html" => $msg,
+		);
 	}
 
 	public static function requireServerInit() {
@@ -170,6 +204,13 @@ The file <b>$file</b> contains project specific settings.
 	}
 
 	public static function startWizard($html) {
+
+		if(ServiceEnv::$response_is_expected_to_be_json){
+			new Error("Start wizard: Not possible!"
+				#.implode("<br>",DebugTools::backtrace())
+			);
+		}
+
 		echo self::wizardHtml($html);
 		exit;
 	}
@@ -177,10 +218,12 @@ The file <b>$file</b> contains project specific settings.
 	public static function wizardHtml($body) {
 		$css = file_get_contents(__DIR__ . "/wizard.css");
 		$head = "<style>$css</style>";
+		$head.=self::$additionalWizardHead;
+		$head.=LoadJs::htmlScript(Config::get(Config::HTTP_TTROOT).'/service/js/core.js');
 		$head = "<head>$head</head>";
 
-		$html = "";
-		$html .= Html::H1("Install wizard");
+		$html = Html::H1("Install wizard");
+		$html .= "<div id='tt_pg_messages'></div>";
 		$html .= $body;
 
 		$html = $head . $html;

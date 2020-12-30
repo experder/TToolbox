@@ -26,13 +26,9 @@ class Page {
 
 	private $html_nodes = array();
 
-	private $jsScripts;
+	private $jsScripts = array();
 
 	private function __construct() {
-		$this->jsScripts = array(
-			"jQuery"=>($j = new Jquery())->getScriptReference(),
-			"coreJs"=>Config::get(Config::HTTP_TTROOT).'/service/js/core.js',
-		);
 	}
 
 	/**
@@ -41,6 +37,8 @@ class Page {
 	public static function getInstance() {
 		if (self::$instance === null) {
 			self::$instance = new Page();
+			self::$instance->addJs(($j = new Jquery())->getScriptReference(), "jQuery");
+			self::$instance->addJs(Config::get(Config::HTTP_TTROOT).'/service/js/core.js', "coreJs");
 		}
 		return self::$instance;
 	}
@@ -53,7 +51,7 @@ class Page {
 	 * @param string $type Message::TYPE_
 	 * @param string $message
 	 */
-	public function addMessageText($type, $message) {
+	public static function addMessageText($type, $message) {
 		self::$messages[] = new Message($type, $message);
 	}
 
