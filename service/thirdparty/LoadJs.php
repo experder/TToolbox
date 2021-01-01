@@ -16,6 +16,7 @@ class LoadJs {
 
 	protected $scriptRef = null;
 	protected $externalResource = null;
+	protected $checksum = false;//TODO: Checksum for external resources
 	protected $downloadTo = null;
 	protected $unzip = false;
 

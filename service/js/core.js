@@ -27,7 +27,9 @@ function tt_ajax_post(url, data_object, Funktion){
 		error: function (jqXHR, textStatus, errorThrown) {
 			let message;
 			if (jqXHR.readyState === 0) {
-				message="Could not connect to the server. Please check your network connection.";
+				message = "Could not connect to the server. Please check your network connection.";
+			}else if(textStatus=='parsererror'&&errorThrown=='SyntaxError: JSON.parse: unexpected character at line 1 column 1 of the JSON data'){
+				message='<div class="dev"><h1>Invalid JSON</h1><div class="dev ajax_response">'+jqXHR.responseText+'</div></div>';
 			}else{
 				message='<div class="dev"><h1>'+textStatus+'</h1>'+errorThrown+'<pre>'+url+'<br>Status code: '+jqXHR.status+'</pre><div class="dev ajax_response">'+jqXHR.responseText+'</div></div>';
 			}

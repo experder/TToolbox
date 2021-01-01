@@ -21,3 +21,10 @@ Requirements
 ------------
 
 TT is currently downward compatible to PHP 5.3.
+
+[ [Apache](install_apache.md) ]
+
+Troubleshooting
+---------------
+
+[ [FAQ](faq.md) ]
