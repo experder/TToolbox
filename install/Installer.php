@@ -153,7 +153,7 @@ class Installer {
 				new FormfieldRadioOption("PLATFORM_LINUX", "Linux"),
 			), $platform));
 
-			$suggest = "\\tt\\core\\Config::get(\\tt\\core\\Config::HTTP_RUN) . '/?c='";
+			$suggest = "\\tt\\core\\Config::get(\\tt\\core\\Config::HTTP_TTROOT) . '/run/?c='";
 			$form->addField(new FormfieldText("RUNALIAS", "run alias", $suggest));
 
 			self::startWizard(

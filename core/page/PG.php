@@ -14,13 +14,6 @@ class PG {
 		Page::getInstance()->addMessage($message);
 	}
 
-	/**
-	 * @deprecated TODO: Page::addMessageText
-	 */
-	public static function addMessageText($type, $message) {
-		Page::getInstance()->addMessageText($type, $message);
-	}
-
 	public static function echoAndQuit($html = "") {
 		Page::getInstance()->echoAndQuit($html);
 	}
