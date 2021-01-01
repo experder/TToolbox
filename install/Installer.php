@@ -50,10 +50,12 @@ class Installer {
 			$form = new Form("createWebPointer", "", "Create init_web_pointer.php");
 			$suggest = "dirname(__DIR__).'/TTconfig/init_web.php'";
 			$form->addField(new FormfieldText("val_webpath", "Path to init_web.php", $suggest));
+			$m = new Message(Message::TYPE_INFO,
+				"The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b>"
+				. " (located in <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>CFG_DIR</a>)."
+			);
 			self::startWizard(
-				($m = new Message(Message::TYPE_INFO, "
-The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (located in <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>CFG_DIR</a>).
-						"))->toHtml()
+				$m->toHtml()
 				. $form
 			);
 		}
@@ -67,7 +69,8 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 		if (!ServiceEnv::requestCmd('getExternalFile')) {
 
 			$msg = "Downloading <b>$url</b>...";
-			$msg = ($m = new Message(Message::TYPE_INFO, $msg))->toHtml();
+			$m = new Message(Message::TYPE_INFO, $msg);
+			$msg = $m->toHtml();
 			$msg = "<div id='download_status_div'>$msg</div>";
 
 			self::startWizard(
@@ -89,12 +92,16 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 	}
 
 	public static function doGetExternalFile($url, $toFile) {
-		$bytesWritten = ServiceFiles::save($toFile, fopen($url, 'r'));
+		$stream = fopen($url, 'r');
+		if($stream===false){
+			new Error("Could not open URL '$url'!");
+		}
+		$bytesWritten = ServiceFiles::save($toFile, $stream);
 
 		$filename = basename($toFile);
 
 		$msg = "Successfully stored file '$filename'.";
-		$msg = ($m = new Message(Message::TYPE_CONFIRM, $msg))->toHtml();
+		$msg = Message::messageToHtml(Message::TYPE_CONFIRM, $msg);
 
 		return array(
 			"ok" => true,
@@ -125,6 +132,8 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 			}
 			$form->addField(new FormfieldText("HTTP_ROOT", "Web root path (<a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>HTTP_ROOT</a>)", $suggest));
 
+			$form->addField(new FormfieldText("HTTP_TTROOT", "TT root path (HTTP_TTROOT)", "\\tt\\core\\Config::get(\\tt\\core\\Config::HTTP_ROOT).'/TToolbox'"));
+
 			$form->addField(new FormfieldText("DB_HOST", "DB host", "localhost"));
 			$form->addField(new FormfieldText("DB_NAME", "DB name", "mytt"));
 			$form->addField(new FormfieldText("DB_USER", "DB user", "root"));
@@ -148,15 +157,16 @@ The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b> (lo
 			$form->addField(new FormfieldText("RUNALIAS", "run alias", $suggest));
 
 			self::startWizard(
-				($m = new Message(Message::TYPE_INFO, "
-The file <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>CFG_SERVER_INIT_FILE</a> (<b>$file</b>) contains server specific settings.
-						"))->toHtml()
+				Message::messageToHtml(Message::TYPE_INFO,
+					"The file <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>CFG_SERVER_INIT_FILE</a> (<b>$file</b>) contains server specific settings."
+				)
 				. $form
 			);
 		}
 
 		Templates::create_file($file, __DIR__ . '/templates/init_server.php', array(
 			"#HTTP_ROOT" => $_REQUEST["HTTP_ROOT"],
+			"'#HTTP_TTROOT'" => $_REQUEST["HTTP_TTROOT"],
 			"#SERVERNAME" => $_REQUEST["SERVERNAME"],
 			"#DB_HOST" => $_REQUEST["DB_HOST"],
 			"#DB_NAME" => $_REQUEST["DB_NAME"],
@@ -190,9 +200,9 @@ The file <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md
 			$form->addField(new FormfieldText("PROJ_NAMESPACE_ROOT", "Project's root namespace", $suggest));
 
 			self::startWizard(
-				($m = new Message(Message::TYPE_INFO, "
-The file <b>$file</b> contains project specific settings.
-						"))->toHtml()
+				Message::messageToHtml(Message::TYPE_INFO,
+					"The file <b>$file</b> contains project specific settings."
+				)
 				. $form
 			);
 		}

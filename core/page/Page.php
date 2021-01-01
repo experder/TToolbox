@@ -37,7 +37,8 @@ class Page {
 	public static function getInstance() {
 		if (self::$instance === null) {
 			self::$instance = new Page();
-			self::$instance->addJs(($j = new Jquery())->getScriptReference(), "jQuery");
+			$j = new Jquery();
+			self::$instance->addJs($j->getScriptReference(), "jQuery");
 			self::$instance->addJs(Config::get(Config::HTTP_TTROOT) . '/service/js/core.js', "coreJs");
 		}
 		return self::$instance;

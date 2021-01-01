@@ -27,4 +27,9 @@ class Message {
 		return "<div class='message $this->type'>" . $this->message . "</div>";
 	}
 
+	public static function messageToHtml($type, $message){
+		$msg = new Message($type, $message);
+		return $msg->toHtml();
+	}
+
 }

@@ -15,8 +15,8 @@ if (true) exit;/*
 \tt\core\Database::init('#DB_HOST', '#DB_NAME', '#DB_USER', '#DB_PASS');
 
 \tt\core\Config::set(\tt\core\Config::HTTP_ROOT, '#HTTP_ROOT');
+\tt\core\Config::set(\tt\core\Config::HTTP_TTROOT, '#HTTP_TTROOT');
 /*
-\tt\core\Config::set(\tt\core\Config::HTTP_TTROOT, \tt\core\Config::get(\tt\core\Config::HTTP_ROOT).'/TToolbox');
 \tt\core\Config::set(\tt\core\Config::HTTP_RUN, \tt\core\Config::get(\tt\core\Config::HTTP_TTROOT).'/run');
 \tt\core\Config::set(\tt\core\Config::HTTP_SKIN, \tt\core\Config::get(\tt\core\Config::HTTP_ROOT).'/TTconfig/skins/skin1');
 \tt\core\Config::set(\tt\core\Config::HTTP_3RDPARTY, \tt\core\Config::get(\tt\core\Config::HTTP_ROOT).'/thirdparty');
