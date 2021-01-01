@@ -73,14 +73,11 @@ class Error {
 			$last_msg = array_pop($messages);
 		}
 
-		$is_commandline_call = ServiceEnv::isSapiCLI();
-		$is_json_response = ServiceEnv::$response_is_expected_to_be_json;
-
-		if ($is_commandline_call) {
+		if (ServiceEnv::isSapiCLI()) {
 			return $this->getTextPlain();
 		}
 
-		if ($is_json_response) {
+		if (ServiceEnv::$response_is_expected_to_be_json) {
 			return $this->getJson();
 		}
 

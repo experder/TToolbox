@@ -28,12 +28,8 @@ class Installer {
 
 	public static $additionalWizardHead = "";
 
-	public static function requireWebPointer($ajax = false) {
-		if ($ajax) {
-			require_once dirname(__DIR__) . '/service/ServiceEnv.php';
-			ServiceEnv::$response_is_expected_to_be_json = true;
-		}
-		$file = dirname(__DIR__) . '/init_web_pointer.php';
+	public static function requireInitPointer() {
+		$file = dirname(__DIR__) . '/init_pointer.php';
 
 		if (!file_exists($file)) {
 			self::promptWebPointer($file);
@@ -47,11 +43,11 @@ class Installer {
 		Autoloader::init();
 
 		if (!ServiceEnv::requestCmd('createWebPointer')) {
-			$form = new Form("createWebPointer", "", "Create init_web_pointer.php");
-			$suggest = "dirname(__DIR__).'/TTconfig/init_web.php'";
-			$form->addField(new FormfieldText("val_webpath", "Path to init_web.php", $suggest));
+			$form = new Form("createWebPointer", "", "Create init_pointer.php");
+			$suggest = "dirname(__DIR__).'/TTconfig/Init.php'";
+			$form->addField(new FormfieldText("val_webpath", "Path to Init.php", $suggest));
 			$m = new Message(Message::TYPE_INFO,
-				"The file <b>$file</b> (excluded from the repo) points to <b>init_web.php</b>"
+				"The file <b>$file</b> (excluded from the repo) points to <b>Init.php</b>"
 				. " (located in <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>CFG_DIR</a>)."
 			);
 			self::startWizard(
@@ -60,7 +56,7 @@ class Installer {
 			);
 		}
 
-		Templates::create_file($file, __DIR__ . '/templates/init_web_pointer.php', array(
+		Templates::create_file($file, __DIR__ . '/templates/init_pointer.php', array(
 			"'#INIT_WEB_PATH'" => $_REQUEST["val_webpath"],
 		));
 	}
@@ -190,20 +186,20 @@ class Installer {
 		));
 	}
 
-	public static function requireInitWeb($file) {
+	public static function requireInit($file) {
 		if (!file_exists($file)) {
-			self::promptInitWeb($file);
+			self::promptInit($file);
 		}
 
 		require_once $file;
 	}
 
-	private static function promptInitWeb($file) {
+	private static function promptInit($file) {
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
 
-		if (!ServiceEnv::requestCmd('createInitWeb')) {
-			$form = new Form("createInitWeb", "", "Create init_web.php");
+		if (!ServiceEnv::requestCmd('cmdCreateInit')) {
+			$form = new Form("cmdCreateInit", "", "Create Init.php");
 
 			$suggest = "dirname(__DIR__) . '/" . basename(dirname(__DIR__)) . "'";
 			$form->addField(new FormfieldText("TToolbox", "Relative path to TToolbox", $suggest));
@@ -219,7 +215,7 @@ class Installer {
 			);
 		}
 
-		Templates::create_file($file, __DIR__ . '/templates/init_web.php', array(
+		Templates::create_file($file, __DIR__ . '/templates/Init.php', array(
 			"'#TToolbox'" => $_REQUEST["TToolbox"],
 			"#PROJ_NAMESPACE_ROOT" => $_REQUEST["PROJ_NAMESPACE_ROOT"],
 		));

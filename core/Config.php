@@ -76,7 +76,7 @@ class Config {
 				return self::PLATFORM_UNKNOWN;
 
 			/*
-			 * init_web.php
+			 * Init.php (project specific config's)
 			 */
 			case self::CFG_PROJECT_DIR:
 				return dirname(dirname(__DIR__));
@@ -102,6 +102,17 @@ class Config {
 		}
 	}
 
+	public static function startAjax() {
+		require_once dirname(__DIR__) . '/core/Autoloader.php';
+		Autoloader::init();
+
+		ServiceEnv::$response_is_expected_to_be_json = true;
+
+		Installer::requireServerInit();
+
+		User::initSession();
+	}
+
 	public static function startWeb() {
 
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
@@ -109,8 +120,7 @@ class Config {
 
 		Installer::requireServerInit();
 
-		if (ServiceEnv::$response_is_expected_to_be_json) $page = null; else
-			$page = Page::getInstance();
+		$page = Page::getInstance();
 
 		User::initSession();
 

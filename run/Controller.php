@@ -49,7 +49,7 @@ class Controller {
 	/**
 	 * @return array JSON
 	 */
-	public function runAjax() {
+	public function runAjax() {//TODO: Gehört NUR in Ajax-Controller
 		ServiceEnv::$response_is_expected_to_be_json = true;
 		new Error("runAjax is not defined in " . get_class($this));
 		return null;

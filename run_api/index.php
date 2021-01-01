@@ -11,6 +11,7 @@ namespace tt\run;
 use tt\install\Installer;
 
 require_once dirname(__DIR__) . '/install/Installer.php';
-Installer::requireWebPointer(true);//TODO: init_ajax instead of init_web!
+Installer::requireInitPointer();
+\tt\config\Init::initAjax();
 
 Controller::runA();
