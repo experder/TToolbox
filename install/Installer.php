@@ -65,7 +65,7 @@ class Installer {
 		));
 	}
 
-	public static function getExternalFile($url, $toFile, $onSuccessJs = "", $checksum=false) {
+	public static function getExternalFile($url, $toFile, $onSuccessJs = "", $checksum = false) {
 		if (!ServiceEnv::requestCmd('cmdGetExternalFile')) {
 
 			$msg = "Downloading <b>$url</b>...";
@@ -92,9 +92,9 @@ class Installer {
 		return true;
 	}
 
-	public static function doGetExternalFile($url, $toFile, $checksum=false) {
+	public static function doGetExternalFile($url, $toFile, $checksum = false) {
 		$stream = fopen($url, 'r');
-		if($stream===false){
+		if ($stream === false) {
 			new Error("Could not open URL '$url'!");
 		}
 		$bytesWritten = ServiceFiles::save($toFile, $stream);
@@ -106,9 +106,9 @@ class Installer {
 
 		$warning = false;
 
-		if($checksum!==false){
+		if ($checksum !== false) {
 			$hash = hash_file("md5", $toFile);
-			if($hash!==$checksum){
+			if ($hash !== $checksum) {
 				$warning = "Stored file '$filename', but hash doesn't match!";
 				$msg = Message::messageToHtml(Message::TYPE_ERROR, $warning);
 			}
