@@ -15,6 +15,7 @@ class Jquery extends LoadJs {
 	protected $scriptRef = 'jquery341/jquery.min.js';
 
 	protected $externalResource = 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js';
+	protected $checksum = "220afd743d9e9643852e31a135a9f3ae";
 
 	protected function downloadPackage() {
 		Installer::$additionalWizardHead .= LoadJs::htmlScript($this->externalResource);

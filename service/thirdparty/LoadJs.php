@@ -16,7 +16,10 @@ class LoadJs {
 
 	protected $scriptRef = null;
 	protected $externalResource = null;
-	protected $checksum = false;//TODO: Checksum for external resources
+	/**
+	 * @var string|false $checksum md5-hash of the resource or false if no check required.
+	 */
+	protected $checksum = false;
 	protected $downloadTo = null;
 	protected $unzip = false;
 
@@ -34,7 +37,7 @@ class LoadJs {
 		$downloadTo = $this->downloadTo;
 		if ($downloadTo === null) $downloadTo = $this->scriptRef;
 		$downloadTo = Config::get(Config::DIR_3RDPARTY) . '/' . $downloadTo;
-		Installer::getExternalFile($res, $downloadTo, "setTimeout(function(){location.reload();},2000);");
+		Installer::getExternalFile($res, $downloadTo, "if(!data.warning){setTimeout(function(){location.reload();},2000);}",$this->checksum);
 	}
 
 	public function getExternalResource() {

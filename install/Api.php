@@ -14,9 +14,10 @@ class Api extends Ajax {
 
 	protected function runCmd() {
 		switch ($this->cmd) {
-			case "getExternalFile":
+			case "cmdGetExternalFile":
 				$data = $this->requiredFieldsFromData(array("url", "to_file"));
-				return Installer::doGetExternalFile($data["url"], $data["to_file"]);
+				$checksum = (isset($this->data["checksum"])&&$this->data["checksum"]!=='false')?$this->data["checksum"]:false;
+				return Installer::doGetExternalFile($data["url"], $data["to_file"], $checksum);
 				break;
 			default:
 				return null;

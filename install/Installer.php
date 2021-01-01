@@ -65,8 +65,8 @@ class Installer {
 		));
 	}
 
-	public static function getExternalFile($url, $toFile, $onSuccessJs = "") {
-		if (!ServiceEnv::requestCmd('getExternalFile')) {
+	public static function getExternalFile($url, $toFile, $onSuccessJs = "", $checksum=false) {
+		if (!ServiceEnv::requestCmd('cmdGetExternalFile')) {
 
 			$msg = "Downloading <b>$url</b>...";
 			$m = new Message(Message::TYPE_INFO, $msg);
@@ -75,9 +75,10 @@ class Installer {
 
 			self::startWizard(
 				$msg
-				. "<script>" . Js::ajaxPostToId("download_status_div", "getExternalFile", "tt\\install\\Api", array(
+				. "<script>" . Js::ajaxPostToId("download_status_div", "cmdGetExternalFile", "tt\\install\\Api", array(
 					"url" => $url,
 					"to_file" => $toFile,
+					"checksum" => $checksum,
 				), "html", "
 				
 					if(data.ok){
@@ -91,7 +92,7 @@ class Installer {
 		return true;
 	}
 
-	public static function doGetExternalFile($url, $toFile) {
+	public static function doGetExternalFile($url, $toFile, $checksum=false) {
 		$stream = fopen($url, 'r');
 		if($stream===false){
 			new Error("Could not open URL '$url'!");
@@ -103,10 +104,21 @@ class Installer {
 		$msg = "Successfully stored file '$filename'.";
 		$msg = Message::messageToHtml(Message::TYPE_CONFIRM, $msg);
 
+		$warning = false;
+
+		if($checksum!==false){
+			$hash = hash_file("md5", $toFile);
+			if($hash!==$checksum){
+				$warning = "Stored file '$filename', but hash doesn't match!";
+				$msg = Message::messageToHtml(Message::TYPE_ERROR, $warning);
+			}
+		}
+
 		return array(
 			"ok" => true,
 			"bytes_written" => $bytesWritten,
 			"html" => $msg,
+			"warning" => $warning,
 		);
 	}
 
@@ -154,7 +166,7 @@ class Installer {
 			), $platform));
 
 			$suggest = "\\tt\\core\\Config::get(\\tt\\core\\Config::HTTP_TTROOT) . '/run/?c='";
-			$form->addField(new FormfieldText("RUNALIAS", "run alias", $suggest));
+			$form->addField(new FormfieldText("RUNALIAS", "Run alias", $suggest));
 
 			self::startWizard(
 				Message::messageToHtml(Message::TYPE_INFO,
