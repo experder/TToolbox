@@ -26,26 +26,20 @@ class Js {
 	 * @param array|string $postData
 	 * @param string       $callbackFunction
 	 * @return string
-	 *
-	 * TODO: ajaxPost: cmd und controller obligatorisch
 	 */
-	public static function ajaxPost($cmd = null, $controller = null, $postData = array(), $callbackFunction = "") {
-		if ($controller !== null) {
-			$postData["class"] = $controller;
-		}
-		if ($cmd !== null) {
-			$postData["cmd"] = $cmd;
-		}
+	public static function ajaxPost($cmd, $controller, $postData = array(), $callbackFunction = "") {
 		if (is_array($postData)) {
+			$postData["class"] = $controller;
+			$postData["cmd"] = $cmd;
 			$dataObj = json_encode($postData);
 		} else {
 			$dataObj = $postData;
 		}
-		$api = Config::get(Config::HTTP_TTROOT) . "/run_api/";
+		$api = Config::get(Config::RUN_ALIAS_API);
 		return "tt_ajax_post('$api',$dataObj,function(data){{$callbackFunction}});";
 	}
 
-	public static function ajaxPostToId($id, $cmd = null, $controller = null, $postData = array(), $responseBody = "html", $callbackFunction = "") {
+	public static function ajaxPostToId($id, $cmd, $controller, $postData = array(), $responseBody = "html", $callbackFunction = "") {
 		$callbackFunction = "$('#$id').html(data.$responseBody);" . $callbackFunction;
 		return self::ajaxPost($cmd, $controller, $postData, $callbackFunction);
 	}

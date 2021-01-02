@@ -12,7 +12,6 @@ use tt\config\Init;
 use tt\core\page\Page;
 use tt\install\Installer;
 use tt\service\Error;
-use tt\service\ServiceEnv;
 
 class Config {
 
@@ -36,6 +35,7 @@ class Config {
 	const DEVMODE = 'DEVMODE';
 	const HTTP_ROOT = 'HTTP_ROOT';
 	const RUN_ALIAS = 'RUN_ALIAS';
+	const RUN_ALIAS_API = 'RUN_ALIAS_API';
 
 
 	public static function set($cfgId, $value) {
@@ -93,6 +93,8 @@ class Config {
 				return self::get(self::HTTP_ROOT) . '/' . basename(dirname(__DIR__));
 			case self::RUN_ALIAS:
 				return self::get(self::HTTP_TTROOT) . '/run/?c=';
+			case self::RUN_ALIAS_API:
+				return self::get(self::HTTP_TTROOT) . '/run_api/';
 			case self::HTTP_SKIN:
 				return self::get(self::HTTP_ROOT) . '/TTconfig/skins/skin1';
 			case self::HTTP_3RDPARTY:

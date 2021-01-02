@@ -19,6 +19,7 @@ if (true) exit;/*
 /*
 \tt\core\Config::set(\tt\core\Config::HTTP_SKIN, \tt\core\Config::get(\tt\core\Config::HTTP_ROOT).'/TTconfig/skins/skin1');
 \tt\core\Config::set(\tt\core\Config::HTTP_3RDPARTY, \tt\core\Config::get(\tt\core\Config::HTTP_ROOT).'/thirdparty');
+\tt\core\Config::set(\tt\core\Config::RUN_ALIAS_API, \tt\core\Config::get(\tt\core\Config::HTTP_TTROOT) . '/run_api/');
 /**/
 
 #\tt\core\Config::set(\tt\core\Config::RUN_ALIAS, \tt\core\Config::get(\tt\core\Config::HTTP_TTROOT) . '/run/?c=');
