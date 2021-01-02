@@ -10,12 +10,44 @@ namespace tt\run_api;
 
 use tt\run\Controller;
 use tt\service\Error;
-use tt\service\ServiceEnv;
+use tt\service\ServiceStrings;
 
-class Ajax extends Controller {
+abstract class Ajax {
 
 	protected $cmd;
 
+	protected $data = array();
+
+	/**
+	 * @param array $data
+	 */
+	public function __construct(array $data) {
+		$this->data = $data;
+	}
+
+	public static function run() {
+
+		$input = file_get_contents("php://input");
+
+		$input_data = json_decode($input, true);
+
+		if ($input_data === null) {
+			$input_data = $_POST;
+		}
+
+		if(!isset($input_data["class"])){
+			new Error("Ajax: No class set!");
+		}
+
+		$class = ServiceStrings::classnameSafe($input_data["class"]);
+		unset($input_data["class"]);
+
+		Controller::runController($class, Controller::RUN_TYPE_API, $input_data);
+	}
+
+	/**
+	 * @return array JSON
+	 */
 	public function runAjax() {
 		if (!isset($this->data["cmd"])) {
 			new Error(get_class($this) . ": No cmd sent!");
@@ -31,20 +63,15 @@ class Ajax extends Controller {
 		return $response;
 	}
 
-	protected function runCmd() {
-		switch ($this->cmd) {
-			case "test1":
-				return array(
-					"ok" => true,
-					"html" => "You have sent:<pre>" . print_r($this->data, 1) . "</pre>",
-					"msg_type" => isset($this->data["msg_type"]) ? $this->data["msg_type"] : "info",
-				);
-				break;
-			default:
-				return null;
-				break;
-		}
-	}
+	/**
+	 * @return array|null array(
+	 * "ok" => true,
+	 * "html" => "...",
+	 * //Optional:
+	 * "msg_type" => "info",//["info","error","ok","ask"]
+	 * );
+	 */
+	abstract protected function runCmd();
 
 	protected function requiredFieldsFromData($fieldlist) {
 		$fields = array();

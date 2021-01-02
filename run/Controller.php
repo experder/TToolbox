@@ -11,11 +11,12 @@ namespace tt\run;
 use tt\core\Autoloader;
 use tt\core\Config;
 use tt\core\page\Page;
+use tt\run_api\Ajax;
+use tt\run_cli\RunApi;
 use tt\service\Error;
-use tt\service\ServiceEnv;
 use tt\service\ServiceStrings;
 
-class Controller {
+abstract class Controller {
 
 	const RUN_TYPE_WEB = 1;
 	const RUN_TYPE_CLI = 2;
@@ -33,27 +34,7 @@ class Controller {
 	/**
 	 * @return string HTML
 	 */
-	public function runWeb() {
-		new Error("runWeb is not defined in " . get_class($this));
-		return "";
-	}
-
-	/**
-	 * @return string plaintext
-	 */
-	public function runCli() {
-		new Error("runCli is not defined in " . get_class($this));
-		return "";
-	}
-
-	/**
-	 * @return array JSON
-	 */
-	public function runAjax() {//TODO: Gehört NUR in Ajax-Controller
-		ServiceEnv::$response_is_expected_to_be_json = true;
-		new Error("runAjax is not defined in " . get_class($this));
-		return null;
-	}
+	abstract protected function runWeb();
 
 	public static function getWebUrl($controllerClass) {
 		$controllerClass = str_replace('\\', '/', $controllerClass);
@@ -65,23 +46,7 @@ class Controller {
 		return "<a href='" . self::getWebUrl($controllerClass) . "'>" . $linkTitle . "</a>";
 	}
 
-	public static function runA() {
-
-		$input = file_get_contents("php://input");
-
-		$input_data = json_decode($input, true);
-
-		if ($input_data === null) {
-			$input_data = $_POST;
-		}
-
-		$class = isset($input_data["class"]) ? $input_data["class"] : "tt\\run_api\\Ajax";
-		unset($input_data["class"]);
-
-		self::run($class, self::RUN_TYPE_API, $input_data);
-	}
-
-	public static function runC() {
+	public static function run() {
 
 		if (!isset($_REQUEST["c"])) {
 			new Error("No controller given! [ /?c= ]");
@@ -90,10 +55,15 @@ class Controller {
 		$c = $_REQUEST["c"];
 		unset($_REQUEST["c"]);
 
-		self::run($c, self::RUN_TYPE_WEB, $_REQUEST);
+		self::runController($c, self::RUN_TYPE_WEB, $_REQUEST);
 	}
 
-	private static function run($controllerClass, $run_type, $data) {
+	/**
+	 * @param string $controllerClass
+	 * @param string $run_type Controller::RUN_TYPE_
+	 * @param array $data
+	 */
+	public static function runController($controllerClass, $run_type, $data) {
 		$controllerClass = str_replace('/', '\\', $controllerClass);
 		$controllerClass = ServiceStrings::classnameSafe($controllerClass);
 		if (!$controllerClass) new Error("No qualified controller classname given!");
@@ -112,14 +82,14 @@ class Controller {
 			new Error("File not found: '$file'");
 		}
 
-		$class = new $controllerClass($data);
-
-		if (!$class instanceof Controller) {
-			new Error("Controller class '$controllerClass' does not extend 'tt\\run\\Controller'!");
-		}
-
 		switch ($run_type) {
 			case self::RUN_TYPE_WEB:
+
+				$class = new $controllerClass($data);
+
+				if (!$class instanceof Controller) {
+					new Error("Controller class '$controllerClass' does not extend 'tt\\run\\Controller'!");
+				}
 
 				$response = $class->runWeb();
 				Page::getInstance()->add($response);
@@ -128,12 +98,24 @@ class Controller {
 				break;
 			case self::RUN_TYPE_CLI:
 
+				$class = new $controllerClass($data);
+
+				if (!$class instanceof RunApi) {
+					new Error("Controller class '$controllerClass' does not extend 'tt\\run_cli\\RunApi'!");
+				}
+
 				$response = $class->runCli();
 				echo $response;
 				exit;
 
 				break;
 			case self::RUN_TYPE_API:
+
+				$class = new $controllerClass($data);
+
+				if (!$class instanceof Ajax) {
+					new Error("Controller class '$controllerClass' does not extend 'tt\\run_api\\Ajax'!");
+				}
 
 				$response = $class->runAjax();
 				$json = json_encode($response);

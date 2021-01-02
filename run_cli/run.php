@@ -9,10 +9,9 @@
 namespace tt\run;
 
 use tt\core\Config;
-use tt\install\Installer;
+use tt\run_cli\RunApi;
 
-require_once dirname(__DIR__) . '/install/Installer.php';
-Installer::requireInitPointer();
-Config::startWeb();
+require_once dirname(__DIR__) . '/init_pointer.php';
+Config::startCli();
 
-Controller::run();
+RunApi::run();

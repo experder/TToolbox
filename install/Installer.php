@@ -11,6 +11,7 @@ namespace tt\install;
 use tt\core\Autoloader;
 use tt\core\Config;
 use tt\core\page\Message;
+use tt\service\DebugTools;
 use tt\service\Error;
 use tt\service\form\Form;
 use tt\service\form\FormfieldPassword;
@@ -216,17 +217,18 @@ class Installer {
 		}
 
 		Templates::create_file($file, __DIR__ . '/templates/Init.php', array(
+			"//TPL:namespace" => "namespace",
 			"'#TToolbox'" => $_REQUEST["TToolbox"],
 			"#PROJ_NAMESPACE_ROOT" => $_REQUEST["PROJ_NAMESPACE_ROOT"],
 		));
 	}
 
-	public static function startWizard($html) {
+	public static function startWizard($html, $cutBacktrace=0) {
 
-		if (ServiceEnv::$response_is_expected_to_be_json) {
+		if (ServiceEnv::isSapiAjax() || ServiceEnv::isSapiCLI()) {
 			new Error("Start wizard: Not possible!"
-			#.implode("<br>",DebugTools::backtrace())
-			);
+			."<hr>".implode("<br>",DebugTools::backtrace())
+				, $cutBacktrace+1);
 		}
 
 		echo self::wizardHtml($html);

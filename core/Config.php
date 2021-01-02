@@ -8,6 +8,7 @@
 
 namespace tt\core;
 
+use tt\config\Init;
 use tt\core\page\Page;
 use tt\install\Installer;
 use tt\service\Error;
@@ -103,17 +104,27 @@ class Config {
 	}
 
 	public static function startAjax() {
+		Init::loadConfig();
+
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
-
-		ServiceEnv::$response_is_expected_to_be_json = true;
 
 		Installer::requireServerInit();
 
 		User::initSession();
 	}
 
+	public static function startCli() {
+		Init::loadConfig();
+
+		require_once dirname(__DIR__) . '/core/Autoloader.php';
+		Autoloader::init();
+
+		Installer::requireServerInit();
+	}
+
 	public static function startWeb() {
+		Init::loadConfig();
 
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();

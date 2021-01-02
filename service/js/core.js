@@ -17,6 +17,7 @@ function tt_ajax_post(url, data_object, Funktion) {
 			} else {
 				let message;
 				message = "<h1>Ajax returns error!</h1><pre class='dev'>" + url + '<hr>' + data.error_msg + "</pre>";
+				//TODO: Backtrace
 				if (!data.error_msg) {
 					message += 'See console for response object.';
 					console.log(data);
@@ -29,13 +30,17 @@ function tt_ajax_post(url, data_object, Funktion) {
 			if (jqXHR.readyState === 0) {
 				message = "Could not connect to the server. Please check your network connection.";
 			} else if (textStatus == 'parsererror' && errorThrown == 'SyntaxError: JSON.parse: unexpected character at line 1 column 1 of the JSON data') {
-				message = '<div class="dev"><h1>Invalid JSON</h1><div class="dev ajax_response">' + jqXHR.responseText + '</div></div>';
+				message = '<div class="dev"><h1>Invalid JSON</h1><div class="dev ajax_response">' + htmlEntities(jqXHR.responseText) + '</div></div>';
 			} else {
 				message = '<div class="dev"><h1>' + textStatus + '</h1>' + errorThrown + '<pre>' + url + '<br>Status code: ' + jqXHR.status + '</pre><div class="dev ajax_response">' + jqXHR.responseText + '</div></div>';
 			}
 			tt_error(message);
 		}
 	});
+}
+
+function htmlEntities(str) {
+	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 }
 
 function tt_error(message) {

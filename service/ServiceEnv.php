@@ -10,9 +10,6 @@ namespace tt\service;
 
 class ServiceEnv {
 
-	/**
-	 * @var bool $request_is_ajax Otherwise HTML
-	 */
 	public static $response_is_expected_to_be_json = false;
 
 	/**
@@ -36,8 +33,8 @@ class ServiceEnv {
 		return php_sapi_name() == 'cli';
 	}
 
-	public static function isSapiWeb() {
-		return php_sapi_name() != 'cli';
+	public static function isSapiAjax() {
+		return self::$response_is_expected_to_be_json;
 	}
 
 	/**

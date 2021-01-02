@@ -40,11 +40,11 @@ class Error {
 		 */
 
 		if (ServiceEnv::isSapiCLI()) {
-			echo $this->getTextPlain();
+			echo $this->getTextPlain($cutBacktrace+1);
 			exit;
 		}
 
-		if (ServiceEnv::$response_is_expected_to_be_json) {
+		if (ServiceEnv::isSapiAjax()) {
 			echo $this->getJson();
 			exit;
 		}
@@ -77,7 +77,7 @@ class Error {
 			return $this->getTextPlain();
 		}
 
-		if (ServiceEnv::$response_is_expected_to_be_json) {
+		if (ServiceEnv::isSapiAjax()) {
 			return $this->getJson();
 		}
 
@@ -87,9 +87,9 @@ class Error {
 		return $lastMsgHtml . $msg->toHtml();
 	}
 
-	private function getTextPlain() {
-		return $this->message
-			. "\n" . implode("\n", DebugTools::backtrace());
+	private function getTextPlain($cutBacktrace = 0) {
+		return "\n*** ERROR ***\n".$this->message
+			. "\n-------------\n" . implode("\n", DebugTools::backtrace($cutBacktrace+1))."\n";
 	}
 
 	private function getJson($pretty_print = true) {

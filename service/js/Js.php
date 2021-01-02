@@ -26,6 +26,8 @@ class Js {
 	 * @param array|string $postData
 	 * @param string       $callbackFunction
 	 * @return string
+	 *
+	 * TODO: ajaxPost: cmd und controller obligatorisch
 	 */
 	public static function ajaxPost($cmd = null, $controller = null, $postData = array(), $callbackFunction = "") {
 		if ($controller !== null) {
@@ -48,7 +50,7 @@ class Js {
 		return self::ajaxPost($cmd, $controller, $postData, $callbackFunction);
 	}
 
-	public static function ajaxPostToMessages($cmd = null, $controller = null, $postData = array(), $responseBody = "html", $callbackFunction = "") {
+	public static function ajaxPostToMessages($cmd, $controller, $postData = array(), $responseBody = "html", $callbackFunction = "") {
 		$callbackFunction = "
 		
 			let classname = 'info';
