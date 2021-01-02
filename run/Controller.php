@@ -61,7 +61,7 @@ abstract class Controller {
 	/**
 	 * @param string $controllerClass
 	 * @param string $run_type Controller::RUN_TYPE_
-	 * @param array $data
+	 * @param array  $data
 	 */
 	public static function runController($controllerClass, $run_type, $data) {
 		$controllerClass = str_replace('/', '\\', $controllerClass);

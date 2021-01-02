@@ -40,7 +40,7 @@ class Error {
 		 */
 
 		if (ServiceEnv::isSapiCLI()) {
-			echo $this->getTextPlain($cutBacktrace+1);
+			echo $this->getTextPlain($cutBacktrace + 1);
 			exit;
 		}
 
@@ -88,15 +88,15 @@ class Error {
 	}
 
 	private function getTextPlain($cutBacktrace = 0) {
-		return "\n*** ERROR ***\n".$this->message
-			. "\n-------------\n" . implode("\n", DebugTools::backtrace($cutBacktrace+1))."\n";
+		return "\n*** ERROR ***\n" . $this->message
+			. "\n-------------\n" . implode("\n", DebugTools::backtrace($cutBacktrace + 1)) . "\n";
 	}
 
 	private function getJson($pretty_print = true) {
 		return json_encode(array(
 			"ok" => false,
 			"error_msg" => $this->message,
-			"backtrace" => DebugTools::backtrace(),
+			"backtrace" => DebugTools::backtrace(),//TODO:cutBacktrace
 		),
 			$pretty_print ? JSON_PRETTY_PRINT : 0
 		);

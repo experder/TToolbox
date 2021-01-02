@@ -223,12 +223,12 @@ class Installer {
 		));
 	}
 
-	public static function startWizard($html, $cutBacktrace=0) {
+	public static function startWizard($html, $cutBacktrace = 0) {
 
 		if (ServiceEnv::isSapiAjax() || ServiceEnv::isSapiCLI()) {
 			new Error("Start wizard: Not possible!"
-			."<hr>".implode("<br>",DebugTools::backtrace())
-				, $cutBacktrace+1);
+				#. "<hr>" . implode("<br>", DebugTools::backtrace())
+				, $cutBacktrace + 1);
 		}
 
 		echo self::wizardHtml($html);

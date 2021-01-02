@@ -13,7 +13,7 @@ use tt\run_api\Ajax;
 use tt\service\ServiceEnv;
 
 require_once dirname(__DIR__) . '/service/ServiceEnv.php';
-ServiceEnv::$response_is_expected_to_be_json=true;
+ServiceEnv::$response_is_expected_to_be_json = true;
 
 require_once dirname(__DIR__) . '/init_pointer.php';
 Config::startAjax();

@@ -28,11 +28,9 @@ abstract class RunApi {
 
 		$data = $argv;
 
-		if(!is_array($data) || count($data)<2){
+		if (!is_array($data) || count($data) < 2) {
 			new Error("No arguments passed!");
 		}
-
-		#print_r($data);exit;
 
 		//Remoce first element (script itself)
 		array_shift($data);

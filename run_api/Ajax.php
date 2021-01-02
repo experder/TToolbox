@@ -35,7 +35,7 @@ abstract class Ajax {
 			$input_data = $_POST;
 		}
 
-		if(!isset($input_data["class"])){
+		if (!isset($input_data["class"])) {
 			new Error("Ajax: No class set!");
 		}
 
