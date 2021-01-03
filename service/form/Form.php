@@ -25,6 +25,8 @@ class Form {
 
 	private $params;
 
+	public $onSubmit = "t2_spinner_start();";
+
 	/**
 	 * @param string|false $action An URL that is called on form submission.
 	 *                             Can be left empty (same page is called).
@@ -57,21 +59,6 @@ class Form {
 		$this->fields[] = $formfield;
 	}
 
-	public function addClientAccordion($content, $title = "") {
-		$id = Page::get_next_global_id("acc");
-		$this->addField($header = new Formfield_header2(Html::BUTTON("&nbsp;+&nbsp;", "expand_$id();"), $title));
-		$header->setOuterId($id);
-		$content = Strings::escapeJsQuotation($content);
-		$content = str_replace("{{c}}", "'+(count_$id)+'", $content);
-		Page::getSingleton()->add_inline_js("
-			function expand_$id(){
-				$('#$id').before('$content');
-				count_$id++;
-			}
-			count_$id = 1;
-		");
-	}
-
 	public function __toString() {
 		return $this->toHtml();
 	}
@@ -89,7 +76,11 @@ class Form {
 		}
 		$fields_html = implode("\n", $this->fields);
 		$action = ($this->action === false ? "" : (" action=\"$this->action\" method='$this->method'"));
-		return "<form$action " . Html::tag_keyValues($this->params) . ">\n$fields_html$buttons\n</form>";
+		$params = $this->params;
+		if($this->onSubmit){
+			$params["onsubmit"] = $this->onSubmit;
+		}
+		return "<form$action " . Html::tag_keyValues($params) . ">\n$fields_html$buttons\n</form>";
 	}
 
 }
