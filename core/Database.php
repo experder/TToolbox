@@ -8,6 +8,7 @@
 
 namespace tt\core;
 
+use tt\install\Installer;
 use tt\service\Error;
 
 class Database {
@@ -71,8 +72,7 @@ class Database {
 				} else if ($e->getCode() === 1044/*Access denied for user to database*/) {
 					new Error("Access denied to database '$this->dbname'!");
 				} else if ($e->getCode() === 1049/*Unknown database*/) {
-					//TODO:Installer!
-					new Error("Unknown database! $this->dbname");
+					Installer::initDatabase($this->dbname);
 				}
 			}
 			Error::fromException($e);

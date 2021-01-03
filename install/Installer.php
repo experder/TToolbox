@@ -223,6 +223,21 @@ class Installer {
 		));
 	}
 
+	public static function initDatabase($dbname) {
+		if (!ServiceEnv::requestCmd('cmdInitDatabase')) {
+			$form = new Form("cmdInitDatabase", "", "Create database '$dbname'");
+
+			self::startWizard(
+				Message::messageToHtml(Message::TYPE_INFO,
+					"Database '<b>$dbname</b>' needs to be created."
+				)
+				. $form
+			);
+		}
+
+		//TODO: Initialize database
+	}
+
 	public static function startWizard($html) {
 
 		if (ServiceEnv::isSapiAjax() || ServiceEnv::isSapiCLI()) {

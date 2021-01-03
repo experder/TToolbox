@@ -9,6 +9,7 @@
 namespace tt\service\form;
 
 use tt\service\Html;
+use tt\service\ServiceStrings;
 
 class Form {
 
@@ -50,7 +51,7 @@ class Form {
 		}
 
 		if ($submit_text !== false) {
-			$this->buttons[] = "<input type='submit' value='$submit_text'>";
+			$this->buttons[] = "<input type='submit' value='".ServiceStrings::escape_value_html($submit_text)."'>";
 		}
 
 	}
