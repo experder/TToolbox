@@ -223,12 +223,10 @@ class Installer {
 		));
 	}
 
-	public static function startWizard($html, $cutBacktrace = 0) {
+	public static function startWizard($html) {
 
 		if (ServiceEnv::isSapiAjax() || ServiceEnv::isSapiCLI()) {
-			new Error("Start wizard: Not possible!"
-				#. "<hr>" . implode("<br>", DebugTools::backtrace())
-				, $cutBacktrace + 1);
+			new Error("Start wizard: Not possible!");
 		}
 
 		echo self::wizardHtml($html);
@@ -237,7 +235,10 @@ class Installer {
 
 	public static function wizardHtml($body) {
 		$css = file_get_contents(__DIR__ . "/wizard.css");
+		$js = file_get_contents(__DIR__ . "/wizard.js");
+
 		$head = "<style>$css</style>";
+		$head .= "<script>$js</script>";
 		$head .= self::$additionalWizardHead;
 
 		if (Config::getIfSet(Config::HTTP_ROOT, false))

@@ -15,9 +15,12 @@ function tt_ajax_post(url, data_object, Funktion) {
 			if (data.ok) {
 				Funktion(data);
 			} else {
+				let backtrace = '';
+				if(data.backtrace && Array.isArray(data.backtrace)){
+					backtrace= "<hr>"+data.backtrace.join('\n');
+				}
 				let message;
-				message = "<h1>Ajax returns error!</h1><pre class='dev'>" + url + '<hr>' + data.error_msg + "</pre>";
-				//TODO: Backtrace
+				message = "<h1>Ajax returns error!</h1><pre class='dev'>" + url + '</pre><div class=\'ajax_response\'>' + htmlEntities(data.error_msg) +backtrace+ "</div>";
 				if (!data.error_msg) {
 					message += 'See console for response object.';
 					console.log(data);
