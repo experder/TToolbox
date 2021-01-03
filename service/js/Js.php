@@ -51,8 +51,7 @@ class Js {
 			if(data.msg_type){
 				classname = data.msg_type;
 			}
-			let msg = $('<div>',{'class': 'message '+classname}).html(data.$responseBody);
-			$('#tt_pg_messages').append(msg);
+			tt_error(data.$responseBody,classname);
 		
 		" . $callbackFunction;
 		return self::ajaxPost($cmd, $controller, $postData, $callbackFunction);

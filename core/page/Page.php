@@ -88,11 +88,17 @@ class Page {
 		$body = $this->getBodyHtml();
 		$body = "\n<div class='inner_body'>\n$body\n</div>";
 		$body = $messages . $body;
+		$body .= $this->waitSpinner();
 		$body = "\n<body>\n$body\n</body>\n";
 
 		$html = $head . $body;
 		$html = "<!DOCTYPE html><html>$html</html>";
 		return $html;
+	}
+
+	private function waitSpinner() {
+		$waitSpinner = "<div id=\"uploadSpinner\" style='display:none;'><div class=\"spinnerContent\"><div>Please wait...</div></div></div>";
+		return $waitSpinner;
 	}
 
 	public function getBodyHtml() {
