@@ -1,1 +1,2 @@
-function t2_spinner_start(){}
+function t2_spinner_start() {
+}

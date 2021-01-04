@@ -51,7 +51,7 @@ class Form {
 		}
 
 		if ($submit_text !== false) {
-			$this->buttons[] = "<input type='submit' value='".ServiceStrings::escape_value_html($submit_text)."'>";
+			$this->buttons[] = "<input type='submit' value='" . ServiceStrings::escape_value_html($submit_text) . "'>";
 		}
 
 	}
@@ -78,7 +78,7 @@ class Form {
 		$fields_html = implode("\n", $this->fields);
 		$action = ($this->action === false ? "" : (" action=\"$this->action\" method='$this->method'"));
 		$params = $this->params;
-		if($this->onSubmit){
+		if ($this->onSubmit) {
 			$params["onsubmit"] = $this->onSubmit;
 		}
 		return "<form$action " . Html::tag_keyValues($params) . ">\n$fields_html$buttons\n</form>";

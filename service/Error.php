@@ -45,7 +45,7 @@ class Error {
 		}
 
 		if (ServiceEnv::isSapiAjax()) {
-			echo $this->getJson(true, $cutBacktrace+1);
+			echo $this->getJson(true, $cutBacktrace + 1);
 			exit;
 		}
 
@@ -92,11 +92,11 @@ class Error {
 			. "\n-------------\n" . implode("\n", DebugTools::backtrace($cutBacktrace + 1)) . "\n";
 	}
 
-	private function getJson($pretty_print = true, $cutBacktrace=0) {
+	private function getJson($pretty_print = true, $cutBacktrace = 0) {
 		return json_encode(array(
 			"ok" => false,
 			"error_msg" => $this->message,
-			"backtrace" => DebugTools::backtrace($cutBacktrace+1),
+			"backtrace" => DebugTools::backtrace($cutBacktrace + 1),
 		),
 			$pretty_print ? JSON_PRETTY_PRINT : 0
 		);
