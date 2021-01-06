@@ -262,7 +262,7 @@ class Installer {
 			);
 		}
 
-		$api_class_content=  "<?php\n\nnamespace tt\\api;\n\nclass $classname extends \\tt\\core\\api_default\\Session {\n}";
+		$api_class_content = "<?php\n\nnamespace tt\\api;\n\nclass $classname extends \\tt\\core\\api_default\\Session {\n}";
 
 		ServiceFiles::save($filename, $api_class_content);
 	}

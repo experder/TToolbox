@@ -16,17 +16,17 @@ function tt_ajax_post(url, data_object, Funktion) {
 				Funktion(data);
 			} else {
 				let backtrace = '';
-				if(data.backtrace && Array.isArray(data.backtrace)){
-					backtrace= "<hr>"+data.backtrace.join('\n');
+				if (data.backtrace && Array.isArray(data.backtrace)) {
+					backtrace = "<hr>" + data.backtrace.join('\n');
 				}
 				let msg = '';
-				if(data.error_msg){
+				if (data.error_msg) {
 					msg = htmlEntities(data.error_msg);
-				}else{
+				} else {
 					msg = 'Response doesn\'t have \'error_msg\' value. See console for response object.';
 					console.log(data);
 				}
-				let message = "<h1>Ajax returns error!</h1><pre class='dev'>" + url + '</pre><div class=\'ajax_response\'>' + msg +backtrace+ "</div>";
+				let message = "<h1>Ajax returns error!</h1><pre class='dev'>" + url + '</pre><div class=\'ajax_response\'>' + msg + backtrace + "</div>";
 				tt_error(message);
 			}
 		},
@@ -48,33 +48,35 @@ function htmlEntities(str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 }
 
-function tt_error(message, classname='error ajax_error') {
-	let msg = $('<div>', {'class': 'message '+classname}).html(message);
+function tt_error(message, classname = 'error ajax_error') {
+	let msg = $('<div>', {'class': 'message ' + classname}).html(message);
 	let msgDiv = $('#tt_pg_messages');
 	msgDiv.append(msg);
 	t2_spinner_stop();
 	tt_scroll_to(msgDiv.children().last());
 }
 
-function tt_scroll_to(jQo, millis=400){
+function tt_scroll_to(jQo, millis = 400) {
 	$('html, body').animate({
-		scrollTop:jQo.offset().top
-	},millis);
+		scrollTop: jQo.offset().top
+	}, millis);
 }
 
 /*
        WAIT SPINNER
  */
-function t2_spinner_start(){
-	let uS=document.getElementById('uploadSpinner');
-	if(uS)uS.style.display="block";
+function t2_spinner_start() {
+	let uS = document.getElementById('uploadSpinner');
+	if (uS) uS.style.display = "block";
 	scope_disableKeys = true;
 }
-function t2_spinner_stop(){
-	let uS=document.getElementById('uploadSpinner');
-	if(uS)uS.style.display="none";
+
+function t2_spinner_stop() {
+	let uS = document.getElementById('uploadSpinner');
+	if (uS) uS.style.display = "none";
 	scope_disableKeys = false;
 }
+
 let scope_disableKeys = false;
 window.addEventListener('keydown', function (event) {
 	if (scope_disableKeys === true) {

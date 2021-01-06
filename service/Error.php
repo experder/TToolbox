@@ -52,8 +52,8 @@ class Error {
 		Page::getInstance()->deliver();
 	}
 
-	public static function fromException(\Exception $e, $cutBacktrace=0) {
-		return new Error($e->getMessage(), $cutBacktrace+1);
+	public static function fromException(\Exception $e, $cutBacktrace = 0) {
+		return new Error($e->getMessage(), $cutBacktrace + 1);
 	}
 
 	private function withNoDependencies() {

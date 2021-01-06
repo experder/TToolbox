@@ -42,7 +42,7 @@ class Autoloader {
 			//Namespace: TT\API
 			if (Autoloader::loadApiClass($class_name)) return true;
 
-			foreach (Autoloader::getAllNamespaceRoots() as $namespace=>$folder){
+			foreach (Autoloader::getAllNamespaceRoots() as $namespace => $folder) {
 				if (Autoloader::requireFileInNamespace($class_name, $namespace, $folder)) return true;
 			}
 
@@ -58,7 +58,7 @@ class Autoloader {
 		$name_api = $matches[1];
 
 		$file_api = Config::get(Config::CFG_API_DIR) . '/' . $name_api . ".php";
-		if (!file_exists($file_api)){
+		if (!file_exists($file_api)) {
 			//Installer: Create API file stubs
 			Installer::initApiClass($name_api, $file_api);
 		}
@@ -87,31 +87,31 @@ class Autoloader {
 		return true;
 	}
 
-	public static function classnameMatchesAnyNamespaceRoot($classname){
-		foreach (self::getAllNamespaceRoots() as $namespace=>$folder){
-			if(($file=self::classnameMatchesNamespaceRoot($classname, $namespace, $folder))!==false){
+	public static function classnameMatchesAnyNamespaceRoot($classname) {
+		foreach (self::getAllNamespaceRoots() as $namespace => $folder) {
+			if (($file = self::classnameMatchesNamespaceRoot($classname, $namespace, $folder)) !== false) {
 				return $file;
 			}
 		}
 		return false;
 	}
 
-	private static function getAllNamespaceRoots(){
-		if(self::$all_namespace_roots===null){
+	private static function getAllNamespaceRoots() {
+		if (self::$all_namespace_roots === null) {
 
-			self::$all_namespace_roots=array(
-				"tt"=>dirname(__DIR__),
+			self::$all_namespace_roots = array(
+				"tt" => dirname(__DIR__),
 			);
 
-			if (Config::getIfSet(Config::PROJ_NAMESPACE_ROOT, false) !== false){
-				self::$all_namespace_roots[Config::get(Config::PROJ_NAMESPACE_ROOT)]=Config::get(Config::CFG_PROJECT_DIR);
+			if (Config::getIfSet(Config::PROJ_NAMESPACE_ROOT, false) !== false) {
+				self::$all_namespace_roots[Config::get(Config::PROJ_NAMESPACE_ROOT)] = Config::get(Config::CFG_PROJECT_DIR);
 			}
 
 		}
 		return self::$all_namespace_roots;
 	}
 
-	private static function classnameMatchesNamespaceRoot($classname, $namespace_root, $folder){
+	private static function classnameMatchesNamespaceRoot($classname, $namespace_root, $folder) {
 		if (!preg_match("/^$namespace_root\\\\(.*)/", $classname, $matches)) return false;
 
 		$name = $matches[1];
