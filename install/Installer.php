@@ -222,7 +222,7 @@ class Installer {
 		));
 	}
 
-	public static function initDatabase($dbname) {
+	public static function initDatabase($dbname, $host, $user, $password) {
 		if (!ServiceEnv::requestCmd('cmdInitDatabase')) {
 			$form = new Form("cmdInitDatabase", "", "Create database '$dbname'");
 
@@ -234,7 +234,20 @@ class Installer {
 			);
 		}
 
-		//TODO: Initialize database
+		try {
+			$dbh = new \PDO("mysql:host=" . $host, $user, $password);
+			$dbh->exec("CREATE DATABASE `" . $dbname . "`;") or die(print_r($dbh->errorInfo(), true) . "Error240");
+		} catch (\PDOException $e) {
+			Error::fromException($e);
+		}
+
+		self::startWizard(
+			Message::messageToHtml(Message::TYPE_CONFIRM,
+				"Database '<b>$dbname</b>' has been created."
+			)
+			. new Form("helloworld", "", "OK")
+		);
+
 	}
 
 	public static function initApiClass($classname, $filename) {
