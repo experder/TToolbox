@@ -68,11 +68,7 @@ abstract class Controller {
 		$controllerClass = ServiceStrings::classnameSafe($controllerClass);
 		if (!$controllerClass) new Error("No qualified controller classname given!");
 
-		$file = Autoloader::classnameMatchesProjectNamespace($controllerClass);
-
-		if ($file === false) {
-			$file = Autoloader::classnameMatchesTtNamespace($controllerClass);
-		}
+		$file = Autoloader::classnameMatchesAnyNamespaceRoot($controllerClass);
 
 		if ($file === false) {
 			new Error("No class definition found for '$controllerClass'!");

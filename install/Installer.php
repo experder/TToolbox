@@ -11,7 +11,6 @@ namespace tt\install;
 use tt\core\Autoloader;
 use tt\core\Config;
 use tt\core\page\Message;
-use tt\service\DebugTools;
 use tt\service\Error;
 use tt\service\form\Form;
 use tt\service\form\FormfieldPassword;
@@ -236,6 +235,23 @@ class Installer {
 		}
 
 		//TODO: Initialize database
+	}
+
+	public static function initApiClass($classname, $filename) {
+		if (!ServiceEnv::requestCmd('cmdInitApiClass')) {
+			$form = new Form("cmdInitApiClass", "", "Create API class '$classname'");
+
+			self::startWizard(
+				Message::messageToHtml(Message::TYPE_INFO,
+					"API class '<b>$filename</b>' needs to be created."
+				)
+				. $form
+			);
+		}
+
+		$api_class_content=  "<?php\n\nnamespace tt\\api;\n\nclass $classname extends \\tt\\core\\api_default\\Session {\n}";
+
+		ServiceFiles::save($filename, $api_class_content);
 	}
 
 	public static function startWizard($html) {

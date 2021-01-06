@@ -26,6 +26,7 @@ class Config {
 	const CFG_PROJECT_DIR = 'CFG_PROJECT_DIR';
 	const PROJ_NAMESPACE_ROOT = 'PROJ_NAMESPACE_ROOT';
 	const CFG_DIR = 'CFG_DIR';
+	const CFG_API_DIR = 'CFG_API_DIR';
 	const CFG_SERVER_INIT_FILE = 'CFG_SERVER_INIT_FILE';
 	const DIR_3RDPARTY = 'DIR_3RDPARTY';
 	const HTTP_TTROOT = 'HTTP_TTROOT';
@@ -83,6 +84,8 @@ class Config {
 				return dirname(dirname(__DIR__));
 			case self::CFG_SERVER_INIT_FILE:
 				return self::get(self::CFG_DIR) . '/init_server.php';
+			case self::CFG_API_DIR:
+				return self::get(self::CFG_DIR) . '/api';
 			case self::DIR_3RDPARTY:
 				return self::get(self::CFG_PROJECT_DIR) . '/thirdparty';
 

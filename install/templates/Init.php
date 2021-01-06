@@ -8,18 +8,21 @@ if (true) exit;/*
 
 //TPL:namespace tt\config;
 
+use tt\core\Config;
+
 require_once '#TToolbox' . '/core/Config.php';
 
 class Init {
 
 	public static function loadConfig() {
 
-		\tt\core\Config::set(\tt\core\Config::PROJ_NAMESPACE_ROOT, '#PROJ_NAMESPACE_ROOT');
-		\tt\core\Config::set(\tt\core\Config::CFG_DIR, __DIR__);
+		Config::set(Config::PROJ_NAMESPACE_ROOT, '#PROJ_NAMESPACE_ROOT');
+		Config::set(Config::CFG_DIR, __DIR__);
 		/*
-		\tt\core\Config::set(\tt\core\Config::CFG_PROJECT_DIR, dirname(__DIR__));
-		\tt\core\Config::set(\tt\core\Config::CFG_SERVER_INIT_FILE, __DIR__.'/init_server.php');
-		\tt\core\Config::set(\tt\core\Config::DIR_3RDPARTY, dirname(__DIR__).'/thirdparty');
+		Config::set(Config::CFG_PROJECT_DIR, dirname(__DIR__));
+		Config::set(Config::CFG_SERVER_INIT_FILE, __DIR__.'/init_server.php');
+		Config::set(Config::DIR_3RDPARTY, dirname(__DIR__).'/thirdparty');
+		Config::set(Config::CFG_API_DIR, Config::get(Config::CFG_DIR) . '/api');
 		/**/
 
 		//Enable multi Autoloader (Autoloader doesn't terminate on error):

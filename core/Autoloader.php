@@ -8,6 +8,7 @@
 
 namespace tt\core;
 
+use tt\install\Installer;
 use tt\service\Error;
 use tt\service\ServiceEnv;
 use tt\service\ServiceStrings;
@@ -16,6 +17,8 @@ class Autoloader {
 
 	private static $initialized = false;
 	private static $abort_on_error = true;
+
+	private static $all_namespace_roots = null;
 
 	public static function init() {
 		if (self::$initialized) return;
@@ -36,18 +39,12 @@ class Autoloader {
 			require_once dirname(__DIR__) . '/core/Config.php';
 			$class_name = ServiceStrings::classnameSafe($class_name);
 
-			//TODO:Just define three roots, all with the same behaviour
-
-			// Case API
-			// You can override any class defined in tt/api.
-			// Just place a file with the same name in the project's config/api folder (CFG_DIR.'/api').
+			//Namespace: TT\API
 			if (Autoloader::loadApiClass($class_name)) return true;
 
-			// Case TT
-			if (Autoloader::loadTtNamespace($class_name)) return true;
-
-			// Case PROJECT
-			if (Autoloader::loadProjectNamespace($class_name)) return true;
+			foreach (Autoloader::getAllNamespaceRoots() as $namespace=>$folder){
+				if (Autoloader::requireFileInNamespace($class_name, $namespace, $folder)) return true;
+			}
 
 			return Autoloader::notFound($class_name, 2);
 		});
@@ -56,25 +53,30 @@ class Autoloader {
 
 	private static function loadApiClass($class_name) {
 		if (!preg_match("/^tt\\\\api\\\\(.*)\$/", $class_name, $matches)) return false;
+		require_once dirname(__DIR__) . '/service/ServiceEnv.php';
 
 		$name_api = $matches[1];
 
-		$file_api = Config::get(Config::CFG_DIR) . '/api/' . $name_api . ".php";
-		if (!file_exists($file_api)) return false;
+		$file_api = Config::get(Config::CFG_API_DIR) . '/' . $name_api . ".php";
+		if (!file_exists($file_api)){
+			//Installer: Create API file stubs
+			Installer::initApiClass($name_api, $file_api);
+		}
 
 		require_once $file_api;
 
-		require_once dirname(__DIR__) . '/service/ServiceEnv.php';
-		if (!ServiceEnv::reflectionInstanceof($class_name, "tt\\api_default\\$name_api")) {
-			require_once dirname(__DIR__) . '/debug/Error.php';
-			new Error("TT API class '$class_name' ($file_api) does not extend '\\tt\\api_default\\$name_api'!");
+		if (!ServiceEnv::reflectionInstanceof($class_name, "tt\\core\\api_default\\$name_api")) {
+			require_once dirname(__DIR__) . '/service/Error.php';
+			new Error(
+				"TT API class '$class_name' ($file_api) does not extend '\\tt\\core\\api_default\\$name_api'!"
+			);
 		}
 
 		return true;
 	}
 
-	private static function loadTtNamespace($class_name) {
-		$file = self::classnameMatchesTtNamespace($class_name);
+	private static function requireFileInNamespace($classname, $namespace_root, $folder) {
+		$file = self::classnameMatchesNamespaceRoot($classname, $namespace_root, $folder);
 
 		if (!$file) return false;
 
@@ -85,39 +87,36 @@ class Autoloader {
 		return true;
 	}
 
-	private static function loadProjectNamespace($class_name) {
-		if (Config::getIfSet(Config::PROJ_NAMESPACE_ROOT, false) === false) return false;
-
-		$file = Autoloader::classnameMatchesProjectNamespace($class_name);
-
-		if (!$file) return false;
-
-		if (!file_exists($file)) return false;
-
-		require_once $file;
-
-		return true;
+	public static function classnameMatchesAnyNamespaceRoot($classname){
+		foreach (self::getAllNamespaceRoots() as $namespace=>$folder){
+			if(($file=self::classnameMatchesNamespaceRoot($classname, $namespace, $folder))!==false){
+				return $file;
+			}
+		}
+		return false;
 	}
 
-	public static function classnameMatchesTtNamespace($classname) {
-		if (!preg_match("/^tt\\\\(.*)/", $classname, $matches)) return false;
+	private static function getAllNamespaceRoots(){
+		if(self::$all_namespace_roots===null){
+
+			self::$all_namespace_roots=array(
+				"tt"=>dirname(__DIR__),
+			);
+
+			if (Config::getIfSet(Config::PROJ_NAMESPACE_ROOT, false) !== false){
+				self::$all_namespace_roots[Config::get(Config::PROJ_NAMESPACE_ROOT)]=Config::get(Config::CFG_PROJECT_DIR);
+			}
+
+		}
+		return self::$all_namespace_roots;
+	}
+
+	private static function classnameMatchesNamespaceRoot($classname, $namespace_root, $folder){
+		if (!preg_match("/^$namespace_root\\\\(.*)/", $classname, $matches)) return false;
 
 		$name = $matches[1];
 
-		$file = dirname(__DIR__) . '/' . str_replace('\\', '/', $name) . '.php';
-
-		return $file;
-	}
-
-	public static function classnameMatchesProjectNamespace($classname) {
-
-		$PROJ_NAMESPACE_ROOT = Config::get(Config::PROJ_NAMESPACE_ROOT);
-
-		if (!preg_match("/^$PROJ_NAMESPACE_ROOT\\\\(.*)\$/", $classname, $matches)) return false;
-
-		$name = $matches[1];
-
-		$file = str_replace('\\', '/', Config::get(Config::CFG_PROJECT_DIR) . '/' . $name . '.php');
+		$file = str_replace('\\', '/', $folder . '/' . $name . '.php');
 
 		return $file;
 	}
