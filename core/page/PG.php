@@ -14,8 +14,12 @@ class PG {
 		Page::getInstance()->addMessage($message);
 	}
 
+	/**
+	 * @deprecated
+	 * demo check
+	 */
 	public static function echoAndQuit($html = "") {
-		Page::getInstance()->echoAndQuit($html);
+		Page::echoAndQuit($html);
 	}
 
 	public static function deliver() {

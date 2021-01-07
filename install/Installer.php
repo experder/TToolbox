@@ -202,7 +202,7 @@ class Installer {
 			$form = new Form("cmdCreateInit", "", "Create Init.php");
 
 			$suggest = "dirname(__DIR__) . '/" . basename(dirname(__DIR__)) . "'";
-			$form->addField(new FormfieldText("TToolbox", "Relative path to TToolbox", $suggest));
+			$form->addField(new FormfieldText("TToolbox", "Path to TToolbox", $suggest));
 
 			$suggest = strtolower(basename(dirname(dirname(__DIR__))));
 			$form->addField(new FormfieldText("PROJ_NAMESPACE_ROOT", "Project's root namespace", $suggest));
