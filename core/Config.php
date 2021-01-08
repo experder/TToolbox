@@ -108,37 +108,54 @@ class Config {
 		}
 	}
 
+	/**
+	 * Configurations, Autoloader, Database, Session
+	 */
 	public static function startAjax() {
-		Init::loadConfig();
 
-		require_once dirname(__DIR__) . '/core/Autoloader.php';
-		Autoloader::init();
+		//Configurations, Autoloader, Database
+		self::startCli();
 
-		Installer::requireServerInit();
-
+		//Session
 		User::initSession();
 	}
 
+	/**
+	 * Configurations, Autoloader, Database
+	 */
 	public static function startCli() {
+
+		//Project specific configuration
 		Init::loadConfig();
 
+		//Autoloader
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
 
+		//Server specific configuration, including database settings
 		Installer::requireServerInit();
 	}
 
+	/**
+	 * @deprecated TODO
+	 * ttdemo check
+	 * core ...(run_web)
+	 */
 	public static function startWeb() {
-		Init::loadConfig();
+		return self::startWeb2(null);
+	}
 
-		require_once dirname(__DIR__) . '/core/Autoloader.php';
-		Autoloader::init();
+	/**
+	 * @param string $pid unique page id
+	 * @return Page
+	 */
+	public static function startWeb2($pid) {
 
-		Installer::requireServerInit();
+		//Configurations, Autoloader, Database, Session
+		self::startAjax();
 
-		$page = Page::getInstance();
-
-		User::initSession();
+		//Navigation, Breadcrumbs, HTML
+		$page = Page::init($pid);
 
 		return $page;
 	}

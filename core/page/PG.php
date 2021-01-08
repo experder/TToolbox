@@ -16,6 +16,7 @@ class PG {
 
 	/**
 	 * @deprecated
+	 * core check
 	 * demo check
 	 */
 	public static function echoAndQuit($html = "") {

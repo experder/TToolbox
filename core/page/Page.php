@@ -20,6 +20,11 @@ class Page {
 	private static $instance = null;
 
 	/**
+	 * @var string $id unique page id
+	 */
+	private $id = null;
+
+	/**
 	 * @var Message[] $messages
 	 */
 	private static $messages = array();
@@ -42,6 +47,16 @@ class Page {
 			self::$instance->addJs(Config::get(Config::HTTP_TTROOT) . '/service/js/core.js', "coreJs");
 		}
 		return self::$instance;
+	}
+
+	public static function init($pid) {
+		$page = self::getInstance();
+		$page->id = $pid;
+
+		//TODO: Navigation
+		//TODO: Breadcrumbs
+
+		return $page;
 	}
 
 	public function addMessage(Message $message) {

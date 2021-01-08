@@ -234,12 +234,7 @@ class Installer {
 			);
 		}
 
-		try {
-			$dbh = new \PDO("mysql:host=" . $host, $user, $password);
-			$dbh->exec("CREATE DATABASE `" . $dbname . "`;") or die(print_r($dbh->errorInfo(), true) . "Error240");
-		} catch (\PDOException $e) {
-			Error::fromException($e);
-		}
+		self::initDatabaseDo($dbname, $host, $user, $password);
 
 		self::startWizard(
 			Message::messageToHtml(Message::TYPE_CONFIRM,
@@ -248,6 +243,15 @@ class Installer {
 			. new Form("helloworld", "", "OK")
 		);
 
+	}
+
+	private static function initDatabaseDo($dbname, $host, $user, $password) {
+		try {
+			$dbh = new \PDO("mysql:host=" . $host, $user, $password);
+			$dbh->exec("CREATE DATABASE `" . $dbname . "` CHARACTER SET utf8;") or die(print_r($dbh->errorInfo(), true) . "Error240");
+		} catch (\PDOException $e) {
+			Error::fromException($e);
+		}
 	}
 
 	public static function initApiClass($classname, $filename) {
@@ -262,7 +266,7 @@ class Installer {
 			);
 		}
 
-		$api_class_content = "<?php\n\nnamespace tt\\api;\n\nclass $classname extends \\tt\\core\\api_default\\Session {\n}";
+		$api_class_content = "<?php\n\nnamespace tt\\api;\n\nclass $classname extends \\tt\\core\\api_default\\$classname {\n}";
 
 		ServiceFiles::save($filename, $api_class_content);
 	}
