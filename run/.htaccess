@@ -1,3 +1,4 @@
 RewriteEngine on
 
+# Q: What is [L,QSA] in htaccess? A: https://stackoverflow.com/a/16468677
 RewriteRule ^(.*)$ index.php?c=$1 [L,QSA]
