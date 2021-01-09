@@ -13,6 +13,6 @@ use tt\install\Installer;
 
 require_once dirname(__DIR__) . '/install/Installer.php';
 Installer::requireInitPointer();
-Config::startWeb();
+Config::startWeb2(null);
 
 Controller::run();

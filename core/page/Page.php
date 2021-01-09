@@ -95,6 +95,8 @@ class Page {
 	public function getHtml() {
 		$head = $this->getMainCss();
 		$head .= "\n" . $this->getJsHtml();
+//TODO:
+$head .= "<title>".$this->id."</title>";
 		$head = "\n<head>\n$head\n</head>";
 
 		$messages = $this->messagesToHtml();
@@ -104,6 +106,7 @@ class Page {
 		$body = "\n<div class='inner_body'>\n$body\n</div>";
 		$body = $messages . $body;
 		$body .= $this->waitSpinner();
+$body="<h1>$this->id</h1>".$body;
 		$body = "\n<body>\n$body\n</body>\n";
 
 		$html = $head . $body;

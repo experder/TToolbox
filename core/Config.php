@@ -137,9 +137,9 @@ class Config {
 	}
 
 	/**
-	 * @deprecated TODO
+	 * @deprecated
 	 * ttdemo check
-	 * core ...(run_web)
+	 * core check
 	 */
 	public static function startWeb() {
 		return self::startWeb2(null);

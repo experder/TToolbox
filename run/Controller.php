@@ -62,6 +62,8 @@ abstract class Controller {
 	 * @param string $controllerClass
 	 * @param string $run_type Controller::RUN_TYPE_
 	 * @param array  $data
+	 *
+	 * TODO: checks auslagern, dann ist diese funktion obsolet/verteilt sich auf die drei run_types
 	 */
 	public static function runController($controllerClass, $run_type, $data) {
 		$controllerClass = str_replace('/', '\\', $controllerClass);
@@ -86,6 +88,8 @@ abstract class Controller {
 				if (!$class instanceof Controller) {
 					new Error("Controller class '$controllerClass' does not extend 'tt\\run\\Controller'!");
 				}
+
+				Page::init($controllerClass);
 
 				$response = $class->runWeb();
 				Page::getInstance()->add($response);
