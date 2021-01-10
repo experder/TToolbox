@@ -4,6 +4,9 @@
  * TT comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
+//TODO:Prototype!
+
+
 
 function tt_ajax_post(url, data_object, Funktion) {
 	$.ajax({

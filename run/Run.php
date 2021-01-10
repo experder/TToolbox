@@ -137,12 +137,8 @@ class Run {
 
 		$file = Autoloader::classnameMatchesAnyNamespaceRoot($controllerClass);
 
-		if ($file === false) {
-			new Error("No class definition found for '$controllerClass'!");
-		}
-
-		if (!file_exists($file)) {
-			new Error("File not found: '$file'");
+		if ($file === false || !file_exists($file)) {
+			new Error("Controller not found: '$controllerClass'");
 		}
 
 		return true;
