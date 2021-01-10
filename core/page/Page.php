@@ -108,7 +108,7 @@ $head .= "<title>".$this->id."</title>";
 		$body = $messages . $body;
 		$body .= $this->waitSpinner();
 $body="<h1>$this->id</h1>".$body;
-		$body = "\n<body>\n$body\n</body>\n";
+		$body = "\n<body onunload='t2_spinner_stop();'>\n$body\n</body>\n";
 
 		$html = $head . $body;
 		$html = "<!DOCTYPE html><html>$html</html>";
