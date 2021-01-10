@@ -25,7 +25,7 @@ class Runner {
 	/**
 	 * @param string $cmd
 	 * @param array  $data
-	 * @return array JSON
+	 * @return ApiResponse
 	 */
 	public function runApi($cmd = null, array $data = array()) {
 		new Error("runApi is not defined in " . get_class($this)

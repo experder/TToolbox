@@ -11,6 +11,7 @@ namespace tt\install;
 use tt\core\Autoloader;
 use tt\core\Config;
 use tt\core\page\Message;
+use tt\run\ApiResponseHtml;
 use tt\service\Error;
 use tt\service\form\Form;
 use tt\service\form\FormfieldPassword;
@@ -27,6 +28,8 @@ use tt\service\thirdparty\LoadJs;
 class Installer {
 
 	const DIVID_download_status_div = 'download_status_div';
+
+	const AJAXDATA_warning = "warning";
 
 	public static $additionalWizardHead = "";
 
@@ -95,7 +98,7 @@ class Installer {
 		if ($stream === false) {
 			new Error("Could not open URL '$url'!");
 		}
-		$bytesWritten = ServiceFiles::save($toFile, $stream);
+		ServiceFiles::save($toFile, $stream);
 
 		$filename = basename($toFile);
 
@@ -113,12 +116,10 @@ class Installer {
 			}
 		}
 
-		return array(
-			"ok" => true,
-			"bytes_written" => $bytesWritten,
-			"html" => $msg,
-			"warning" => $warning,
-		);
+		return new ApiResponseHtml(true, $msg, array(
+			self::AJAXDATA_warning => $warning,
+		));
+
 	}
 
 	public static function requireServerInit() {

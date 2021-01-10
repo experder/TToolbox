@@ -88,7 +88,7 @@ class Run {
 
 		$response = $class->runApi($cmd, $input_data);
 
-		$json = json_encode($response);
+		$json = json_encode($response->getResponseArray());
 		echo $json;
 		exit;
 
