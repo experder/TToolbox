@@ -51,6 +51,7 @@ class Page {
 
 	public static function init($pid) {
 		$page = self::getInstance();
+		if ($pid === null) return $page;
 		$page->id = $pid;
 
 		//TODO: Navigation
