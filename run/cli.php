@@ -8,10 +8,7 @@
 
 namespace tt\run;
 
-use tt\core\Config;
-use tt\run_cli\RunApi;
-
 require_once dirname(__DIR__) . '/init_pointer.php';
-Config::startCli();
 
-RunApi::run();
+require_once __DIR__ . '/Run.php';
+Run::run();

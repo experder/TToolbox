@@ -8,11 +8,10 @@
 
 namespace tt\run;
 
-use tt\core\Config;
 use tt\install\Installer;
 
 require_once dirname(__DIR__) . '/install/Installer.php';
 Installer::requireInitPointer();
-Config::startWeb2(null);
 
-Controller::run();
+require_once __DIR__ . '/Run.php';
+Run::run();

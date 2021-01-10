@@ -8,16 +8,16 @@
 
 namespace tt\install;
 
-use tt\run_api\Ajax;
+use tt\run\Runner;
 
-class Api extends Ajax {
+class Api extends Runner {
 
-	protected function runCmd() {
-		switch ($this->cmd) {
+	public function runApi($cmd = null, array $data = array()) {
+		switch ($cmd) {
 			case "cmdGetExternalFile":
-				$data = $this->requiredFieldsFromData(array("url", "to_file"));
-				$checksum = (isset($this->data["checksum"]) && $this->data["checksum"] !== 'false') ? $this->data["checksum"] : false;
-				return Installer::doGetExternalFile($data["url"], $data["to_file"], $checksum);
+				list($url, $toFile) = $this->requiredFieldsFromData($data, array("url", "to_file"), false);
+				$checksum = (isset($data["checksum"]) && $data["checksum"] !== 'false') ? $data["checksum"] : false;
+				return Installer::doGetExternalFile($url, $toFile, $checksum);
 				break;
 			default:
 				return null;

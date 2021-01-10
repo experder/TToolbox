@@ -108,22 +108,45 @@ class Config {
 		}
 	}
 
-	/**
-	 * Configurations, Autoloader, Database, Session
-	 */
-	public static function startAjax() {
+	public static function startCli() {
 
 		//Configurations, Autoloader, Database
-		self::startCli();
+		self::init1();
+
+	}
+
+	public static function startApi() {
+
+		//Configurations, Autoloader, Database
+		self::init1();
 
 		//Session
-		User::initSession();
+		self::init2();
+
+	}
+
+	/**
+	 * @param string $pid unique page id
+	 * @return Page
+	 */
+	public static function startWeb($pid) {
+
+		//Configurations, Autoloader, Database
+		self::init1();
+
+		//Session
+		self::init2();
+
+		//Navigation, Breadcrumbs, HTML
+		$page = self::init3($pid);
+
+		return $page;
 	}
 
 	/**
 	 * Configurations, Autoloader, Database
 	 */
-	public static function startCli() {
+	public static function init1() {
 
 		//Project specific configuration
 		Init::loadConfig();
@@ -134,30 +157,32 @@ class Config {
 
 		//Server specific configuration, including database settings
 		Installer::requireServerInit();
+
 	}
 
 	/**
-	 * @deprecated
-	 * ttdemo check
-	 * core check
+	 * Session
 	 */
-	public static function startWeb() {
-		return self::startWeb2(null);
+	public static function init2() {
+
+		//Session
+		User::initSession();
+
 	}
 
 	/**
+	 * Navigation, Breadcrumbs, HTML
+	 *
 	 * @param string $pid unique page id
 	 * @return Page
 	 */
-	public static function startWeb2($pid) {
-
-		//Configurations, Autoloader, Database, Session
-		self::startAjax();
+	public static function init3($pid) {
 
 		//Navigation, Breadcrumbs, HTML
 		$page = Page::init($pid);
 
 		return $page;
+
 	}
 
 }

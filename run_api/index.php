@@ -8,14 +8,12 @@
 
 namespace tt\run;
 
-use tt\core\Config;
-use tt\run_api\Ajax;
 use tt\service\ServiceEnv;
 
 require_once dirname(__DIR__) . '/service/ServiceEnv.php';
 ServiceEnv::$response_is_expected_to_be_json = true;
 
 require_once dirname(__DIR__) . '/init_pointer.php';
-Config::startAjax();
 
-Ajax::run();
+require_once dirname(__DIR__). '/run/Run.php';
+Run::run();
