@@ -18,6 +18,8 @@ class Php7 {
 	 *
 	 * @param int $length
 	 * @return string
+	 *
+	 * @see http://php.net/manual/en/function.random-bytes.php (Since 7.0)
 	 */
 	public static function random_bytes($length) {
 		$string = "";

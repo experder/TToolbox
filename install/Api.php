@@ -12,9 +12,15 @@ use tt\run\Runner;
 
 class Api extends Runner {
 
+	public static function getClass() {
+		return \tt\service\polyfill\Php5::get_class();
+	}
+
+	const CMD_GetExternalFile = 'cmdGetExternalFile';
+
 	public function runApi($cmd = null, array $data = array()) {
 		switch ($cmd) {
-			case "cmdGetExternalFile":
+			case self::CMD_GetExternalFile:
 				list($url, $toFile) = $this->requiredFieldsFromData($data, array("url", "to_file"), false);
 				$checksum = (isset($data["checksum"]) && $data["checksum"] !== 'false') ? $data["checksum"] : false;
 				return Installer::doGetExternalFile($url, $toFile, $checksum);

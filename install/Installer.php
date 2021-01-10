@@ -26,6 +26,8 @@ use tt\service\thirdparty\LoadJs;
 
 class Installer {
 
+	const DIVID_download_status_div = 'download_status_div';
+
 	public static $additionalWizardHead = "";
 
 	public static function requireInitPointer() {
@@ -62,16 +64,16 @@ class Installer {
 	}
 
 	public static function getExternalFile($url, $toFile, $onSuccessJs = "", $checksum = false) {
-		if (!ServiceEnv::requestCmd('cmdGetExternalFile')) {
+		if (!ServiceEnv::requestCmd(Api::CMD_GetExternalFile)) {
 
 			$msg = "Downloading <b>$url</b>...";
 			$m = new Message(Message::TYPE_INFO, $msg);
 			$msg = $m->toHtml();
-			$msg = "<div id='download_status_div'>$msg</div>";
+			$msg = "<div id='".self::DIVID_download_status_div."'>$msg</div>";
 
 			self::startWizard(
 				$msg
-				. "<script>" . Js::ajaxPostToId("download_status_div", "cmdGetExternalFile", "tt\\install\\Api", array(
+				. "<script>" . Js::ajaxPostToId(self::DIVID_download_status_div, Api::CMD_GetExternalFile, Api::getClass(), array(
 					"url" => $url,
 					"to_file" => $toFile,
 					"checksum" => $checksum,
@@ -99,6 +101,7 @@ class Installer {
 
 		$msg = "Successfully stored file '$filename'.";
 		$msg = Message::messageToHtml(Message::TYPE_CONFIRM, $msg);
+		$msg.=new Form("every little thing she does", "", "OK");
 
 		$warning = false;
 
@@ -240,7 +243,7 @@ class Installer {
 			Message::messageToHtml(Message::TYPE_CONFIRM,
 				"Database '<b>$dbname</b>' has been created."
 			)
-			. new Form("helloworld", "", "OK")
+			. new Form("glittering prizes", "", "OK")
 		);
 
 	}
