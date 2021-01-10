@@ -15,5 +15,5 @@ ServiceEnv::$response_is_expected_to_be_json = true;
 
 require_once dirname(__DIR__) . '/init_pointer.php';
 
-require_once dirname(__DIR__). '/run/Run.php';
+require_once dirname(__DIR__) . '/run/Run.php';
 Run::run();

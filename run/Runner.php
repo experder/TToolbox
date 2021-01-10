@@ -16,9 +16,9 @@ class Runner {
 	 * @param array $args
 	 * @return string plaintext
 	 */
-	public function runCli(array $args = array()){
-		new Error("runCli is not defined in ".get_class($this)
-			.' / '.count($args));
+	public function runCli(array $args = array()) {
+		new Error("runCli is not defined in " . get_class($this)
+			. ' / ' . count($args));
 		return false;
 	}
 
@@ -27,18 +27,18 @@ class Runner {
 	 * @param array  $data
 	 * @return array JSON
 	 */
-	public function runApi($cmd = null, array $data = array()){
-		new Error("runApi is not defined in ".get_class($this)
-			." / ".$cmd
-			." / ".count($data));
+	public function runApi($cmd = null, array $data = array()) {
+		new Error("runApi is not defined in " . get_class($this)
+			. " / " . $cmd
+			. " / " . count($data));
 		return null;
 	}
 
 	/**
 	 * @return string HTML
 	 */
-	public function runWeb(){
-		new Error("runWeb is not defined in ".get_class($this));
+	public function runWeb() {
+		new Error("runWeb is not defined in " . get_class($this));
 		return false;
 	}
 
@@ -48,9 +48,9 @@ class Runner {
 			if (!isset($data[$key])) {
 				new Error(get_class($this) . ": Required data not received: '$key'");
 			}
-			if($return_associative){
+			if ($return_associative) {
 				$fields[$key] = $data[$key];
-			}else{
+			} else {
 				$fields[] = $data[$key];
 			}
 		}

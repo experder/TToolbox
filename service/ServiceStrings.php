@@ -29,6 +29,19 @@ class ServiceStrings {
 	}
 
 	/**
+	 * Escapes control characters for JS.
+	 * @param string $value
+	 * @return string
+	 */
+	public static function escape_value_js($value) {
+		return self::replace_byArray($value, array(
+			"\\" => "\\\\",
+			"'" => "\\'",
+			"\"" => "\\\"",
+		));
+	}
+
+	/**
 	 * Other syntax for the str_replace function.
 	 *
 	 * !!! WARNING! Keys that are a subset of other keys must be defined AFTER the other:

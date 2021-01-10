@@ -69,7 +69,7 @@ class Installer {
 			$msg = "Downloading <b>$url</b>...";
 			$m = new Message(Message::TYPE_INFO, $msg);
 			$msg = $m->toHtml();
-			$msg = "<div id='".self::DIVID_download_status_div."'>$msg</div>";
+			$msg = "<div id='" . self::DIVID_download_status_div . "'>$msg</div>";
 
 			self::startWizard(
 				$msg
@@ -101,7 +101,7 @@ class Installer {
 
 		$msg = "Successfully stored file '$filename'.";
 		$msg = Message::messageToHtml(Message::TYPE_CONFIRM, $msg);
-		$msg.=new Form("every little thing she does", "", "OK");
+		$msg .= new Form("every little thing she does", "", "OK");
 
 		$warning = false;
 
@@ -276,7 +276,7 @@ class Installer {
 
 	public static function startWizard($html) {
 
-		if (ServiceEnv::isSapiAjax() || ServiceEnv::isSapiCLI()) {
+		if (ServiceEnv::isSapiAPI() || ServiceEnv::isSapiCLI()) {
 			new Error("Start wizard: Not possible!");
 		}
 

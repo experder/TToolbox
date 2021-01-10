@@ -33,12 +33,6 @@ class ServiceEnv {
 		return php_sapi_name() == 'cli';
 	}
 
-	/**
-	 * @deprecated TODO Use isSapiAPI
-	 */
-	public static function isSapiAjax() {
-		return self::isSapiAPI();
-	}
 	public static function isSapiAPI() {
 		return self::$response_is_expected_to_be_json;
 	}

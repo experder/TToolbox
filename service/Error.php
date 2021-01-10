@@ -44,7 +44,7 @@ class Error {
 			exit;
 		}
 
-		if (ServiceEnv::isSapiAjax()) {
+		if (ServiceEnv::isSapiAPI()) {
 			echo $this->getJson(true, $cutBacktrace + 1);
 			exit;
 		}
@@ -77,7 +77,7 @@ class Error {
 			return $this->getTextPlain();
 		}
 
-		if (ServiceEnv::isSapiAjax()) {
+		if (ServiceEnv::isSapiAPI()) {
 			return $this->getJson();
 		}
 

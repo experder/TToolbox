@@ -17,16 +17,16 @@ use tt\service\ServiceStrings;
 
 class Run {
 
-	public static function run(){
+	public static function run() {
 
 		require_once dirname(__DIR__) . '/service/ServiceEnv.php';
 
-		if (ServiceEnv::isSapiCLI()){
+		if (ServiceEnv::isSapiCLI()) {
 			Config::startCli();
 			self::doRunCli();
 		}
 
-		if (ServiceEnv::isSapiAPI()){
+		if (ServiceEnv::isSapiAPI()) {
 			Config::startApi();
 			self::doRunApi();
 		}
@@ -46,7 +46,7 @@ class Run {
 		return "<a href='" . self::getWebUrl($controllerClass) . "'>" . $linkTitle . "</a>";
 	}
 
-	private static function doRunWeb(){
+	private static function doRunWeb() {
 
 		if (!isset($_GET["c"])) {
 			new Error("TT API: No Runner specified! [ /?c= ]");
@@ -66,7 +66,7 @@ class Run {
 
 	}
 
-	private static function doRunApi(){
+	private static function doRunApi() {
 
 		$input = file_get_contents("php://input");
 
@@ -83,7 +83,7 @@ class Run {
 		$class = self::loadRunner($input_data["class"]);
 		unset($input_data["class"]);
 
-		$cmd = isset($input_data["cmd"])?$input_data["cmd"]:null;
+		$cmd = isset($input_data["cmd"]) ? $input_data["cmd"] : null;
 		unset($input_data["cmd"]);
 
 		$response = $class->runApi($cmd, $input_data);
@@ -105,7 +105,7 @@ class Run {
 	 *   }
 	 * }
 	 */
-	private static function doRunCli(){
+	private static function doRunCli() {
 
 		global $argv;
 
@@ -131,7 +131,7 @@ class Run {
 
 	private static function checkRunner($controllerClass) {
 
-		if (!$controllerClass){
+		if (!$controllerClass) {
 			new Error("No qualified controller classname given!");
 		}
 
