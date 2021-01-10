@@ -46,7 +46,7 @@ class Runner {
 		$fields = array();
 		foreach ($fieldlist as $key) {
 			if (!isset($data[$key])) {
-				new Error(get_class($this) . ": Required data not received: '$key'");
+				new Error(get_class($this) . ": Required data not received: '$key'", 1);
 			}
 			if ($return_associative) {
 				$fields[$key] = $data[$key];

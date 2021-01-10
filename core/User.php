@@ -9,16 +9,16 @@
 namespace tt\core;
 
 use tt\api\Session;
-use tt\core\page\PG;
+use tt\core\page\Page;
 use tt\service\ServiceEnv;
 
 class User {
 
 	public static function initSession() {
 		return;//disabled for the moment
-//		if (ServiceEnv::isSapiWeb() && !ServiceEnv::$response_is_expected_to_be_json) {
-//			PG::echoAndQuit(Session::getLoginHtml());
-//		}
+		if (!ServiceEnv::isSapiCLI() && !ServiceEnv::$response_is_expected_to_be_json) {
+			Page::echoAndQuit(Session::getLoginHtml());
+		}
 	}
 
 }
