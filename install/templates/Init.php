@@ -31,4 +31,12 @@ class Init {
 
 	}
 
+	/**
+	 * @param string $pid unique page id
+	 * @return \tt\core\page\Page
+	 */
+	public static function initWeb($pid) {
+		return Config::startWeb($pid);
+	}
+
 }

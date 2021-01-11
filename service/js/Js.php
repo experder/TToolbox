@@ -12,15 +12,9 @@ use tt\core\Config;
 
 class Js {
 
+	const JSID_CORE = "coreJs";//Config::HTTP_TTROOT . '/service/js/core.js'
+
 	/**
-	 * Example:
-	 * $dataArray = array(
-	 *     "cmd"=>"test1",
-	 * );
-	 * $funktion = "alert(data.html);";
-	 * PG::add("<span onclick=\"".htmlentities(Js::ajaxPost(null,"tt\\run_api\\Ajax",$dataArray,$funktion))."\"
-	 * style='cursor: pointer'>Ajax test</span>");
-	 *
 	 * @param string       $cmd
 	 * @param string       $controller
 	 * @param array|string $postData

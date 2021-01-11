@@ -44,6 +44,11 @@ function tt_ajax_post(url, data_object, Funktion) {
 					+ '<div class="dev ajax_response raw" id="' + id + '" style="display: none;">' + htmlEntities(jqXHR.responseText) + '</div>'
 					+ '<div class="dev ajax_response">' + jqXHR.responseText + '</div>'
 					+ '</div>';
+			} else if (String(textStatus) === 'parsererror' && String(errorThrown) === 'SyntaxError: JSON.parse: unexpected end of data at line 1 column 1 of the JSON data') {
+				message = '<div class="dev"><h1>Empty response</h1>See console for request object.</div>';
+				console.log('url: ' + url);
+				console.log('data:');
+				console.log(data_object);
 			} else {
 				message = '<div class="dev"><h1>' + textStatus + '</h1>' + errorThrown + '<pre>' + url + '<br>Status code: ' + jqXHR.status + '</pre><div class="dev ajax_response">' + jqXHR.responseText + '</div></div>';
 			}

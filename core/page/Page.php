@@ -9,6 +9,7 @@
 namespace tt\core\page;
 
 use tt\core\Config;
+use tt\service\js\Js;
 use tt\service\thirdparty\Jquery;
 use tt\service\thirdparty\LoadJs;
 
@@ -43,8 +44,8 @@ class Page {
 		if (self::$instance === null) {
 			self::$instance = new Page();
 			$j = new Jquery();
-			self::$instance->addJs($j->getScriptReference(), "jQuery");
-			self::$instance->addJs(Config::get(Config::HTTP_TTROOT) . '/service/js/core.js', "coreJs");
+			self::$instance->addJs($j->getScriptReference(), Jquery::JS_NAME);
+			self::$instance->addJs(Config::get(Config::HTTP_TTROOT) . '/service/js/core.js', Js::JSID_CORE);
 		}
 		return self::$instance;
 	}

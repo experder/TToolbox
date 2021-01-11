@@ -5,6 +5,7 @@
  */
 if (true) exit;/*
  * TPLDOCEND*/
+
 /*
  * Server specific settings
  *
@@ -12,19 +13,22 @@ if (true) exit;/*
  *
  */
 
-\tt\core\Database::init('#DB_HOST', '#DB_NAME', '#DB_USER', '#DB_PASS');
+use tt\core\database\Database;
+use tt\core\Config;
 
-\tt\core\Config::set(\tt\core\Config::HTTP_ROOT, '#HTTP_ROOT');
-\tt\core\Config::set(\tt\core\Config::HTTP_TTROOT, '#HTTP_TTROOT');
+Database::init('#DB_HOST', '#DB_NAME', '#DB_USER', '#DB_PASS');
+
+Config::set(Config::HTTP_ROOT, '#HTTP_ROOT');
+Config::set(Config::HTTP_TTROOT, '#HTTP_TTROOT');
 /*
-\tt\core\Config::set(\tt\core\Config::HTTP_SKIN, \tt\core\Config::get(\tt\core\Config::HTTP_ROOT).'/TTconfig/skins/skin1');
-\tt\core\Config::set(\tt\core\Config::HTTP_3RDPARTY, \tt\core\Config::get(\tt\core\Config::HTTP_ROOT).'/thirdparty');
-\tt\core\Config::set(\tt\core\Config::RUN_ALIAS_API, \tt\core\Config::get(\tt\core\Config::HTTP_TTROOT) . '/run_api/');
+Config::set(Config::HTTP_SKIN, Config::get(Config::HTTP_ROOT) . '/TTconfig/skins/skin1');
+Config::set(Config::HTTP_3RDPARTY, Config::get(Config::HTTP_ROOT) . '/thirdparty');
+Config::set(Config::RUN_ALIAS_API, Config::get(Config::HTTP_TTROOT) . '/run_api/');
 /**/
 
-#\tt\core\Config::set(\tt\core\Config::RUN_ALIAS, \tt\core\Config::get(\tt\core\Config::HTTP_TTROOT) . '/run/?c=');
-\tt\core\Config::set(\tt\core\Config::RUN_ALIAS, '#RUNALIAS');
+#Config::set(Config::RUN_ALIAS, Config::get(Config::HTTP_TTROOT) . '/run/?c=');
+Config::set(Config::RUN_ALIAS, '#RUNALIAS');
 
-\tt\core\Config::set(\tt\core\Config::CFG_PLATFORM, '#PLATFORM');
+Config::set(Config::CFG_PLATFORM, '#PLATFORM');
 
-\tt\core\Config::set(\tt\core\Config::DEVMODE, '#DEVMODE');
+Config::set(Config::DEVMODE, '#DEVMODE');

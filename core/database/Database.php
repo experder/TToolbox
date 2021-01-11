@@ -6,16 +6,11 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\core;
+namespace tt\core\database;
 
 use tt\install\Installer;
 use tt\service\Error;
 
-/**
- * @deprecated
- * core check
- * demo check
- */
 class Database {
 
 	/**
@@ -58,13 +53,13 @@ class Database {
 	 * @param string $user
 	 * @param string $password
 	 */
-	public function __construct($host, $dbname, $user, $password, $init_pdo = true) {
+	public function __construct($host, $dbname, $user, $password) {
 		$this->host = $host;
 		$this->dbname = $dbname;
-		if ($init_pdo) $this->initPdo($user, $password);
+		$this->initPdo($user, $password);
 	}
 
-	public function initPdo($user, $password) {
+	private function initPdo($user, $password) {
 		try {
 			$this->pdo = new \PDO("mysql:host=" . $this->host . ";dbname=" . $this->dbname, $user, $password);
 			$this->pdo->query('SET NAMES utf8');

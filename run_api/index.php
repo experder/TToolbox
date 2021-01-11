@@ -6,9 +6,8 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\run;
-
 use tt\service\ServiceEnv;
+use tt\run\Run;
 
 require_once dirname(__DIR__) . '/service/ServiceEnv.php';
 ServiceEnv::$response_is_expected_to_be_json = true;

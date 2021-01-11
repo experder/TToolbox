@@ -144,7 +144,7 @@ class Installer {
 			}
 			$form->addField(new FormfieldText("HTTP_ROOT", "Web root path (<a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>HTTP_ROOT</a>)", $suggest));
 
-			$form->addField(new FormfieldText("HTTP_TTROOT", "TT root path (HTTP_TTROOT)", "\\tt\\core\\Config::get(\\tt\\core\\Config::HTTP_ROOT).'/TToolbox'"));
+			$form->addField(new FormfieldText("HTTP_TTROOT", "TT root path (HTTP_TTROOT)", "Config::get(Config::HTTP_ROOT).'/TToolbox'"));
 
 			$form->addField(new FormfieldText("DB_HOST", "DB host", "localhost"));
 			$form->addField(new FormfieldText("DB_NAME", "DB name", "mytt"));
@@ -165,7 +165,7 @@ class Installer {
 				new FormfieldRadioOption("PLATFORM_LINUX", "Linux"),
 			), $platform));
 
-			$suggest = "\\tt\\core\\Config::get(\\tt\\core\\Config::HTTP_TTROOT) . '/run/?c='";
+			$suggest = "Config::get(Config::HTTP_TTROOT) . '/run/?c='";
 			$form->addField(new FormfieldText("RUNALIAS", "Run alias", $suggest));
 
 			self::startWizard(
@@ -177,6 +177,7 @@ class Installer {
 		}
 
 		Templates::create_file($file, __DIR__ . '/templates/init_server.php', array(
+			"<?php" . PHP_EOL . PHP_EOL . "/*" => "<?php" . PHP_EOL . "/*",
 			"#HTTP_ROOT" => $_REQUEST["HTTP_ROOT"],
 			"'#HTTP_TTROOT'" => $_REQUEST["HTTP_TTROOT"],
 			"#SERVERNAME" => $_REQUEST["SERVERNAME"],
@@ -185,7 +186,7 @@ class Installer {
 			"#DB_USER" => $_REQUEST["DB_USER"],
 			"#DB_PASS" => $_REQUEST["DB_PASS"],
 			"'#DEVMODE'" => $_REQUEST["DEVMODE"] == 'on' ? 'true' : 'false',
-			"'#PLATFORM'" => '\tt\core\Config::' . $_REQUEST["PLATFORM"],
+			"'#PLATFORM'" => 'Config::' . $_REQUEST["PLATFORM"],
 			"'#RUNALIAS'" => $_REQUEST["RUNALIAS"],
 		));
 	}
