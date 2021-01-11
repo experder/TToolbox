@@ -164,9 +164,13 @@ $body="<h1>$this->id</h1>".$body;
 		return $ok;
 	}
 
+	public function getJsScripts() {
+		return $this->jsScripts;
+	}
+
 	public function getJsHtml() {
 		$html = array();
-		foreach ($this->jsScripts as $script) {
+		foreach ($this->getJsScripts() as $script) {
 			$html[] = LoadJs::htmlScript($script);
 		}
 		return implode("\n", $html);

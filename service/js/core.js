@@ -38,13 +38,24 @@ function tt_ajax_post(url, data_object, Funktion) {
 			if (jqXHR.readyState === 0) {
 				message = "Could not connect to the server. Please check your network connection.";
 			} else if (String(textStatus) === 'parsererror' && String(errorThrown) === 'SyntaxError: JSON.parse: unexpected character at line 1 column 1 of the JSON data') {
-				message = '<div class="dev"><h1>Invalid JSON</h1><div class="dev ajax_response">' + htmlEntities(jqXHR.responseText) + '</div></div>';
+				let id = 'id_' + next_global_id();
+				message = '<div class="dev"><h1>Invalid JSON</h1>'
+					+ '<input type="button" value="raw" onclick="$(\'#' + id + '\').toggle(400);" />'
+					+ '<div class="dev ajax_response raw" id="' + id + '" style="display: none;">' + htmlEntities(jqXHR.responseText) + '</div>'
+					+ '<div class="dev ajax_response">' + jqXHR.responseText + '</div>'
+					+ '</div>';
 			} else {
 				message = '<div class="dev"><h1>' + textStatus + '</h1>' + errorThrown + '<pre>' + url + '<br>Status code: ' + jqXHR.status + '</pre><div class="dev ajax_response">' + jqXHR.responseText + '</div></div>';
 			}
 			tt_error(message);
 		}
 	});
+}
+
+let global_counter = 0;
+
+function next_global_id() {
+	return ++global_counter;
 }
 
 function htmlEntities(str) {
