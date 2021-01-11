@@ -224,6 +224,14 @@ class Installer {
 			"'#TToolbox'" => $_REQUEST["TToolbox"],
 			"#PROJ_NAMESPACE_ROOT" => $_REQUEST["PROJ_NAMESPACE_ROOT"],
 		));
+
+		self::startWizard(
+			Message::messageToHtml(Message::TYPE_CONFIRM,
+				"File '<b>$file</b>' has been created."
+			)
+			. new Form("make it so", "", "OK")
+		);
+
 	}
 
 	public static function initDatabase($dbname, $host, $user, $password) {
