@@ -87,7 +87,15 @@ class Database {
 
 		self::$primary = new Database($host, $dbname, $user, $password);
 
+		//TODO:self::$primary->checkVersion();
+
 		return self::$primary;
+	}
+
+	private function checkVersion() {
+
+		echo "97!";
+
 	}
 
 

@@ -9,16 +9,18 @@
 namespace tt\core;
 
 use tt\api\Session;
+use tt\core\auth\Token;
 use tt\core\page\Page;
 use tt\service\ServiceEnv;
 
 class User {
 
 	public static function initSession() {
-		return;//disabled for the moment
+		return new Token();//disabled for the moment
 		if (!ServiceEnv::isSapiCLI() && !ServiceEnv::$response_is_expected_to_be_json) {
 			Page::echoAndQuit(Session::getLoginHtml());
 		}
+		return new Token();
 	}
 
 }

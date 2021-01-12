@@ -56,7 +56,7 @@ class Run {
 
 		$class = self::loadRunner($controller);
 
-		Page::init($controller);
+		Page::init($controller, null);
 
 		$response = $class->runWeb();
 

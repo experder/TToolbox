@@ -43,14 +43,16 @@ class Page {
 	public static function getInstance() {
 		if (self::$instance === null) {
 			self::$instance = new Page();
-			$j = new Jquery();
-			self::$instance->addJs($j->getScriptReference(), Jquery::JS_NAME);
-			self::$instance->addJs(Config::get(Config::HTTP_TTROOT) . '/service/js/core.js', Js::JSID_CORE);
+			if(Config::getIfSet(Config::HTTP_ROOT, false)!==false) {
+				$j = new Jquery();
+				self::$instance->addJs($j->getScriptReference(), Jquery::JS_NAME);
+				self::$instance->addJs(Config::get(Config::HTTP_TTROOT) . '/service/js/core.js', Js::JSID_CORE);
+			}
 		}
 		return self::$instance;
 	}
 
-	public static function init($pid) {
+	public static function init($pid, $token) {
 		$page = self::getInstance();
 		if ($pid === null) return $page;
 		$page->id = $pid;
@@ -149,8 +151,10 @@ $body="<h1>$this->id</h1>".$body;
 
 	public function getMainCss() {
 		$css = array();
-		$HTTP_SKIN = Config::get(Config::HTTP_SKIN);
-		$css[] = "<link href=\"" . $HTTP_SKIN . "/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
+		if(Config::getIfSet(Config::HTTP_ROOT, false)!==false) {
+			$HTTP_SKIN = Config::get(Config::HTTP_SKIN);
+			$css[] = "<link href=\"" . $HTTP_SKIN . "/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
+		}
 		return implode("\n", $css);
 	}
 

@@ -6,20 +6,13 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\core\page;
+namespace tt\core\database;
 
-class PG {
+abstract class DbModell {
 
-	public static function addMessage(Message $message) {
-		Page::getInstance()->addMessage($message);
-	}
-
-	public static function deliver() {
-		Page::getInstance()->deliver();
-	}
-
-	public static function add($node) {
-		return Page::getInstance()->add($node);
-	}
+	/**
+	 * @return string
+	 */
+	abstract public function getTableName();
 
 }

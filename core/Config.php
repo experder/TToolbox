@@ -9,6 +9,7 @@
 namespace tt\core;
 
 use tt\config\Init;
+use tt\core\auth\Token;
 use tt\core\page\Page;
 use tt\install\Installer;
 use tt\service\Error;
@@ -16,6 +17,8 @@ use tt\service\Error;
 class Config {
 
 	private static $settings = array();
+
+	const MODULE_CORE = 'core';
 
 	const DEFAULT_VALUE_NOT_FOUND = "!TTDEFVALNOTFOUND!";
 
@@ -37,6 +40,9 @@ class Config {
 	const HTTP_ROOT = 'HTTP_ROOT';
 	const RUN_ALIAS = 'RUN_ALIAS';
 	const RUN_ALIAS_API = 'RUN_ALIAS_API';
+
+	const DB_CORE_PREFIX = 'DB_CORE_PREFIX';
+	const DB_TBL_CFG = 'DB_TBL_CFG';
 
 
 	public static function set($cfgId, $value) {
@@ -76,10 +82,6 @@ class Config {
 				return false;
 			case self::CFG_PLATFORM:
 				return self::PLATFORM_UNKNOWN;
-
-			/*
-			 * Init.php (project specific config's)
-			 */
 			case self::CFG_PROJECT_DIR:
 				return dirname(dirname(__DIR__));
 			case self::CFG_SERVER_INIT_FILE:
@@ -88,10 +90,6 @@ class Config {
 				return self::get(self::CFG_DIR) . '/api';
 			case self::DIR_3RDPARTY:
 				return self::get(self::CFG_PROJECT_DIR) . '/thirdparty';
-
-			/*
-			 * CFG_SERVER_INIT_FILE (init_server.php)
-			 */
 			case self::HTTP_TTROOT:
 				return self::get(self::HTTP_ROOT) . '/' . basename(dirname(__DIR__));
 			case self::RUN_ALIAS:
@@ -102,6 +100,10 @@ class Config {
 				return self::get(self::HTTP_ROOT) . '/TTconfig/skins/skin1';
 			case self::HTTP_3RDPARTY:
 				return self::get(self::HTTP_ROOT) . "/thirdparty";
+			case self::DB_CORE_PREFIX:
+				return "core";
+			case self::DB_TBL_CFG:
+				return self::get(self::DB_CORE_PREFIX) . "_config";
 
 			default:
 				return self::DEFAULT_VALUE_NOT_FOUND;
@@ -120,7 +122,7 @@ class Config {
 		//Configurations, Autoloader, Database
 		self::init1();
 
-		//Session
+		//Session, Authentication
 		self::init2();
 
 	}
@@ -134,11 +136,11 @@ class Config {
 		//Configurations, Autoloader, Database
 		self::init1();
 
-		//Session
-		self::init2();
+		//Session, Authentication
+		$token = self::init2();
 
 		//Navigation, Breadcrumbs, HTML
-		$page = self::init3($pid);
+		$page = self::init3($pid, $token);
 
 		return $page;
 	}
@@ -161,25 +163,28 @@ class Config {
 	}
 
 	/**
-	 * Session
+	 * Session, Authentication
+	 * @return Token
 	 */
 	public static function init2() {
 
-		//Session
-		User::initSession();
+		//Session, Authentication
+		$token = User::initSession();
 
+		return $token;
 	}
 
 	/**
 	 * Navigation, Breadcrumbs, HTML
 	 *
 	 * @param string $pid unique page id
+	 * @param Token  $token
 	 * @return Page
 	 */
-	public static function init3($pid) {
+	public static function init3($pid, Token $token) {
 
 		//Navigation, Breadcrumbs, HTML
-		$page = Page::init($pid);
+		$page = Page::init($pid, $token);
 
 		return $page;
 

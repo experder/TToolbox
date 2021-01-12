@@ -10,6 +10,7 @@ namespace tt\service;
 
 use tt\core\page\Message;
 use tt\core\page\Page;
+use tt\run\ApiResponseHtml;
 
 class Error {
 
@@ -25,13 +26,11 @@ class Error {
 		$this->message = $message;
 
 		if (!self::$recursion_protection) {
-			$this->message = "(ERROR IN ERROR HANDLING!) " . $this->message;
-			echo $this->withNoDependencies();
-			exit;
+			self::withNoDependencies("(ERROR IN ERROR HANDLING!) " .$this->message);
 		}
 		self::$recursion_protection = false;
 
-		$text_html = $this->getTextHtml($cutBacktrace + 1);
+		$text_html = self::getTextHtml($this->message, $cutBacktrace + 1);
 
 		Page::addMessageText(Message::TYPE_ERROR, $text_html);
 
@@ -40,12 +39,12 @@ class Error {
 		 */
 
 		if (ServiceEnv::isSapiCLI()) {
-			echo $this->getTextPlain($cutBacktrace + 1);
+			echo self::getTextPlain($this->message, $cutBacktrace + 1);
 			exit;
 		}
 
 		if (ServiceEnv::isSapiAPI()) {
-			echo $this->getJson(true, $cutBacktrace + 1);
+			echo self::getJson($this->message, true, $cutBacktrace + 1);
 			exit;
 		}
 
@@ -56,7 +55,7 @@ class Error {
 		return new Error($e->getMessage(), $cutBacktrace + 1);
 	}
 
-	private function withNoDependencies() {
+	public static function withNoDependencies($message) {
 
 		//Autoloader:
 		require_once dirname(__DIR__) . '/service/ServiceEnv.php';
@@ -74,37 +73,40 @@ class Error {
 		}
 
 		if (ServiceEnv::isSapiCLI()) {
-			return $this->getTextPlain();
+			echo self::getTextPlain($message);
+			exit;
 		}
 
 		if (ServiceEnv::isSapiAPI()) {
-			return $this->getJson();
+			require_once dirname(__DIR__) . '/run/ApiResponse.php';
+			require_once dirname(__DIR__) . '/run/ApiResponseHtml.php';
+			echo self::getJson($message);
+			exit;
 		}
 
 		//HTML-Response:
-		$msg = new Message(Message::TYPE_ERROR, $this->getTextHtml());
+		$msg = new Message(Message::TYPE_ERROR, self::getTextHtml($message));
 		$lastMsgHtml = $last_msg ? $last_msg->toHtml() : "";
-		return $lastMsgHtml . $msg->toHtml();
+		echo $lastMsgHtml . $msg->toHtml();
+		exit;
 	}
 
-	private function getTextPlain($cutBacktrace = 0) {
-		return "\n*** ERROR ***\n" . $this->message
+	private static function getTextPlain($message, $cutBacktrace = 0) {
+		return "\n*** ERROR ***\n" . $message
 			. "\n-------------\n" . implode("\n", DebugTools::backtrace($cutBacktrace + 1)) . "\n";
 	}
 
-	private function getJson($pretty_print = true, $cutBacktrace = 0) {
-		return json_encode(array(
-			"ok" => false,
-			"error_msg" => $this->message,
+	private static function getJson($message, $pretty_print = true, $cutBacktrace = 0) {
+		$response = new ApiResponseHtml(false, null, array(
+			"error_msg" => $message,
 			"backtrace" => DebugTools::backtrace($cutBacktrace + 1),
-		),
-			$pretty_print ? JSON_PRETTY_PRINT : 0
-		);
+		));
+		return json_encode($response, $pretty_print ? JSON_PRETTY_PRINT : 0);
 	}
 
-	private function getTextHtml($cutBacktrace = 0) {
+	private static function getTextHtml($message, $cutBacktrace = 0) {
 		return "<pre class='errormessage'>"
-			. "<div class='errormessage_message'>" . htmlentities($this->message) . "</div>"
+			. "<div class='errormessage_message'>" . htmlentities($message) . "</div>"
 			. "<hr>"
 			. "<div class='errormessage_backtrace'>" . implode("<br>", DebugTools::backtrace($cutBacktrace + 1)) . "</div>"
 			. "</pre>";
