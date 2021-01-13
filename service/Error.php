@@ -101,7 +101,7 @@ class Error {
 			"error_msg" => $message,
 			"backtrace" => DebugTools::backtrace($cutBacktrace + 1),
 		));
-		return json_encode($response, $pretty_print ? JSON_PRETTY_PRINT : 0);
+		return json_encode($response->getResponseArray(), $pretty_print ? JSON_PRETTY_PRINT : 0);
 	}
 
 	private static function getTextHtml($message, $cutBacktrace = 0) {

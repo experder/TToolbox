@@ -9,6 +9,7 @@
 namespace tt\core\database;
 
 use tt\core\Config;
+use tt\install\Installer;
 
 class CoreDatabase extends UpdateDatabase {
 
@@ -16,18 +17,16 @@ class CoreDatabase extends UpdateDatabase {
 		return Config::MODULE_CORE;
 	}
 
+	public static function init() {
+		$cd = new CoreDatabase();
+		$cd->doUpdate();
+	}
+
 	protected function doUpdate() {
 
-		$this->q(1,
-			"CREATE `" . Config::get(Config::DB_TBL_CFG) . "` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `idstring` varchar(40) COLLATE utf8_bin NOT NULL,
-  `module` varchar(40) COLLATE utf8_bin DEFAULT NULL,
-  `userid` int(11) DEFAULT NULL,
-  `content` text COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;"
-		);
+		/** @see Installer::initDatabaseDo() */
+
+#		$this->q(2, "");
 
 	}
 

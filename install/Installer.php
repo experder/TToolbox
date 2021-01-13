@@ -10,6 +10,8 @@ namespace tt\install;
 
 use tt\core\Autoloader;
 use tt\core\Config;
+use tt\core\database\CoreDatabase;
+use tt\core\database\Database;
 use tt\core\page\Message;
 use tt\run\ApiResponseHtml;
 use tt\service\Error;
@@ -235,7 +237,7 @@ class Installer {
 
 	}
 
-	public static function initDatabase($dbname, $host, $user, $password) {
+	public static function initDatabaseGui($dbname, $host, $user, $password) {
 		if (!ServiceEnv::requestCmd('cmdInitDatabase')) {
 			$form = new Form("cmdInitDatabase", "", "Create database '$dbname'");
 
@@ -259,12 +261,27 @@ class Installer {
 	}
 
 	private static function initDatabaseDo($dbname, $host, $user, $password) {
-		try {
-			$dbh = new \PDO("mysql:host=" . $host, $user, $password);
-			$dbh->exec("CREATE DATABASE `" . $dbname . "` CHARACTER SET utf8;") or die(print_r($dbh->errorInfo(), true) . "Error240");
-		} catch (\PDOException $e) {
-			Error::fromException($e);
-		}
+		$dbh = new \PDO("mysql:host=" . $host, $user, $password);
+		$dbh->exec(
+			"CREATE DATABASE `" . $dbname . "` CHARACTER SET utf8;"
+		) or die("Error240! " . print_r($dbh->errorInfo(), true));
+
+		$db = new Database($host, $dbname, $user, $password);
+
+		$db->_query(
+			"CREATE TABLE `" . Config::get(Config::DB_TBL_CFG) . "` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `idstring` VARCHAR(40) COLLATE utf8_bin NOT NULL,
+  `module` VARCHAR(40) COLLATE utf8_bin DEFAULT NULL,
+  `userid` INT(11) DEFAULT NULL,
+  `content` TEXT COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;"
+		);
+
+		//TODO:Insert Version, call:
+		CoreDatabase::init();
+
 	}
 
 	public static function initApiClass($classname, $filename) {

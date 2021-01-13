@@ -9,6 +9,8 @@
 use tt\service\ServiceEnv;
 use tt\run\Run;
 
+#echo "12<hr>";//TODO: This is also "Invalid JSON"!
+
 require_once dirname(__DIR__) . '/service/ServiceEnv.php';
 ServiceEnv::$response_is_expected_to_be_json = true;
 
