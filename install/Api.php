@@ -10,7 +10,7 @@ namespace tt\install;
 
 use tt\run\Runner;
 
-class Api extends Runner {
+class Api/*TODO:Rename:InstallerApi*/ extends Runner {
 
 	public static function getClass() {
 		return \tt\service\polyfill\Php5::get_class();

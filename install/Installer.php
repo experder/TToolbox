@@ -24,6 +24,7 @@ use tt\service\Html;
 use tt\service\js\Js;
 use tt\service\ServiceEnv;
 use tt\service\ServiceFiles;
+use tt\service\ServiceStrings;
 use tt\service\Templates;
 use tt\service\thirdparty\LoadJs;
 
@@ -138,7 +139,9 @@ class Installer {
 		if (!ServiceEnv::requestCmd('createInitServer')) {
 			$form = new Form("createInitServer", "", "Create init_server.php");
 
-			$form->addField(new FormfieldText("SERVERNAME", "Servername", "mydevserver"));
+			$form->addField(new FormfieldText("SERVERNAME", "Servername", "mydevserver",true,array(
+				"id"=>"focus",
+			)));
 
 			$suggest = dirname($_SERVER['SCRIPT_NAME']);
 			if (($p = strpos($suggest, '/TToolbox')) !== false) {
@@ -239,7 +242,12 @@ class Installer {
 
 	public static function initDatabaseGui($dbname, $host, $user, $password) {
 		if (!ServiceEnv::requestCmd('cmdInitDatabase')) {
-			$form = new Form("cmdInitDatabase", "", "Create database '$dbname'");
+			$form = new Form("cmdInitDatabase", "", false);
+			$form->addButton(
+				"<input type='submit' id='focus' value='"
+				. ServiceStrings::escape_value_html("Create database '$dbname'")
+				. "'>"
+			);
 
 			self::startWizard(
 				Message::messageToHtml(Message::TYPE_INFO,
@@ -251,11 +259,15 @@ class Installer {
 
 		self::initDatabaseDo($dbname, $host, $user, $password);
 
+		$form2 = new Form("glittering prizes", "", false);
+		$form2->addButton(
+			"<input type='submit' id='focus' value='OK'>"
+		);
 		self::startWizard(
 			Message::messageToHtml(Message::TYPE_CONFIRM,
 				"Database '<b>$dbname</b>' has been created."
 			)
-			. new Form("glittering prizes", "", "OK")
+			. $form2
 		);
 
 	}
@@ -266,20 +278,21 @@ class Installer {
 			"CREATE DATABASE `" . $dbname . "` CHARACTER SET utf8;"
 		) or die("Error240! " . print_r($dbh->errorInfo(), true));
 
-		$db = new Database($host, $dbname, $user, $password);
+		$db = Database::init($host, $dbname, $user, $password);
 
 		$db->_query(
 			"CREATE TABLE `" . Config::get(Config::DB_TBL_CFG) . "` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `idstring` VARCHAR(40) COLLATE utf8_bin NOT NULL,
-  `module` VARCHAR(40) COLLATE utf8_bin DEFAULT NULL,
+  `module` VARCHAR(40) COLLATE utf8_bin NOT NULL,
   `userid` INT(11) DEFAULT NULL,
   `content` TEXT COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;"
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;"
 		);
 
-		//TODO:Insert Version, call:
+		$db->_query("INSERT INTO `" . Config::get(Config::DB_TBL_CFG) . "` (`idstring`, `module`, `content`) VALUES ('DB_VERSION', '".Config::MODULE_CORE."', '1');");//TODO:Insert Assoc
+
 		CoreDatabase::init();
 
 	}
@@ -311,6 +324,10 @@ class Installer {
 		exit;
 	}
 
+	private static function onloadFocusJs() {
+		return "e=document.getElementById('focus');if(e)e.focus();";
+	}
+
 	public static function wizardHtml($body) {
 		$css = file_get_contents(__DIR__ . "/wizard.css");
 		$js = file_get_contents(__DIR__ . "/wizard.js");
@@ -327,6 +344,8 @@ class Installer {
 		$html = Html::H1("Install wizard");
 		$html .= "<div id='tt_pg_messages'></div>";
 		$html .= $body;
+
+		$html = "<body onload='".ServiceStrings::escape_value_html(self::onloadFocusJs())."'>$html</body>";
 
 		$html = $head . $html;
 		$html = "<!DOCTYPE html><html>$html</html>";

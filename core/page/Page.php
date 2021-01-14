@@ -10,6 +10,7 @@ namespace tt\core\page;
 
 use tt\core\Config;
 use tt\service\js\Js;
+use tt\service\ServiceStrings;
 use tt\service\thirdparty\Jquery;
 use tt\service\thirdparty\LoadJs;
 
@@ -33,6 +34,12 @@ class Page {
 	private $html_nodes = array();
 
 	private $jsScripts = array();
+	private $jsOnLoad = "";
+
+	/**
+	 * @var bool|string $focus TRUE or selector. Example: "#name"
+	 */
+	private $focus = null;
 
 	private function __construct() {
 	}
@@ -106,12 +113,14 @@ $head .= "<title>".$this->id."</title>";
 		$messages = $this->messagesToHtml();
 		$messages = "<div class='messages' id='tt_pg_messages'>" . ($messages ? "\n$messages\n" : "") . "</div>";
 
+		$bodyOnLoad = $this->getJsOnLoadHtml();
+
 		$body = $this->getBodyHtml();
 		$body = "\n<div class='inner_body'>\n$body\n</div>";
 		$body = $messages . $body;
 		$body .= $this->waitSpinner();
 $body="<h1>$this->id</h1>".$body;
-		$body = "\n<body onunload='t2_spinner_stop();'>\n$body\n</body>\n";
+		$body = "\n<body onunload='t2_spinner_stop();' $bodyOnLoad>\n$body\n</body>\n";
 
 		$html = $head . $body;
 		$html = "<!DOCTYPE html><html>$html</html>";
@@ -179,6 +188,42 @@ $body="<h1>$this->id</h1>".$body;
 			$html[] = LoadJs::htmlScript($script);
 		}
 		return implode("\n", $html);
+	}
+
+	/**
+	 * @param string $jsOnLoad
+	 */
+	public function addJsOnLoad($jsOnLoad) {
+		$this->jsOnLoad .= $jsOnLoad;
+	}
+
+	private function getFocus(){
+		$focus = $this->focus;
+		if($focus===null || $focus===true){
+			$focus=":input:enabled:visible:first";
+		}
+		return $focus;
+	}
+
+	private function getJsOnLoadHtml(){
+		$js=$this->jsOnLoad;
+
+		$focus = $this->getFocus();
+		if($focus!==false){
+			$js.="$('$focus').focus();";
+		}
+
+		if(!$js)return"";
+		return "onload=\"".ServiceStrings::escape_value_html($js)."\"";
+	}
+
+	/**
+	 * @param bool|string $focus TRUE or selector. Example: "#name"
+	 * @param bool        $override If focus is already set this command is ignored unless $override is set to TRUE.
+	 */
+	public function setFocus($focus, $override = false) {
+		if (!$override && $this->focus !== null) return;
+		$this->focus = $focus;
 	}
 
 	public static function echoAndQuit($html = "") {

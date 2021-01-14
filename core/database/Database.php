@@ -64,7 +64,6 @@ class Database {
 			$this->pdo = new \PDO("mysql:host=" . $this->host . ";dbname=" . $this->dbname, $user, $password);
 			$this->pdo->query('SET NAMES utf8;');
 		} catch (\Exception $e) {
-			#echo "ab5$this->dbname".$e->getMessage()."==>".$e->getCode();
 			if ($e instanceof \PDOException) {
 				if ($e->getCode() === 2002/*php_network_getaddresses: getaddrinfo failed*/) {
 					new Error("Host unknown! $this->host");
@@ -159,7 +158,8 @@ class Database {
 		}
 	}
 
-	private function error_handling(\PDOStatement $statement, $query) {
+	private function /*TODO:*/error_handling(\PDOStatement $statement, $query) {
+		new Error(print_r($statement->errorInfo(),1));
 		return;
 		$eInfo = $statement->errorInfo();
 		$errorCode = $eInfo[0];

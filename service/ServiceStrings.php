@@ -13,10 +13,8 @@ class ServiceStrings {
 	/**
 	 * Escapes quotes with htmlentities.
 	 * Escapes single quotes, double quotes and the ampersand.
-	 * Examples:
+	 * Example:
 	 *      "<tag value = '".escape_value_html($value)."' />"
-	 *      "<tag value = \"".escape_value_html($value)."\" />"
-	 *      '<tag value = "'.escape_value_html($value).'" />'
 	 * @param string $value
 	 * @return string
 	 */
@@ -30,6 +28,7 @@ class ServiceStrings {
 
 	/**
 	 * Escapes control characters for JS.
+	 * Escapes backslashes, single quotes and double quotes.
 	 * @param string $value
 	 * @return string
 	 */
