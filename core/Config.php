@@ -20,6 +20,8 @@ class Config {
 
 	const MODULE_CORE = 'core';
 
+	const DBCFG_DB_VERSION = "DB_VERSION";
+
 	const DEFAULT_VALUE_NOT_FOUND = "!TTDEFVALNOTFOUND!";
 
 	const PLATFORM_UNKNOWN = 0;

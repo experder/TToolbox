@@ -13,6 +13,10 @@ use tt\core\database\DbModell;
 
 class core_config extends DbModell {
 
+	const content = "content";
+	const idstring = "idstring";
+	const module = "module";
+
 	/**
 	 * @return string
 	 */

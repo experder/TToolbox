@@ -257,7 +257,7 @@ class Installer {
 			);
 		}
 
-		self::initDatabaseDo($dbname, $host, $user, $password);
+		$init_response = self::initDatabaseDo($dbname, $host, $user, $password);
 
 		$form2 = new Form("glittering prizes", "", false);
 		$form2->addButton(
@@ -265,7 +265,7 @@ class Installer {
 		);
 		self::startWizard(
 			Message::messageToHtml(Message::TYPE_CONFIRM,
-				"Database '<b>$dbname</b>' has been created."
+				"Database '<b>$dbname</b>' has been created. $init_response"
 			)
 			. $form2
 		);
@@ -293,8 +293,9 @@ class Installer {
 
 		$db->_query("INSERT INTO `" . Config::get(Config::DB_TBL_CFG) . "` (`idstring`, `module`, `content`) VALUES ('DB_VERSION', '".Config::MODULE_CORE."', '1');");//TODO:Insert Assoc
 
-		CoreDatabase::init();
+		$msg = CoreDatabase::init();
 
+		return $msg;
 	}
 
 	public static function initApiClass($classname, $filename) {

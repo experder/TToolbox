@@ -13,13 +13,14 @@ use tt\install\Installer;
 
 class CoreDatabase extends UpdateDatabase {
 
-	protected function getModuleName() {
+	public function getModuleName() {
 		return Config::MODULE_CORE;
 	}
 
 	public static function init() {
 		$cd = new CoreDatabase();
-		$cd->doUpdate();
+		$msg = $cd->startUpdate();
+		return $msg;
 	}
 
 	protected function doUpdate() {
