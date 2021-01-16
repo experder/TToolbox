@@ -28,6 +28,17 @@ use tt\service\ServiceStrings;
 use tt\service\Templates;
 use tt\service\thirdparty\LoadJs;
 
+/**
+ * Installer handles:
+ * - Creation of "init_pointer.php"
+ * - Creation of "Init.php"
+ * - Creation of "init_server.php"
+ * - Creation of tt database (name specified in init_server.php)
+ * - Download of third party package:
+ *   - jquery
+ *
+ * TODO: api-dir
+ */
 class Installer {
 
 	const DIVID_download_status_div = 'download_status_div';
@@ -53,10 +64,9 @@ class Installer {
 		if (!ServiceEnv::requestCmd('createWebPointer')) {
 			$form = new Form("createWebPointer", "", "Create init_pointer.php");
 			$suggest = "dirname(__DIR__).'/TTconfig/Init.php'";
-			$form->addField(new FormfieldText("val_webpath", "Path to Init.php", $suggest));
+			$form->addField(new FormfieldText("val_webpath", "Path to Init.php", $suggest, true, array("id"=>"focus")));
 			$m = new Message(Message::TYPE_INFO,
-				"The file <b>$file</b> (excluded from the repo) points to <b>Init.php</b>"
-				. " (located in <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>CFG_DIR</a>)."
+				"The file <b>$file</b> (excluded from the repo) points to <b>Init.php</b>."
 			);
 			self::startWizard(
 				$m->toHtml()
@@ -107,7 +117,11 @@ class Installer {
 
 		$msg = "Successfully stored file '$filename'.";
 		$msg = Message::messageToHtml(Message::TYPE_CONFIRM, $msg);
-		$msg .= new Form("every little thing she does", "", "OK");
+		$form = new Form("every little thing she does", "", false);
+		$form->addButton(
+			"<input type='submit' id='focus' value='OK'>"
+		);
+		$msg .= $form;
 
 		$warning = false;
 
@@ -139,17 +153,11 @@ class Installer {
 		if (!ServiceEnv::requestCmd('createInitServer')) {
 			$form = new Form("createInitServer", "", "Create init_server.php");
 
-			$form->addField(new FormfieldText("SERVERNAME", "Servername", "mydevserver",true,array(
-				"id"=>"focus",
-			)));
-
 			$suggest = dirname($_SERVER['SCRIPT_NAME']);
 			if (($p = strpos($suggest, '/TToolbox')) !== false) {
 				$suggest = substr($suggest, 0, $p);
 			}
-			$form->addField(new FormfieldText("HTTP_ROOT", "Web root path (<a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>HTTP_ROOT</a>)", $suggest));
-
-			$form->addField(new FormfieldText("HTTP_TTROOT", "TT root path (HTTP_TTROOT)", "Config::get(Config::HTTP_ROOT).'/TToolbox'"));
+			$form->addField(new FormfieldText("HTTP_ROOT", "Web root path (<a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>HTTP_ROOT</a>)", $suggest, true, array("id"=>"focus")));
 
 			$form->addField(new FormfieldText("DB_HOST", "DB host", "localhost"));
 			$form->addField(new FormfieldText("DB_NAME", "DB name", "mytt"));
@@ -159,19 +167,7 @@ class Installer {
 			$form->addField(new FormfieldRadio("DEVMODE", array(
 				new FormfieldRadioOption("on", "Development"),
 				new FormfieldRadioOption("off", "Production"),
-			), "off"));
-
-			$platform = "PLATFORM_UNKNOWN";
-			if (PHP_OS == 'WINNT') $platform = "PLATFORM_WINDOWS";
-			if (PHP_OS == 'Linux') $platform = "PLATFORM_LINUX";
-			$form->addField(new FormfieldRadio("PLATFORM", array(
-				new FormfieldRadioOption("PLATFORM_UNKNOWN", "Platform unknown"),
-				new FormfieldRadioOption("PLATFORM_WINDOWS", "Windows"),
-				new FormfieldRadioOption("PLATFORM_LINUX", "Linux"),
-			), $platform));
-
-			$suggest = "Config::get(Config::HTTP_TTROOT) . '/run/?c='";
-			$form->addField(new FormfieldText("RUNALIAS", "Run alias", $suggest));
+			), "on"));
 
 			self::startWizard(
 				Message::messageToHtml(Message::TYPE_INFO,
@@ -181,18 +177,27 @@ class Installer {
 			);
 		}
 
+		$platform = "PLATFORM_UNKNOWN";
+		if (PHP_OS == 'WINNT') $platform = "PLATFORM_WINDOWS";
+		if (PHP_OS == 'Linux') $platform = "PLATFORM_LINUX";
+
+		$servername = isset($_SERVER['SERVER_NAME'])?$_SERVER['SERVER_NAME']:"myserver";
+
+		$ttroot = "Config::get(Config::HTTP_ROOT) . '/".basename(dirname(__DIR__))."'";
+
 		Templates::create_file($file, __DIR__ . '/templates/init_server.php', array(
 			"<?php" . PHP_EOL . PHP_EOL . "/*" => "<?php" . PHP_EOL . "/*",
+
 			"#HTTP_ROOT" => $_REQUEST["HTTP_ROOT"],
-			"'#HTTP_TTROOT'" => $_REQUEST["HTTP_TTROOT"],
-			"#SERVERNAME" => $_REQUEST["SERVERNAME"],
 			"#DB_HOST" => $_REQUEST["DB_HOST"],
 			"#DB_NAME" => $_REQUEST["DB_NAME"],
 			"#DB_USER" => $_REQUEST["DB_USER"],
 			"#DB_PASS" => $_REQUEST["DB_PASS"],
 			"'#DEVMODE'" => $_REQUEST["DEVMODE"] == 'on' ? 'true' : 'false',
-			"'#PLATFORM'" => 'Config::' . $_REQUEST["PLATFORM"],
-			"'#RUNALIAS'" => $_REQUEST["RUNALIAS"],
+
+			"'#HTTP_TTROOT'" => $ttroot,
+			"'#PLATFORM'" => 'Config::' . $platform,
+			"#SERVERNAME" => $servername,
 		));
 	}
 
@@ -212,7 +217,9 @@ class Installer {
 			$form = new Form("cmdCreateInit", "", "Create Init.php");
 
 			$suggest = "dirname(__DIR__) . '/" . basename(dirname(__DIR__)) . "'";
-			$form->addField(new FormfieldText("TToolbox", "Path to TToolbox", $suggest));
+			$form->addField(new FormfieldText("TToolbox", "Path to TToolbox", $suggest, true, array(
+				"id"=>"focus",
+			)));
 
 			$suggest = strtolower(basename(dirname(dirname(__DIR__))));
 			$form->addField(new FormfieldText("PROJ_NAMESPACE_ROOT", "Project's root namespace", $suggest));
@@ -229,13 +236,18 @@ class Installer {
 			"//TPL:namespace" => "namespace",
 			"'#TToolbox'" => $_REQUEST["TToolbox"],
 			"#PROJ_NAMESPACE_ROOT" => $_REQUEST["PROJ_NAMESPACE_ROOT"],
+			#"#CFG_PROJECT_DIR" => dirname(dirname(__DIR__)),
 		));
 
+		$form = new Form("make it so", "", false);
+		$form->addButton(
+			"<input type='submit' id='focus' value='OK'>"
+		);
 		self::startWizard(
 			Message::messageToHtml(Message::TYPE_CONFIRM,
 				"File '<b>$file</b>' has been created."
 			)
-			. new Form("make it so", "", "OK")
+			. $form
 		);
 
 	}
@@ -325,7 +337,7 @@ class Installer {
 		exit;
 	}
 
-	private static function onloadFocusJs() {
+	public static function onloadFocusJs() {
 		return "e=document.getElementById('focus');if(e)e.focus();";
 	}
 

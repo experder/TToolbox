@@ -38,7 +38,7 @@ class LoadJs {
 		if ($downloadTo === null) $downloadTo = $this->scriptRef;
 		$downloadTo = Config::get(Config::DIR_3RDPARTY) . '/' . $downloadTo;
 		#Installer::getExternalFile($res, $downloadTo, "if(!data.".Installer::AJAXDATA_warning."){setTimeout(function(){location.reload();},2000);}", $this->checksum);
-		Installer::getExternalFile($res, $downloadTo, "", $this->checksum);
+		Installer::getExternalFile($res, $downloadTo, Installer::onloadFocusJs(), $this->checksum);
 	}
 
 	public function getExternalResource() {

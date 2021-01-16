@@ -80,32 +80,8 @@ class Config {
 	public static function getDefaultValue($cfgId) {
 		switch ($cfgId) {
 
-			case self::DEVMODE:
+			case self::DEVMODE://TODO: Devmode nicht abfragen, bevor er in der init_server gesetzt wird. Dann hier raus.
 				return false;
-			case self::CFG_PLATFORM:
-				return self::PLATFORM_UNKNOWN;
-			case self::CFG_PROJECT_DIR:
-				return dirname(dirname(__DIR__));
-			case self::CFG_SERVER_INIT_FILE:
-				return self::get(self::CFG_DIR) . '/init_server.php';
-			case self::CFG_API_DIR:
-				return self::get(self::CFG_DIR) . '/api';
-			case self::DIR_3RDPARTY:
-				return self::get(self::CFG_PROJECT_DIR) . '/thirdparty';
-			case self::HTTP_TTROOT:
-				return self::get(self::HTTP_ROOT) . '/' . basename(dirname(__DIR__));
-			case self::RUN_ALIAS:
-				return self::get(self::HTTP_TTROOT) . '/run/?c=';
-			case self::RUN_ALIAS_API:
-				return self::get(self::HTTP_TTROOT) . '/run_api/';
-			case self::HTTP_SKIN:
-				return self::get(self::HTTP_ROOT) . '/TTconfig/skins/skin1';
-			case self::HTTP_3RDPARTY:
-				return self::get(self::HTTP_ROOT) . "/thirdparty";
-			case self::DB_CORE_PREFIX:
-				return "core";
-			case self::DB_TBL_CFG:
-				return self::get(self::DB_CORE_PREFIX) . "_config";
 
 			default:
 				return self::DEFAULT_VALUE_NOT_FOUND;
