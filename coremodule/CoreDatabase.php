@@ -8,7 +8,7 @@
 
 namespace tt\coremodule;
 
-use tt\classes\moduleapi\Modules;
+use tt\core\Modules;
 use tt\classes\moduleapi\UpdateDatabase;
 use tt\install\Installer;
 
