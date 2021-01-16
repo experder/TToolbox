@@ -8,6 +8,7 @@
 
 namespace tt\core;
 
+use tt\classes\moduleapi\Modules;
 use tt\config\Init;
 use tt\core\auth\Token;
 use tt\core\page\Page;
@@ -89,14 +90,14 @@ class Config {
 
 	public static function startCli() {
 
-		//Configurations, Autoloader, Database
+		//Configurations, Autoloader, Modules, Database
 		self::init1();
 
 	}
 
 	public static function startApi() {
 
-		//Configurations, Autoloader, Database
+		//Configurations, Autoloader, Modules, Database
 		self::init1();
 
 		//Session, Authentication
@@ -110,7 +111,7 @@ class Config {
 	 */
 	public static function startWeb($pid) {
 
-		//Configurations, Autoloader, Database
+		//Configurations, Autoloader, Modules, Database
 		self::init1();
 
 		//Session, Authentication
@@ -123,7 +124,7 @@ class Config {
 	}
 
 	/**
-	 * Configurations, Autoloader, Database
+	 * Configurations, Autoloader, Modules, Database
 	 */
 	public static function init1() {
 
@@ -133,6 +134,9 @@ class Config {
 		//Autoloader
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
+
+		//Modules
+		Modules::init();
 
 		//Server specific configuration, including database settings
 		Installer::requireServerInit();

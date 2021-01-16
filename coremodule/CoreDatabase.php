@@ -6,20 +6,17 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\core\database;
+namespace tt\coremodule;
 
-use tt\core\Config;
+use tt\classes\moduleapi\Modules;
+use tt\classes\moduleapi\UpdateDatabase;
 use tt\install\Installer;
 
 class CoreDatabase extends UpdateDatabase {
 
-	public function getModuleName() {
-		return Config::MODULE_CORE;
-	}
-
 	public static function init() {
-		$cd = new CoreDatabase();
-		$msg = $cd->startUpdate();
+		$cd = Modules::getInstance()->getModule(CoreModule::MODULE_ID);
+		$msg = $cd->getUpdateDatabase()->startUpdate();
 		return $msg;
 	}
 

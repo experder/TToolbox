@@ -10,9 +10,9 @@ namespace tt\install;
 
 use tt\core\Autoloader;
 use tt\core\Config;
-use tt\core\database\CoreDatabase;
 use tt\core\database\Database;
 use tt\core\page\Message;
+use tt\coremodule\CoreDatabase;
 use tt\run\ApiResponseHtml;
 use tt\service\Error;
 use tt\service\form\Form;
@@ -42,6 +42,8 @@ class Installer {
 	const DIVID_download_status_div = 'download_status_div';
 
 	const AJAXDATA_warning = "warning";
+
+	const MODULE_ID_MAXLENGTH = 40;//chars
 
 	public static $additionalWizardHead = "";
 
@@ -294,13 +296,14 @@ class Installer {
 			"CREATE TABLE `" . Config::get(Config::DB_TBL_CFG) . "` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `idstring` VARCHAR(40) COLLATE utf8_bin NOT NULL,
-  `module` VARCHAR(40) COLLATE utf8_bin NOT NULL,
+  `module` VARCHAR(".Installer::MODULE_ID_MAXLENGTH.") COLLATE utf8_bin NOT NULL,
   `userid` INT(11) DEFAULT NULL,
   `content` TEXT COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;"
 		);
 
+		//TODO: Initialize from 0
 		$db->_query("INSERT INTO `" . Config::get(Config::DB_TBL_CFG) . "` (`idstring`, `module`, `content`) VALUES ('DB_VERSION', '".Config::MODULE_CORE."', '1');");//TODO:Insert Assoc
 
 		$msg = CoreDatabase::init();
