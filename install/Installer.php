@@ -34,10 +34,8 @@ use tt\service\thirdparty\LoadJs;
  * - Creation of "Init.php"
  * - Creation of "init_server.php"
  * - Creation of tt database (name specified in init_server.php)
- * - Download of third party package:
- *   - jquery
- *
- * TODO: api-dir
+ * - Download of third party packages
+ * - Create API classes
  */
 class Installer {
 
@@ -312,7 +310,10 @@ class Installer {
 
 	public static function initApiClass($classname, $filename) {
 		if (!ServiceEnv::requestCmd('cmdInitApiClass')) {
-			$form = new Form("cmdInitApiClass", "", "Create API class '$classname'");
+			$form = new Form("cmdInitApiClass", "", false);
+			$form->addButton(
+				"<input type='submit' id='focus' value=\"Create API class '$classname'\">"
+			);
 
 			self::startWizard(
 				Message::messageToHtml(Message::TYPE_INFO,

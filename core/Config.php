@@ -77,12 +77,11 @@ class Config {
 		return $default;
 	}
 
+	/**
+	 * @deprecated TODO (defaults are defines in project Init.php and init_server.php
+	 */
 	public static function getDefaultValue($cfgId) {
 		switch ($cfgId) {
-
-			case self::DEVMODE://TODO: Devmode nicht abfragen, bevor er in der init_server gesetzt wird. Dann hier raus.
-				return false;
-
 			default:
 				return self::DEFAULT_VALUE_NOT_FOUND;
 		}
