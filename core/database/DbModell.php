@@ -9,10 +9,4 @@
 namespace tt\core\database;
 
 abstract class DbModell {
-
-	/**
-	 * @return string
-	 */
-	abstract public function getTableName();
-
 }

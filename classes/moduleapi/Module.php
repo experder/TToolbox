@@ -8,10 +8,14 @@
 
 namespace tt\classes\moduleapi;
 
+use tt\core\Modules;
+
 interface Module {
 
 	/**
-	 * @return string Module name, [a-z_0-9], 40 chars max (Installer::MODULE_ID_MAXLENGTH)
+	 * @return string Module name, [a-z_0-9], 40 chars max
+	 * @see Modules::register()
+	 * @see Modules::MODULE_ID_MAXLENGTH
 	 */
 	public function getModuleId();
 

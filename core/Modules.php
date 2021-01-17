@@ -14,6 +14,8 @@ use tt\service\Error;
 
 class Modules {
 
+	const MODULE_ID_MAXLENGTH = 40;//chars
+
 	/**
 	 * @var Modules $instance
 	 */
@@ -44,6 +46,11 @@ class Modules {
 
 	public function register(Module $module){
 		$module_id = $module->getModuleId();
+
+		if(preg_replace("/[^a-z_0-9]/","",$module_id)!==$module_id || strlen($module_id)>Modules::MODULE_ID_MAXLENGTH){
+			new Error("Invalid module ID: '$module_id'");
+		}
+
 		$this->modules[$module_id] = $module;
 	}
 

@@ -8,18 +8,19 @@
 
 namespace tt\core;
 
-use tt\classes\moduleapi\Modules;
 use tt\config\Init;
 use tt\core\auth\Token;
+use tt\core\database\core_model\core_config;
+use tt\core\database\Database;
 use tt\core\page\Page;
 use tt\install\Installer;
 use tt\service\Error;
 
 class Config {
 
-	private static $settings = array();
+	private static $config_cache = array();
 
-	const MODULE_CORE = 'core';
+	private static $settings = array();
 
 	const DBCFG_DB_VERSION = "DB_VERSION";
 
@@ -43,10 +44,7 @@ class Config {
 	const HTTP_ROOT = 'HTTP_ROOT';
 	const RUN_ALIAS = 'RUN_ALIAS';
 	const RUN_ALIAS_API = 'RUN_ALIAS_API';
-
 	const DB_CORE_PREFIX = 'DB_CORE_PREFIX';
-	const DB_TBL_CFG = 'DB_TBL_CFG';
-
 
 	public static function set($cfgId, $value) {
 		self::$settings[$cfgId] = $value;
@@ -76,6 +74,86 @@ class Config {
 		}
 
 		return $default;
+	}
+
+	public static function getValue($id, $module, $user = null, $default_value = null) {
+		$value = self::recallVal($module, $id, $user);
+		if ($value !== false) {
+			return $value;
+		}
+
+		$database = Database::getPrimary();
+
+		$data = $database->_query("SELECT ".core_config::content." FROM ".core_config::getTableName()." WHERE ".core_config::idstring."=:ID AND ".core_config::module."=:MOD AND ".core_config::userid."<=>:USR LIMIT 1;", array(
+			":ID"=>$id,
+			":USR"=>$user,
+			":MOD"=>$module,
+		), Database::RETURN_ASSOC);
+
+		if(!$data || !is_array($data) || count($data)<1){
+			return $default_value;
+		}
+
+		if(count($data)>1){
+			new Error(
+				"Config database corrupt! Multiple entries found for \"$id\" (module '$module'".($user?", user #$user":"").")."
+			);
+		}
+
+		$value = $data[0][core_config::content];
+
+		self::storeVal($value, $module, $id, $user);
+
+		return $value;
+	}
+
+	private static function recallVal($module, $key, $user = null) {
+		$user_index = 'u' . ($user?:0);
+		if (!isset(self::$config_cache[$module][$user_index][$key])) {
+			return false;
+		}
+		return self::$config_cache[$module][$user_index][$key];
+	}
+
+	private static function storeVal($value, $module, $key, $user=null) {
+		$user_index = 'u' . ($user?:0);
+		self::$config_cache[$module][$user_index][$key] = $value;
+	}
+
+
+	public static function setValue($value, $key, $module, $user = null) {
+		$database = Database::getPrimary();
+
+		$response = $database->_query("UPDATE ".core_config::getTableName()." SET ".core_config::content."=:VAL WHERE ".core_config::idstring."=:ID AND ".core_config::module."=:MOD AND ".core_config::userid."<=>:USR LIMIT 1;", array(
+			":VAL"=>$value,
+			":ID"=>$key,
+			":MOD"=>$module,
+			":USR"=>$user,
+		), Database::RETURN_ROWCOUNT);
+
+		if($response===0){
+			//Update failed: Insert!
+
+			//TODO: Database:INSERT_ASSOC
+			$database->_query("INSERT INTO ".core_config::getTableName()." (
+`".core_config::idstring."` ,
+`".core_config::module."` ,
+`".core_config::userid."` ,
+`".core_config::content."`
+)
+VALUES (
+ :ID, :MOD, :USR, :VAL
+);", array(
+				":VAL"=>$value,
+				":ID"=>$key,
+				":MOD"=>$module,
+				":USR"=>$user,
+			));
+		}
+
+
+		self::storeVal($value, $module, $key, $user);
+
 	}
 
 	/**

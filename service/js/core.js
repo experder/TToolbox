@@ -42,7 +42,7 @@ function tt_ajax_post(url, data_object, Funktion) {
 				message = '<div class="dev"><h1>Invalid JSON</h1>'
 					+ '<input type="button" value="raw" onclick="$(\'#' + id + '\').toggle(400);" />'
 					+ '<div class="dev ajax_response raw" id="' + id + '" style="display: none;">' + htmlEntities(jqXHR.responseText) + '</div>'
-					+ '<div class="dev ajax_response">' + jqXHR.responseText + '</div>'
+					+ '<div class="dev ajax_response">' + htmltrim(jqXHR.responseText) + '</div>'
 					+ '</div>';
 			} else if (String(textStatus) === 'parsererror' && String(errorThrown) === 'SyntaxError: JSON.parse: unexpected end of data at line 1 column 1 of the JSON data') {
 				message = '<div class="dev"><h1>Empty response</h1>See console for request object.</div>';
@@ -73,6 +73,10 @@ function tt_error(message, classname = 'error ajax_error') {
 	msgDiv.append(msg);
 	t2_spinner_stop();
 	tt_scroll_to(msgDiv.children().last());
+}
+
+function htmltrim(string){
+	return string;//TODO
 }
 
 function tt_scroll_to(jQo, millis = 400) {

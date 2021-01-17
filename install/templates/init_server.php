@@ -13,6 +13,7 @@ if (true) exit;/*
  *
  */
 
+use tt\core\database\core_model\core_config;
 use tt\core\database\Database;
 use tt\core\Config;
 
@@ -20,7 +21,7 @@ Config::set(Config::DEVMODE, '#DEVMODE');
 
 Config::set(Config::DB_CORE_PREFIX, 'core');
 
-Config::set(Config::DB_TBL_CFG, Config::get(Config::DB_CORE_PREFIX) . '_config');
+core_config::setTableName(Config::get(Config::DB_CORE_PREFIX) . '_config');
 
 Database::init('#DB_HOST', '#DB_NAME', '#DB_USER', '#DB_PASS');
 

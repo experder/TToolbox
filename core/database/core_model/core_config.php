@@ -8,19 +8,30 @@
 
 namespace tt\core\database\core_model;
 
-use tt\core\Config;
 use tt\core\database\DbModell;
 
 class core_config extends DbModell {
 
-	const content = "content";
+	private static $table_name = null;
+
+	const id = "id";
 	const idstring = "idstring";
 	const module = "module";
+	const userid = "userid";
+	const content = "content";
 
 	/**
 	 * @return string
 	 */
-	public function getTableName() {
-		return Config::get(Config::DB_TBL_CFG);
+	public static function getTableName() {
+		return self::$table_name;
 	}
+
+	/**
+	 * @param string $table_name
+	 */
+	public static function setTableName($table_name) {
+		self::$table_name = $table_name;
+	}
+
 }

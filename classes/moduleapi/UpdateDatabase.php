@@ -63,12 +63,10 @@ abstract class UpdateDatabase {
 	}
 
 	private function setVersion($ver){
-		Database::getPrimary()->_query("UPDATE `" . Config::get(Config::DB_TBL_CFG) . "` SET `".core_config::content."` = '$ver' WHERE `".core_config::idstring."` ='".Config::DBCFG_DB_VERSION."' AND ".core_config::module."='".$this->module->getModuleId()."';");//TODO: SetConfigVal
+		Config::setValue($ver, Config::DBCFG_DB_VERSION, $this->module->getModuleId());
 	}
 	private function getVersion(){
-		#TODO: Config::getValue();
-		$data = Database::getPrimary()->_query("SELECT ".core_config::content." FROM `" . Config::get(Config::DB_TBL_CFG) . "` WHERE ".core_config::idstring."='".Config::DBCFG_DB_VERSION."' AND ".core_config::module."='".$this->module->getModuleId()."' LIMIT 1;", null, Database::RETURN_ASSOC);
-		$ver = $data[0]['content'];
+		$ver = Config::getValue(Config::DBCFG_DB_VERSION, $this->module->getModuleId(), null, 0);
 		return $ver;
 	}
 

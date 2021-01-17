@@ -109,7 +109,7 @@ class Database {
 		$ok = @$statement->execute($substitutions);
 		$this->debuginfo($statement, $query);
 		if (!$ok) {
-			$this->error_handling($statement, $query);
+			$this->error_handling($statement, $query, $substitutions, 1);
 			return null;
 		}
 		switch ($return_type) {
@@ -158,7 +158,16 @@ class Database {
 		}
 	}
 
-	private function /*TODO:*/error_handling(\PDOStatement $statement, $query) {
+	private function /*TODO:*/error_handling(\PDOStatement $statement, $query, $substitutions, $cut_backtrace = 0) {
+		$eInfo = $statement->errorInfo();
+		$errorCode = $eInfo[0];
+		$errorInfo = "[$errorCode] " . $eInfo[2];
+
+		if($errorCode=="HY093"){
+			new Error("Invalid parameter number: parameter was not defined", $cut_backtrace+1);
+		}
+
+		#new Error($query." /// ".print_r($substitutions,1)." /// ".print_r($statement->errorInfo(),1));
 		new Error(print_r($statement->errorInfo(),1));
 		return;
 		$eInfo = $statement->errorInfo();

@@ -24,7 +24,7 @@ class CoreDatabase extends UpdateDatabase {
 
 		/** @see Installer::initDatabaseDo() */
 
-#		$this->q(2, "");
+#		$this->q(1, "");
 
 	}
 
