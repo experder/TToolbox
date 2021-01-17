@@ -184,7 +184,7 @@ class Installer {
 
 		$servername = isset($_SERVER['SERVER_NAME'])?$_SERVER['SERVER_NAME']:"myserver";
 
-		$ttroot = "Config::get(Config::HTTP_ROOT) . '/".basename(dirname(__DIR__))."'";
+		$ttroot = "Config::get2(Config::HTTP_ROOT) . '/".basename(dirname(__DIR__))."'";
 
 		Templates::create_file($file, __DIR__ . '/templates/init_server.php', array(
 			"<?php" . PHP_EOL . PHP_EOL . "/*" => "<?php" . PHP_EOL . "/*",

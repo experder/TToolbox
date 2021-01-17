@@ -8,8 +8,8 @@
 
 namespace tt\coremodule;
 
-use tt\classes\moduleapi\Module;
-use tt\classes\moduleapi\UpdateDatabase;
+use tt\moduleapi\Module;
+use tt\moduleapi\UpdateDatabase;
 
 class CoreModule implements Module {
 

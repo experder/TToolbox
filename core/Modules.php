@@ -8,7 +8,7 @@
 
 namespace tt\core;
 
-use tt\classes\moduleapi\Module;
+use tt\moduleapi\Module;
 use tt\coremodule\CoreModule;
 use tt\service\Error;
 

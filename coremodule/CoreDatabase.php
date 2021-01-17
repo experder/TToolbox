@@ -9,7 +9,7 @@
 namespace tt\coremodule;
 
 use tt\core\Modules;
-use tt\classes\moduleapi\UpdateDatabase;
+use tt\moduleapi\UpdateDatabase;
 use tt\install\Installer;
 
 class CoreDatabase extends UpdateDatabase {
