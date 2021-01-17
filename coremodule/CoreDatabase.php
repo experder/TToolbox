@@ -15,8 +15,8 @@ use tt\install\Installer;
 class CoreDatabase extends UpdateDatabase {
 
 	public static function init() {
-		$cd = Modules::getInstance()->getModule(CoreModule::MODULE_ID);
-		$msg = $cd->getUpdateDatabase()->startUpdate();
+		$updater = Modules::getInstance()->getModule(CoreModule::MODULE_ID)->getUpdateDatabase();
+		$msg = $updater->startUpdate();
 		return $msg;
 	}
 

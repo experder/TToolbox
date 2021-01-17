@@ -27,7 +27,7 @@ class Init {
 
 		Config::set(Config::DIR_3RDPARTY, dirname(__DIR__).'/thirdparty');
 
-		Config::set(Config::CFG_API_DIR, Config::get(Config::CFG_DIR) . '/api');
+		Config::set(Config::CFG_API_DIR, Config::get2(Config::CFG_DIR) . '/api');
 
 		//Enable multi Autoloader (Autoloader doesn't terminate on error):
 		#require_once '#TToolbox'.'/core/Autoloader.php';

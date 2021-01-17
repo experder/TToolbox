@@ -24,7 +24,7 @@ class LoadJs {
 	protected $unzip = false;
 
 	public function __construct() {
-		if (!file_exists(Config::get(Config::DIR_3RDPARTY) . '/' . $this->getScriptRef())) {
+		if (!file_exists(Config::get2(Config::DIR_3RDPARTY) . '/' . $this->getScriptRef())) {
 			$this->downloadPackage();
 		}
 	}
@@ -36,7 +36,7 @@ class LoadJs {
 		}
 		$downloadTo = $this->downloadTo;
 		if ($downloadTo === null) $downloadTo = $this->scriptRef;
-		$downloadTo = Config::get(Config::DIR_3RDPARTY) . '/' . $downloadTo;
+		$downloadTo = Config::get2(Config::DIR_3RDPARTY) . '/' . $downloadTo;
 		#Installer::getExternalFile($res, $downloadTo, "if(!data.".Installer::AJAXDATA_warning."){setTimeout(function(){location.reload();},2000);}", $this->checksum);
 		Installer::getExternalFile($res, $downloadTo, Installer::onloadFocusJs(), $this->checksum);
 	}
@@ -54,7 +54,7 @@ class LoadJs {
 			new Error("No script reference given for " . get_class($this) . "!"
 				. "\nprotected \$scriptRef = 'jquery341/jquery.min.js';");
 		}
-		$HTTP_3RDPARTY = Config::get(Config::HTTP_3RDPARTY);
+		$HTTP_3RDPARTY = Config::get2(Config::HTTP_3RDPARTY);
 		return $HTTP_3RDPARTY . "/" . $this->getScriptRef();
 	}
 

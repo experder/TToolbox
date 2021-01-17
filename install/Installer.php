@@ -141,7 +141,7 @@ class Installer {
 	}
 
 	public static function requireServerInit() {
-		$file = Config::get(Config::CFG_SERVER_INIT_FILE);
+		$file = Config::get2(Config::CFG_SERVER_INIT_FILE);
 
 		if (!file_exists($file)) {
 			self::promptServerInit($file);
@@ -354,8 +354,8 @@ class Installer {
 		$head .= "<script>$js</script>";
 		$head .= self::$additionalWizardHead;
 
-		if (Config::getIfSet(Config::HTTP_ROOT, false))
-			$head .= LoadJs::htmlScript(Config::get(Config::HTTP_TTROOT) . '/service/js/core.js');
+		if ($ttroot=Config::get2(Config::HTTP_TTROOT, false))
+			$head .= LoadJs::htmlScript($ttroot . '/service/js/core.js');
 
 		$head = "<head>$head</head>";
 

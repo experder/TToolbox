@@ -50,10 +50,10 @@ class Page {
 	public static function getInstance() {
 		if (self::$instance === null) {
 			self::$instance = new Page();
-			if(Config::getIfSet(Config::HTTP_ROOT, false)!==false) {
+			if(($ttroot=Config::get2(Config::HTTP_TTROOT, false))!==false) {
 				$j = new Jquery();
 				self::$instance->addJs($j->getScriptReference(), Jquery::JS_NAME);
-				self::$instance->addJs(Config::get(Config::HTTP_TTROOT) . '/service/js/core.js', Js::JSID_CORE);
+				self::$instance->addJs($ttroot . '/service/js/core.js', Js::JSID_CORE);
 			}
 		}
 		return self::$instance;
@@ -160,8 +160,7 @@ $body="<h1>$this->id</h1>".$body;
 
 	public function getMainCss() {
 		$css = array();
-		if(Config::getIfSet(Config::HTTP_ROOT, false)!==false) {
-			$HTTP_SKIN = Config::get(Config::HTTP_SKIN);
+		if(($HTTP_SKIN=Config::get2(Config::HTTP_SKIN, false))!==false) {
 			$css[] = "<link href=\"" . $HTTP_SKIN . "/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
 		}
 		return implode("\n", $css);

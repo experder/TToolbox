@@ -61,11 +61,13 @@ class ServiceFiles {
 			}
 		}
 		if ($success === false) {
+			$platform = Config::get2(Config::CFG_PLATFORM);
 			new Error("Couldn't store file \"$filename\". Please check rights."
-				. (
-				(($p = Config::get(Config::CFG_PLATFORM)) == Config::PLATFORM_UNKNOWN
-					|| $p == Config::PLATFORM_LINUX
-				) ? "\nTry this:\nsudo chmod 777 '" . dirname($filename) . "' -R" : "")
+				. (($platform == Config::PLATFORM_UNKNOWN
+					|| $platform == Config::PLATFORM_LINUX)
+					? "\nTry this:\nsudo chmod 777 '" . dirname($filename) . "' -R"
+					: ""
+				)
 			);
 		}
 		return $success;

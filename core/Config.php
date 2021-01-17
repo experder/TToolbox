@@ -50,30 +50,13 @@ class Config {
 		self::$settings[$cfgId] = $value;
 	}
 
-	public static function getIfSet($cfgId, $else) {
+	public static function get2($cfgId, $else=null) {
 
 		if (isset(self::$settings[$cfgId])) {
 			return self::$settings[$cfgId];
 		}
 
-		if (defined($cfgId)) {
-			return constant($cfgId);
-		}
-
 		return $else;
-	}
-
-	public static function get($cfgId) {
-
-		$value = self::getIfSet($cfgId, self::DEFAULT_VALUE_NOT_FOUND);
-		if ($value !== self::DEFAULT_VALUE_NOT_FOUND) return $value;
-
-		$default = self::getDefaultValue($cfgId);
-		if ($default === self::DEFAULT_VALUE_NOT_FOUND) {
-			new Error("No default defined for $cfgId!", 1);
-		}
-
-		return $default;
 	}
 
 	public static function getValue($id, $module, $user = null, $default_value = null) {
@@ -154,16 +137,6 @@ VALUES (
 
 		self::storeVal($value, $module, $key, $user);
 
-	}
-
-	/**
-	 * @deprecated TODO (defaults are defines in project Init.php and init_server.php
-	 */
-	public static function getDefaultValue($cfgId) {
-		switch ($cfgId) {
-			default:
-				return self::DEFAULT_VALUE_NOT_FOUND;
-		}
 	}
 
 	public static function startCli() {

@@ -38,7 +38,7 @@ class Run {
 
 	public static function getWebUrl($controllerClass) {
 		$controllerClass = str_replace('\\', '/', $controllerClass);
-		return Config::get(Config::RUN_ALIAS) . $controllerClass;
+		return Config::get2(Config::RUN_ALIAS) . $controllerClass;
 	}
 
 	public static function getWebLink($controllerClass, $linkTitle = null) {
