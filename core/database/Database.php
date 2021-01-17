@@ -10,6 +10,7 @@ namespace tt\core\database;
 
 use tt\install\Installer;
 use tt\service\Error;
+use tt\service\ServiceArrays;
 
 class Database {
 
@@ -96,6 +97,25 @@ class Database {
 
 		echo "97!";
 
+	}
+
+	public function insert($query, $substitutions) {
+		return $this->_query($query, $substitutions, self::RETURN_ASSOC);
+	}
+
+	public function insertAssoc($table, $data_set) {
+
+		$keys_array = array_keys($data_set);
+		$keys_prefixed = ServiceArrays::prefixValues(':', $keys_array);
+
+		$substitutions = array();
+		foreach ($data_set as $key => $value) {
+			$substitutions[':' . $key] = $value;
+		}
+
+		$keys = implode(",", $keys_array);
+		$values = implode(",", $keys_prefixed);
+		return $this->insert("INSERT INTO $table ($keys) VALUES ($values);", $substitutions);
 	}
 
 	/**

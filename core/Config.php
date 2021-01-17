@@ -10,6 +10,7 @@ namespace tt\core;
 
 use tt\config\Init;
 use tt\core\auth\Token;
+use tt\core\database\DB;
 use tt\coremodule\dbmodell\core_config;
 use tt\core\database\Database;
 use tt\core\page\Page;
@@ -107,36 +108,33 @@ class Config {
 	public static function setValue($value, $key, $module, $user = null) {
 		$database = Database::getPrimary();
 
-		$response = $database->_query("UPDATE ".core_config::getTableName()." SET ".core_config::ROW_content."=:VAL WHERE ".core_config::ROW_idstring."=:ID AND ".core_config::ROW_module."=:MOD AND ".core_config::ROW_userid."<=>:USR LIMIT 1;", array(
-			":VAL"=>$value,
-			":ID"=>$key,
-			":MOD"=>$module,
-			":USR"=>$user,
-		), Database::RETURN_ROWCOUNT);
+		$response = $database->_query(
+			"UPDATE " . core_config::getTableName()
+			. " SET " . core_config::ROW_content . "=:VAL"
+			. " WHERE " . core_config::ROW_idstring . "=:ID"
+			. " AND " . core_config::ROW_module . "=:MOD"
+			. " AND " . core_config::ROW_userid . "<=>:USR"
+			. " LIMIT 1;",
+			array(
+				":VAL" => $value,
+				":ID" => $key,
+				":MOD" => $module,
+				":USR" => $user,
+			),
+			Database::RETURN_ROWCOUNT
+		);
 
 		if($response===0){
 			//Update failed: Insert!
-
-			//TODO: Database:INSERT_ASSOC
-			$database->_query("INSERT INTO ".core_config::getTableName()." (
-`".core_config::ROW_idstring."` ,
-`".core_config::ROW_module."` ,
-`".core_config::ROW_userid."` ,
-`".core_config::ROW_content."`
-)
-VALUES (
- :ID, :MOD, :USR, :VAL
-);", array(
-				":VAL"=>$value,
-				":ID"=>$key,
-				":MOD"=>$module,
-				":USR"=>$user,
+			DB::insertAssoc(core_config::getTableName(), array(
+				core_config::ROW_idstring=>$key,
+				core_config::ROW_content=>$value,
+				core_config::ROW_module=>$module,
+				core_config::ROW_userid=>$user,
 			));
 		}
 
-
 		self::storeVal($value, $module, $key, $user);
-
 	}
 
 	public static function startCli() {

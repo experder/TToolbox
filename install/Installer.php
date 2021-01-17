@@ -118,7 +118,7 @@ class Installer {
 
 		$msg = "Successfully stored file '$filename'.";
 		$msg = Message::messageToHtml(Message::TYPE_CONFIRM, $msg);
-		$form = new Form("every little thing she does", "", false);
+		$form = new Form(null, "", false);
 		$form->addButton(
 			"<input type='submit' id='focus' value='OK'>"
 		);
@@ -240,7 +240,7 @@ class Installer {
 			#"#CFG_PROJECT_DIR" => dirname(dirname(__DIR__)),
 		));
 
-		$form = new Form("make it so", "", false);
+		$form = new Form(null, "", false);
 		$form->addButton(
 			"<input type='submit' id='focus' value='OK'>"
 		);
@@ -272,7 +272,7 @@ class Installer {
 
 		$init_response = self::initDatabaseDo($dbname, $host, $user, $password);
 
-		$form2 = new Form("glittering prizes", "", false);
+		$form2 = new Form(null, "", false);
 		$form2->addButton(
 			"<input type='submit' id='focus' value='OK'>"
 		);
@@ -291,23 +291,7 @@ class Installer {
 			"CREATE DATABASE `" . $dbname . "` CHARACTER SET utf8;"
 		) or die("Error240! " . print_r($dbh->errorInfo(), true));
 
-		$db = Database::init($host, $dbname, $user, $password);
-
-		//TODO: Das hier gehört in die CoreDatabase::init-Methode
-		$db->_query(
-			"CREATE TABLE `" . core_config::getTableName() . "` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `idstring` VARCHAR(40) COLLATE utf8_bin NOT NULL,
-  `module` VARCHAR(".Modules::MODULE_ID_MAXLENGTH.") COLLATE utf8_bin NOT NULL,
-  `userid` INT(11) DEFAULT NULL,
-  `content` TEXT COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;"
-		);
-
-		Config::setValue("0", Config::DBCFG_DB_VERSION, CoreModule::MODULE_ID);
-
-		$msg = CoreDatabase::init();
+		$msg = CoreDatabase::init($host, $dbname, $user, $password);
 
 		return $msg;
 	}
