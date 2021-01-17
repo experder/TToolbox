@@ -9,7 +9,6 @@
 namespace tt\classes\moduleapi;
 
 use tt\core\Config;
-use tt\core\database\core_model\core_config;
 use tt\core\database\Database;
 
 abstract class UpdateDatabase {

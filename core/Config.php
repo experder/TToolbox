@@ -10,7 +10,7 @@ namespace tt\core;
 
 use tt\config\Init;
 use tt\core\auth\Token;
-use tt\core\database\core_model\core_config;
+use tt\coremodule\dbmodell\core_config;
 use tt\core\database\Database;
 use tt\core\page\Page;
 use tt\install\Installer;
@@ -84,7 +84,7 @@ class Config {
 
 		$database = Database::getPrimary();
 
-		$data = $database->_query("SELECT ".core_config::content." FROM ".core_config::getTableName()." WHERE ".core_config::idstring."=:ID AND ".core_config::module."=:MOD AND ".core_config::userid."<=>:USR LIMIT 1;", array(
+		$data = $database->_query("SELECT ".core_config::ROW_content." FROM ".core_config::getTableName()." WHERE ".core_config::ROW_idstring."=:ID AND ".core_config::ROW_module."=:MOD AND ".core_config::ROW_userid."<=>:USR LIMIT 1;", array(
 			":ID"=>$id,
 			":USR"=>$user,
 			":MOD"=>$module,
@@ -100,7 +100,7 @@ class Config {
 			);
 		}
 
-		$value = $data[0][core_config::content];
+		$value = $data[0][core_config::ROW_content];
 
 		self::storeVal($value, $module, $id, $user);
 
@@ -124,7 +124,7 @@ class Config {
 	public static function setValue($value, $key, $module, $user = null) {
 		$database = Database::getPrimary();
 
-		$response = $database->_query("UPDATE ".core_config::getTableName()." SET ".core_config::content."=:VAL WHERE ".core_config::idstring."=:ID AND ".core_config::module."=:MOD AND ".core_config::userid."<=>:USR LIMIT 1;", array(
+		$response = $database->_query("UPDATE ".core_config::getTableName()." SET ".core_config::ROW_content."=:VAL WHERE ".core_config::ROW_idstring."=:ID AND ".core_config::ROW_module."=:MOD AND ".core_config::ROW_userid."<=>:USR LIMIT 1;", array(
 			":VAL"=>$value,
 			":ID"=>$key,
 			":MOD"=>$module,
@@ -136,10 +136,10 @@ class Config {
 
 			//TODO: Database:INSERT_ASSOC
 			$database->_query("INSERT INTO ".core_config::getTableName()." (
-`".core_config::idstring."` ,
-`".core_config::module."` ,
-`".core_config::userid."` ,
-`".core_config::content."`
+`".core_config::ROW_idstring."` ,
+`".core_config::ROW_module."` ,
+`".core_config::ROW_userid."` ,
+`".core_config::ROW_content."`
 )
 VALUES (
  :ID, :MOD, :USR, :VAL

@@ -6,24 +6,28 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\core\database\core_model;
+namespace tt\coremodule\dbmodell;
 
 use tt\core\database\DbModell;
+use tt\service\Error;
 
 class core_config extends DbModell {
 
 	private static $table_name = null;
 
-	const id = "id";
-	const idstring = "idstring";
-	const module = "module";
-	const userid = "userid";
-	const content = "content";
+	const ROW_id = "id";
+	const ROW_idstring = "idstring";
+	const ROW_module = "module";
+	const ROW_userid = "userid";
+	const ROW_content = "content";
 
 	/**
 	 * @return string
 	 */
 	public static function getTableName() {
+		if(self::$table_name===null){
+			new Error("Table name not set!");
+		}
 		return self::$table_name;
 	}
 

@@ -10,7 +10,7 @@ namespace tt\install;
 
 use tt\core\Autoloader;
 use tt\core\Config;
-use tt\core\database\core_model\core_config;
+use tt\coremodule\dbmodell\core_config;
 use tt\core\database\Database;
 use tt\core\Modules;
 use tt\core\page\Message;
