@@ -10,12 +10,8 @@ namespace tt\install;
 
 use tt\core\Autoloader;
 use tt\core\Config;
-use tt\coremodule\dbmodell\core_config;
-use tt\core\database\Database;
-use tt\core\Modules;
 use tt\core\page\Message;
 use tt\coremodule\CoreDatabase;
-use tt\coremodule\CoreModule;
 use tt\run\ApiResponseHtml;
 use tt\service\Error;
 use tt\service\form\Form;
@@ -319,7 +315,7 @@ class Installer {
 	public static function startWizard($html) {
 
 		if (ServiceEnv::isSapiAPI() || ServiceEnv::isSapiCLI()) {
-			new Error("Start wizard: Not possible!");
+			new Error("Start wizard: Not possible! Please call via Browser.");
 		}
 
 		echo self::wizardHtml($html);
