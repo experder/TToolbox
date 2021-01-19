@@ -8,26 +8,23 @@
 
 namespace tt\service\debug;
 
-class DebugQuery {
+class StatsElement {
 
-	private $queryString;
-
-	/**
-	 * @param string $queryString
-	 */
-	public function __construct($queryString) {
-		$this->queryString = $queryString;
-	}
+	private $content;
+	private $class;
 
 	/**
-	 * @return string
+	 * @param string $content HTML
+	 * @param string $class CSS class
 	 */
-	public function getQueryString() {
-		return $this->queryString;
+	public function __construct($content, $class=null) {
+		$this->content = $content;
+		$this->class = $class;
 	}
 
-	public function toHtml() {
-		return "<div>".htmlentities($this->queryString)."</div>";
+	public function toHtml(){
+		$class = $this->class?"class='$this->class'":"";
+		return "<div $class>$this->content</div>";
 	}
 
 }

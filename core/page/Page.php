@@ -10,8 +10,7 @@ namespace tt\core\page;
 
 use tt\core\CFG;
 use tt\core\Config;
-use tt\service\debug\DebugTools;
-use tt\service\Html;
+use tt\service\debug\Stats;
 use tt\service\js\Js;
 use tt\service\ServiceStrings;
 use tt\service\thirdparty\Jquery;
@@ -133,10 +132,7 @@ $body="<h1>$this->id</h1>".$body;
 
 	public static function debugInfo(){
 		if(!CFG::DEVMODE())return "";
-		$html = "<hr>";
-		$queries = DebugTools::getSingleton()->getQueries();
-		$html.=Html::PRE(implode("///",$queries));
-		return $html;
+		return "\n".Stats::getAllStatsHtml();
 	}
 
 	private function waitSpinner() {

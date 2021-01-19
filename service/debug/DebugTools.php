@@ -13,40 +13,6 @@ use tt\service\Error;
 class DebugTools {
 
 	/**
-	 * @var DebugQuery[] $queries
-	 */
-	private $queries = array();
-
-	/**
-	 * @var DebugTools $singleton
-	 */
-	private static $singleton = null;
-
-	private function __construct() {
-	}
-
-	public static function getSingleton(){
-		if(self::$singleton===null){
-			self::$singleton=new DebugTools();
-		}
-		return self::$singleton;
-	}
-
-	/**
-	 * @return DebugQuery[]
-	 */
-	public function getQueries() {
-		return $this->queries;
-	}
-
-	/**
-	 * @param DebugQuery $query
-	 */
-	public function addQuery($query) {
-		$this->queries[] = $query;
-	}
-
-	/**
 	 * Examples:
 	 * $backtrace_plain = implode("\n", DebugTools::backtrace());
 	 * $backtrace_html = implode("<br>", DebugTools::backtrace());
@@ -89,7 +55,9 @@ class DebugTools {
 	 */
 	public static function getCompiledQueryFromDebugDump($dump) {
 		$compiled_query = false;
-		if (preg_match("/^SQL: \\[[0-9]*?\\] (.*?)\nParams:  0$/", $dump, $matches)) {
+		/** https://github.com/experder/TToolbox/blob/master/docs/dev_regex.md */
+		// /.../s PCRE_DOTALL ("...a dot metacharacter in the pattern matches all characters, including newlines.")
+		if (preg_match("/^SQL: \\[[0-9]*?\\] (.*?)\nParams:  0$/s", $dump, $matches)) {
 			$compiled_query = $matches[1];
 		} else {
 			preg_match("/\\nSent SQL: \\[([0-9]*?)\\] /", $dump, $matches);

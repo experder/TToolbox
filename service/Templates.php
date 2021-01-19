@@ -35,8 +35,8 @@ class Templates {
 
 		//Remove TPLDOC:
 		/** https://github.com/experder/TToolbox/blob/master/docs/dev_regex.md */
-		// \R    line break: matches \n, \r and \r\n
-		// /s    PCRE_DOTALL ("...a dot metacharacter in the pattern matches all characters, including newlines.")
+		// \R     line break: matches \n, \r and \r\n
+		// /.../s PCRE_DOTALL ("...a dot metacharacter in the pattern matches all characters, including newlines.")
 		$content = preg_replace("/\\/\\*\\*TPLDOCSTART.*?TPLDOCEND\\*\\/\\R?/s", "", $content);
 
 		//Replacements:

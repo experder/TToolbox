@@ -13,6 +13,7 @@ use tt\core\Config;
 use tt\install\Installer;
 use tt\service\debug\DebugQuery;
 use tt\service\debug\DebugTools;
+use tt\service\debug\Stats;
 use tt\service\Error;
 use tt\service\ServiceArrays;
 
@@ -160,7 +161,7 @@ class Database {
 				$compiled_query = ($debugDump ?: $query);
 			}
 
-			DebugTools::getSingleton()->addQuery(new DebugQuery($compiled_query));
+			Stats::getSingleton()->addQuery(new DebugQuery($compiled_query));
 
 		}
 		return;

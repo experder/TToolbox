@@ -17,7 +17,11 @@ use tt\core\page\Page;
 use tt\install\Installer;
 use tt\service\Error;
 
+Config::$startTimestamp = microtime(true);
+
 class Config {
+
+	public static $startTimestamp;
 
 	private static $config_cache = array();
 
@@ -51,7 +55,13 @@ class Config {
 		self::$settings[$cfgId] = $value;
 	}
 
+	/**
+	 * @deprecated TODO
+	 */
 	public static function get2($cfgId, $else=null) {
+		return self::get($cfgId, $else);
+	}
+	public static function get($cfgId, $else=null) {
 
 		if (isset(self::$settings[$cfgId])) {
 			return self::$settings[$cfgId];
@@ -104,28 +114,38 @@ class Config {
 		self::$config_cache[$module][$user_index][$key] = $value;
 	}
 
-
 	public static function setValue($value, $key, $module, $user = null) {
-		$database = Database::getPrimary();
 
-		$response = $database->_query(
-			"UPDATE " . core_config::getTableName()
-			. " SET " . core_config::ROW_content . "=:VAL"
+		//Will we have to UPDATE or INSERT?
+		$data_exists = DB::select(
+			"SELECT ".core_config::ROW_id
+			. " FROM " . core_config::getTableName()
 			. " WHERE " . core_config::ROW_idstring . "=:ID"
 			. " AND " . core_config::ROW_module . "=:MOD"
-			. " AND " . core_config::ROW_userid . "<=>:USR"
-			. " LIMIT 1;",
+			. " AND " . core_config::ROW_userid . "<=>:USR",
 			array(
-				":VAL" => $value,
 				":ID" => $key,
 				":MOD" => $module,
 				":USR" => $user,
-			),
-			Database::RETURN_ROWCOUNT
+			)
 		);
 
-		if($response===0){
-			//Update failed: Insert!
+		if($data_exists){
+			//UPDATE
+			if(count($data_exists)>1){
+				new Error("Config database is corrupt! Duplicate entry for '$key'!");
+			}
+			$id = $data_exists[0][core_config::ROW_id];
+			Database::getPrimary()->_query(
+				"UPDATE " . core_config::getTableName()
+				. " SET " . core_config::ROW_content . "=:VAL"
+				. " WHERE " . core_config::ROW_id . "=".$id,
+				array(
+					":VAL" => $value,
+				)
+			);
+		}else{
+			//INSERT
 			DB::insertAssoc(core_config::getTableName(), array(
 				core_config::ROW_idstring=>$key,
 				core_config::ROW_content=>$value,
