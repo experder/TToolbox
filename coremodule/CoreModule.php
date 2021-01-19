@@ -17,14 +17,14 @@ class CoreModule implements Module {
 	private $updateDatabase = null;
 
 	/**
-	 * @return string Module name, [a-z_0-9], 40 chars max (Installer::MODULE_ID_MAXLENGTH)
+	 * @inheritdoc
 	 */
 	public function getModuleId() {
 		return self::MODULE_ID;
 	}
 
 	/**
-	 * @return UpdateDatabase
+	 * @inheritdoc
 	 */
 	public function getUpdateDatabase() {
 		if($this->updateDatabase===null){

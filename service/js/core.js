@@ -76,7 +76,9 @@ function tt_error(message, classname = 'error ajax_error') {
 }
 
 function htmltrim(string){
-	return string;//TODO
+	string = string.replace(new RegExp("<br ?/?>"), "\n");
+	string = string.trimLeft();
+	return string;
 }
 
 function tt_scroll_to(jQo, millis = 400) {

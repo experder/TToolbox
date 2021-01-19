@@ -37,7 +37,12 @@ abstract class UpdateDatabase {
 	public static function updateAll(){
 		$responses = array();
 		foreach (\tt\core\Modules::getAllModules() as $module){
-			$responses[] = $module->getUpdateDatabase()->startUpdate();
+			$updater = $module->getUpdateDatabase();
+			if($updater instanceof UpdateDatabase){
+				$responses[] = $updater->startUpdate();
+			}else{
+				$responses[] = "Module '".$module->getModuleId()."': NO UPDATER DEFINED.";
+			}
 		}
 		return $responses;
 	}

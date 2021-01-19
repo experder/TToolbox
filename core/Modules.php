@@ -8,6 +8,7 @@
 
 namespace tt\core;
 
+use tt\api\RegisterModules;
 use tt\moduleapi\Module;
 use tt\coremodule\CoreModule;
 use tt\service\Error;
@@ -69,6 +70,8 @@ class Modules {
 		$m->modules=array();
 
 		$m->register(new CoreModule());
+
+		RegisterModules::registerModules($m);
 
 	}
 
