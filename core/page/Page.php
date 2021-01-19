@@ -8,7 +8,10 @@
 
 namespace tt\core\page;
 
+use tt\core\CFG;
 use tt\core\Config;
+use tt\service\debug\DebugTools;
+use tt\service\Html;
 use tt\service\js\Js;
 use tt\service\ServiceStrings;
 use tt\service\thirdparty\Jquery;
@@ -119,11 +122,20 @@ $head .= "<title>".$this->id."</title>";
 		$body = "\n<div class='inner_body'>\n$body\n</div>";
 		$body = $messages . $body;
 		$body .= $this->waitSpinner();
+		$body .= self::debugInfo();
 $body="<h1>$this->id</h1>".$body;
 		$body = "\n<body onunload='t2_spinner_stop();' $bodyOnLoad>\n$body\n</body>\n";
 
 		$html = $head . $body;
 		$html = "<!DOCTYPE html><html>$html</html>";
+		return $html;
+	}
+
+	public static function debugInfo(){
+		if(!CFG::DEVMODE())return "";
+		$html = "<hr>";
+		$queries = DebugTools::getSingleton()->getQueries();
+		$html.=Html::PRE(implode("///",$queries));
 		return $html;
 	}
 

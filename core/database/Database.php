@@ -8,7 +8,11 @@
 
 namespace tt\core\database;
 
+use tt\core\CFG;
+use tt\core\Config;
 use tt\install\Installer;
+use tt\service\debug\DebugQuery;
+use tt\service\debug\DebugTools;
 use tt\service\Error;
 use tt\service\ServiceArrays;
 
@@ -88,18 +92,14 @@ class Database {
 
 		self::$primary = new Database($host, $dbname, $user, $password);
 
-		//TODO:self::$primary->checkVersion();
-
 		return self::$primary;
 	}
 
-	private function checkVersion() {
-
-		echo "97!";
-
+	public function insert($query, $substitutions=null) {
+		return $this->_query($query, $substitutions, self::RETURN_LASTINSERTID);
 	}
 
-	public function insert($query, $substitutions) {
+	public function select($query, $substitutions=null) {
 		return $this->_query($query, $substitutions, self::RETURN_ASSOC);
 	}
 
@@ -149,18 +149,24 @@ class Database {
 	}
 
 	private function debuginfo(\PDOStatement $statement, $query) {
-		return;
-		if (Config::$DEVMODE) {
-			$backtrace = debug_backtrace();
+		if(CFG::DEVMODE()){
 
 			ob_flush();
 			ob_start();
 			$statement->debugDumpParams();
 			$debugDump = ob_get_clean();
-			$compiled_query = self::get_compiled_query_from_debugDump($debugDump);
+			$compiled_query = DebugTools::getCompiledQueryFromDebugDump($debugDump);
 			if (!$compiled_query) {
 				$compiled_query = ($debugDump ?: $query);
 			}
+
+			DebugTools::getSingleton()->addQuery(new DebugQuery($compiled_query));
+
+		}
+		return;
+		if (Config::$DEVMODE) {
+			$backtrace = debug_backtrace();
+
 
 			$caller = (isset($backtrace[$backtrace_depth + 1]['function']) ? $backtrace[$backtrace_depth + 1]['function'] . " " : "")
 				. "( " . Debug::backtrace($backtrace_depth + 1, "\n", false) . " )";

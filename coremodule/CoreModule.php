@@ -9,7 +9,6 @@
 namespace tt\coremodule;
 
 use tt\moduleapi\Module;
-use tt\moduleapi\UpdateDatabase;
 
 class CoreModule implements Module {
 

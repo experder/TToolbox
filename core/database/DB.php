@@ -14,4 +14,12 @@ class DB {
 		return Database::getPrimary()->insertAssoc($table, $data_set);
 	}
 
+	public static function select($query, $substitutions=null){
+		return Database::getPrimary()->select($query, $substitutions);
+	}
+
+	public static function insert($query, $substitutions=null){
+		return Database::getPrimary()->insert($query, $substitutions);
+	}
+
 }
