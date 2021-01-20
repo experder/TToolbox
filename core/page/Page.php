@@ -43,6 +43,8 @@ class Page {
 	 */
 	private $focus = null;
 
+	private static $next_global_id = 1;
+
 	private function __construct() {
 	}
 
@@ -59,6 +61,10 @@ class Page {
 			}
 		}
 		return self::$instance;
+	}
+
+	public static function getNextGlobalId($prefix="") {
+		return $prefix.(self::$next_global_id++);
 	}
 
 	public static function init($pid, $token) {
@@ -168,7 +174,7 @@ $body="<h1>$this->id</h1>".$body;
 
 	public function getMainCss() {
 		$css = array();
-		if(($HTTP_SKIN=Config::get2(Config::HTTP_SKIN, false))!==false) {
+		if(($HTTP_SKIN=Config::get(Config::HTTP_SKIN, false))!==false) {
 			$css[] = "<link href=\"" . $HTTP_SKIN . "/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
 		}
 		return implode("\n", $css);

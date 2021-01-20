@@ -49,13 +49,16 @@ class Stats {
 	public static function getStatsQueries(){
 		$queries = array();
 		foreach (self::getSingleton()->getQueries() as $query){
-			$queries[] = $query->toHtml();
+			array_unshift($queries, $query->toHtml());
 		}
-		return new StatsElement(implode("",$queries),"statsQueries");
+		$title = "<b>".count($queries)."</b> queries";
+		return new StatsElement($title, implode("",$queries),"statsQueries");
 	}
 
 	public static function getStatsRuntime(){
-		return new StatsElement("".Config::$startTimestamp, "statsRuntime");
+		$duration = round((microtime(true)-Config::$startTimestamp)*1000);
+		$title = "<b>$duration</b> millis";
+		return new StatsElement($title, null, "statsRuntime");
 	}
 
 	/**

@@ -8,23 +8,35 @@
 
 namespace tt\service\debug;
 
+use tt\core\page\Page;
+
 class StatsElement {
 
 	private $content;
 	private $class;
+	private $title;
 
 	/**
+	 * @param string $title
 	 * @param string $content HTML
 	 * @param string $class CSS class
 	 */
-	public function __construct($content, $class=null) {
+	public function __construct($title, $content, $class=null) {
+		$this->title = $title;
 		$this->content = $content;
 		$this->class = $class;
 	}
 
 	public function toHtml(){
-		$class = $this->class?"class='$this->class'":"";
-		return "<div $class>$this->content</div>";
+		$id = Page::getNextGlobalId("id");
+		if($this->content){
+			$btn = "<div class='statsBtn expand' onclick=\"$('#$id').toggle(400);\">$this->title</div>";
+			$class = 'statsContent'.($this->class?" ".$this->class:"");
+			$content = "<div class='$class'>$this->content</div>";
+			$content = "<div id='$id'>$content</div>";
+			return $btn.$content;
+		}
+		return "<div class='statsBtn'>$this->title</div>";
 	}
 
 }
