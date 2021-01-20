@@ -39,7 +39,7 @@ class Page {
 	private $jsOnLoad = "";
 
 	/**
-	 * @var bool|string $focus TRUE or selector. Example: "#name"
+	 * @var bool|string $focus TRUE,FALSE or selector. Example: "#name"
 	 */
 	private $focus = null;
 
@@ -231,7 +231,7 @@ $body="<h1>$this->id</h1>".$body;
 	}
 
 	/**
-	 * @param bool|string $focus TRUE or selector. Example: "#name"
+	 * @param bool|string $focus TRUE,FALSE or selector. Example: "#name"
 	 * @param bool        $override If focus is already set this command is ignored unless $override is set to TRUE.
 	 */
 	public function setFocus($focus, $override = false) {
