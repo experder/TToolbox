@@ -33,7 +33,7 @@ class StatsElement {
 			$btn = "<div class='statsBtn expand' onclick=\"$('#$id').toggle(400);\">$this->title</div>";
 			$class = 'statsContent'.($this->class?" ".$this->class:"");
 			$content = "<div class='$class'>$this->content</div>";
-			$content = "<div id='$id'>$content</div>";
+			$content = "<div class='contentWrapper' id='$id'>$content</div>";
 			return $btn.$content;
 		}
 		return "<div class='statsBtn'>$this->title</div>";
