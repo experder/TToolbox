@@ -30,7 +30,7 @@ use tt\service\thirdparty\LoadJs;
 /**
  * Installer handles:
  * - Creation of "init_pointer.php"
- * - Creation of "Init.php"
+ * - Creation of "Init_project.php"
  * - Creation of "init_server.php"
  * - Creation of tt database (name specified in init_server.php)
  * - Download of third party packages
@@ -48,22 +48,22 @@ class Installer {
 		$file = dirname(__DIR__) . '/init_pointer.php';
 
 		if (!file_exists($file)) {
-			self::promptWebPointer($file);
+			self::promptInitPointer($file);
 		}
 
 		require_once $file;
 	}
 
-	private static function promptWebPointer($file) {
+	private static function promptInitPointer($file) {
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
 
 		if (!ServiceEnv::requestCmd('createWebPointer')) {
 			$form = new Form("createWebPointer", "", "Create init_pointer.php");
-			$suggest = "dirname(__DIR__).'/TTconfig/Init.php'";
-			$form->addField(new FormfieldText("val_webpath", "Path to Init.php", $suggest, true, array("id"=>"focus")));
+			$suggest = "dirname(__DIR__).'/TTconfig/Init_project.php'";
+			$form->addField(new FormfieldText("val_webpath", "Path to Init_project.php", $suggest, true, array("id"=>"focus")));
 			$m = new Message(Message::TYPE_INFO,
-				"The file <b>$file</b> (excluded from the repo) points to <b>Init.php</b>."
+				"The file <b>$file</b> (excluded from the repo) points to <b>Init_project.php</b>."
 			);
 			self::startWizard(
 				$m->toHtml()
@@ -136,8 +136,8 @@ class Installer {
 
 	}
 
-	public static function requireServerInit() {
-		$file = Config::get2(Config::CFG_SERVER_INIT_FILE);
+	public static function requireInitServer() {
+		$file = Config::get(Config::CFG_SERVER_INIT_FILE);
 
 		if (!file_exists($file)) {
 			self::promptServerInit($file);
@@ -198,20 +198,20 @@ class Installer {
 		));
 	}
 
-	public static function requireInit($file) {
+	public static function requireInitProject($file) {
 		if (!file_exists($file)) {
-			self::promptInit($file);
+			self::promptInitProject($file);
 		}
 
 		require_once $file;
 	}
 
-	private static function promptInit($file) {
+	private static function promptInitProject($file) {
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
 
 		if (!ServiceEnv::requestCmd('cmdCreateInit')) {
-			$form = new Form("cmdCreateInit", "", "Create Init.php");
+			$form = new Form("cmdCreateInit", "", "Create Init_project.php");
 
 			$suggest = "dirname(__DIR__) . '/" . basename(dirname(__DIR__)) . "'";
 			$form->addField(new FormfieldText("TToolbox", "Path to TToolbox", $suggest, true, array(
@@ -229,7 +229,7 @@ class Installer {
 			);
 		}
 
-		Templates::create_file($file, __DIR__ . '/templates/Init.php', array(
+		Templates::create_file($file, __DIR__ . '/templates/Init_project.php', array(
 			"//TPL:namespace" => "namespace",
 			"'#TToolbox'" => $_REQUEST["TToolbox"],
 			"#PROJ_NAMESPACE_ROOT" => $_REQUEST["PROJ_NAMESPACE_ROOT"],
@@ -334,7 +334,7 @@ class Installer {
 		$head .= "<script>$js</script>";
 		$head .= self::$additionalWizardHead;
 
-		if ($ttroot=Config::get2(Config::HTTP_TTROOT, false))
+		if ($ttroot=Config::get(Config::HTTP_TTROOT, false))
 			$head .= LoadJs::htmlScript($ttroot . '/service/js/core.js');
 
 		$head = "<head>$head</head>";

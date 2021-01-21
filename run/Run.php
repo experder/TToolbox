@@ -22,23 +22,23 @@ class Run {
 		require_once dirname(__DIR__) . '/service/ServiceEnv.php';
 
 		if (ServiceEnv::isSapiCLI()) {
-			Config::startCli();
+			Config::init_cli();
 			self::doRunCli();
 		}
 
 		if (ServiceEnv::isSapiAPI()) {
-			Config::startApi();
+			Config::init_api();
 			self::doRunApi();
 		}
 
-		Config::startWeb(null);
+		Config::init_web(null);
 		self::doRunWeb();
 
 	}
 
 	public static function getWebUrl($controllerClass) {
 		$controllerClass = str_replace('\\', '/', $controllerClass);
-		return Config::get2(Config::RUN_ALIAS) . $controllerClass;
+		return Config::get(Config::RUN_ALIAS) . $controllerClass;
 	}
 
 	public static function getWebLink($controllerClass, $linkTitle = null) {

@@ -8,14 +8,13 @@
 
 namespace tt\core;
 
-use tt\config\Init;
-use tt\core\auth\Token;
 use tt\core\database\DB;
 use tt\coremodule\dbmodell\core_config;
 use tt\core\database\Database;
 use tt\core\page\Page;
 use tt\install\Installer;
 use tt\service\Error;
+use tt\service\ServiceEnv;
 
 Config::$startTimestamp = microtime(true);
 
@@ -157,48 +156,7 @@ class Config {
 		self::storeVal($value, $module, $key, $user);
 	}
 
-	public static function startCli() {
-
-		//Configurations, Autoloader, Modules, Database
-		self::init1();
-
-	}
-
-	public static function startApi() {
-
-		//Configurations, Autoloader, Modules, Database
-		self::init1();
-
-		//Session, Authentication
-		self::init2();
-
-	}
-
-	/**
-	 * @param string $pid unique page id
-	 * @return Page
-	 */
-	public static function startWeb($pid) {
-
-		//Configurations, Autoloader, Modules, Database
-		self::init1();
-
-		//Session, Authentication
-		$token = self::init2();
-
-		//Navigation, Breadcrumbs, HTML
-		$page = self::init3($pid, $token);
-
-		return $page;
-	}
-
-	/**
-	 * Configurations, Autoloader, Modules, Database
-	 */
-	public static function init1() {
-
-		//Project specific configuration
-		Init::loadConfig();
+	public static function init_cli() {
 
 		//Autoloader
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
@@ -208,36 +166,52 @@ class Config {
 		Modules::init();
 
 		//Server specific configuration, including database settings
-		Installer::requireServerInit();
+		require_once Config::get(Config::CFG_SERVER_INIT_FILE);
+
+	}
+
+	public static function init_api() {
+
+		//Autoloader
+		require_once dirname(__DIR__) . '/core/Autoloader.php';
+		Autoloader::init();
+
+		ServiceEnv::$response_is_expected_to_be_json = true;
+
+		//Modules
+		Modules::init();
+
+		//Server specific configuration, including database settings
+		require_once Config::get(Config::CFG_SERVER_INIT_FILE);
+
+		//Session, Authentication
+		User::initSession();
 
 	}
 
 	/**
-	 * Session, Authentication
-	 * @return Token
+	 * @param string $pid unique page id
+	 * @return Page
 	 */
-	public static function init2() {
+	public static function init_web($pid) {
+
+		//Autoloader
+		require_once dirname(__DIR__) . '/core/Autoloader.php';
+		Autoloader::init();
+
+		//Modules
+		Modules::init();
+
+		//Server specific configuration, including database settings
+		Installer::requireInitServer();
 
 		//Session, Authentication
 		$token = User::initSession();
-
-		return $token;
-	}
-
-	/**
-	 * Navigation, Breadcrumbs, HTML
-	 *
-	 * @param string $pid unique page id
-	 * @param Token  $token
-	 * @return Page
-	 */
-	public static function init3($pid, Token $token) {
 
 		//Navigation, Breadcrumbs, HTML
 		$page = Page::init($pid, $token);
 
 		return $page;
-
 	}
 
 }

@@ -1,7 +1,7 @@
 <?php
 /**TPLDOCSTART
- * Template for the file CFG_DIR."/Init.php".
- * @see \tt\install\Installer::requireInit()
+ * Template for the file CFG_DIR."/Init_project.php".
+ * @see \tt\install\Installer::requireInitProject()
  */
 if (true) exit;/*
  * TPLDOCEND*/
@@ -12,7 +12,9 @@ use tt\core\Config;
 
 require_once '#TToolbox' . '/core/Config.php';
 
-class Init {
+Init_project::loadConfig();
+
+class Init_project {
 
 	public static function loadConfig() {
 
@@ -27,7 +29,7 @@ class Init {
 
 		Config::set(Config::DIR_3RDPARTY, dirname(__DIR__).'/thirdparty');
 
-		Config::set(Config::CFG_API_DIR, Config::get2(Config::CFG_DIR) . '/api');
+		Config::set(Config::CFG_API_DIR, Config::get(Config::CFG_DIR) . '/api');
 
 		//Enable multi Autoloader (Autoloader doesn't terminate on error):
 		#require_once '#TToolbox'.'/core/Autoloader.php';
@@ -40,7 +42,15 @@ class Init {
 	 * @return \tt\core\page\Page
 	 */
 	public static function initWeb($pid) {
-		return Config::startWeb($pid);
+		return Config::init_web($pid);
+	}
+
+	public static function initApi() {
+		Config::init_api();
+	}
+
+	public static function initCli() {
+		Config::init_cli();
 	}
 
 }
