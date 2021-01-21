@@ -35,6 +35,8 @@ class Init_project {
 		#require_once '#TToolbox'.'/core/Autoloader.php';
 		#\tt\core\Autoloader::multipleAutoloader();
 
+		Config::$project_initialized = true;
+
 	}
 
 	/**

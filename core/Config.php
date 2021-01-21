@@ -26,6 +26,8 @@ class Config {
 
 	private static $settings = array();
 
+	public static $project_initialized = false;
+
 	const DBCFG_DB_VERSION = "DB_VERSION";
 
 	const DEFAULT_VALUE_NOT_FOUND = "!TTDEFVALNOTFOUND!";
@@ -67,6 +69,15 @@ class Config {
 		}
 
 		return $else;
+	}
+	public static function getChecked($cfgId) {
+
+		if (isset(self::$settings[$cfgId])) {
+			return self::$settings[$cfgId];
+		}
+
+		new Error("Config value not set: '$cfgId'", 1);
+		return false;
 	}
 
 	public static function getValue($id, $module, $user = null, $default_value = null) {
@@ -162,6 +173,9 @@ class Config {
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
 
+		//Init_project called?
+		self::checkProjectInitialization();
+
 		//Modules
 		Modules::init();
 
@@ -176,6 +190,10 @@ class Config {
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
 
+		//Init_project called?
+		self::checkProjectInitialization();
+
+		//API calls return JSON
 		ServiceEnv::$response_is_expected_to_be_json = true;
 
 		//Modules
@@ -189,6 +207,12 @@ class Config {
 
 	}
 
+	private static function checkProjectInitialization() {
+		if(!self::$project_initialized){
+			new Error("Please initialize project settings. (require 'Init_project.php')", 2);
+		}
+	}
+
 	/**
 	 * @param string $pid unique page id
 	 * @return Page
@@ -198,6 +222,9 @@ class Config {
 		//Autoloader
 		require_once dirname(__DIR__) . '/core/Autoloader.php';
 		Autoloader::init();
+
+		//Init_project called?
+		self::checkProjectInitialization();
 
 		//Modules
 		Modules::init();

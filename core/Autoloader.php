@@ -57,7 +57,7 @@ class Autoloader {
 
 		$name_api = $matches[1];
 
-		$file_api = Config::get2(Config::CFG_API_DIR) . '/' . $name_api . ".php";
+		$file_api = Config::getChecked(Config::CFG_API_DIR) . '/' . $name_api . ".php";
 		if (!file_exists($file_api)) {
 			//Installer: Create API file stubs
 			Installer::initApiClass($name_api, $file_api);
@@ -103,8 +103,8 @@ class Autoloader {
 				"tt" => dirname(__DIR__),
 			);
 
-			if (($r=Config::get2(Config::PROJ_NAMESPACE_ROOT, false)) !== false) {
-				self::$all_namespace_roots[$r] = Config::get2(Config::CFG_PROJECT_DIR);
+			if (($r=Config::get(Config::PROJ_NAMESPACE_ROOT, false)) !== false) {
+				self::$all_namespace_roots[$r] = Config::get(Config::CFG_PROJECT_DIR);
 			}
 
 		}
