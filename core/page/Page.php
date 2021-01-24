@@ -67,7 +67,7 @@ class Page {
 		return self::$instance;
 	}
 
-	public function initDefauls(){
+	public function initDefaults(){
 
 		if(($ttroot=Config::get(Config::HTTP_TTROOT, false))!==false) {
 			$j = new Jquery();
