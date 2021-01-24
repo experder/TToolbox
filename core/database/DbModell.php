@@ -8,5 +8,39 @@
 
 namespace tt\core\database;
 
+use tt\service\Error;
+
 abstract class DbModell {
+
+	/**
+	 * @param array $data
+	 */
+	public function __construct($data) {
+		if (is_array($data)) {
+			$this->setData($data);
+		}
+	}
+
+	public function setData($data_array) {
+		if (!is_array($data_array)) return;
+		$all_fields = get_object_vars($this);
+
+		foreach ($data_array as $key => $value) {
+			if (!array_key_exists($key, $all_fields)) {
+				new Error("Skipped key '$key' when setting data for: " . get_class($this));
+			} else {
+				$this->$key = $value;
+			}
+		}
+
+	}
+
+	/**
+	 * @return string
+	 * TODO: Not static!
+	 */
+	public static function getTableName() {
+		return "UNDEFINED!";
+	}
+
 }
