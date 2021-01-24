@@ -22,4 +22,10 @@ class DB {
 		return Database::getPrimary()->insert($query, $substitutions);
 	}
 
+	public static function quote($string){
+		if ($string === null) return "NULL";
+		if (is_numeric($string)) return $string;
+		return Database::getPrimary()->getPdo()->quote($string);
+	}
+
 }

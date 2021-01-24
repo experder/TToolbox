@@ -8,45 +8,36 @@
 
 namespace tt\coremodule\dbmodell;
 
+use tt\core\Config;
 use tt\core\database\DbModell;
-use tt\core\Modules;
-use tt\service\Error;
 
-class core_config extends DbModell {
+class core_navigation extends DbModell {
 
 	private static $table_name = null;
 
 	const ROW_id = "id";
-	const ROW_idstring = "idstring";
-	const ROW_module = "module";
-	const ROW_userid = "userid";
-	const ROW_content = "content";
+	const ROW_pageid = "pageid";
+	const ROW_title = "title";
+	const ROW_route = "route";
 
 	/**
 	 * @return string
 	 */
 	public static function getTableName() {
 		if(self::$table_name===null){
-			new Error("Table name not set!");
+			self::$table_name = Config::get(Config::DB_CORE_PREFIX) . '_navigation';
 		}
 		return self::$table_name;
-	}
-
-	/**
-	 * @param string $table_name
-	 */
-	public static function setTableName($table_name) {
-		self::$table_name = $table_name;
 	}
 
 	public static function sql_001_create(){
 		return "CREATE TABLE " . self::getTableName() . " ("
 			. " `" . self::ROW_id . "` INT(11) NOT NULL AUTO_INCREMENT,"
-			. " `" . self::ROW_idstring . "` VARCHAR(200) NOT NULL,"
-			. " `" . self::ROW_module . "` VARCHAR(" . Modules::MODULE_ID_MAXLENGTH . ") NOT NULL,"
-			. " `" . self::ROW_userid . "` INT(11) DEFAULT NULL,"
-			. " `" . self::ROW_content . "` TEXT NOT NULL,"
-			. " PRIMARY KEY (`" . self::ROW_id . "`)"
+			. " `" . self::ROW_pageid . "` varchar(200) NOT NULL,"
+			. " `" . self::ROW_title . "` varchar(80) DEFAULT NULL,"
+			. " `" . self::ROW_route . "` varchar(200) DEFAULT NULL,"
+			. " PRIMARY KEY (`" . self::ROW_id . "`),"
+			. " UNIQUE KEY `pageid` (`" . self::ROW_pageid . "`)"
 			. ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 	}
 

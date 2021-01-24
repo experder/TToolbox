@@ -180,7 +180,7 @@ class Installer {
 
 		$servername = isset($_SERVER['SERVER_NAME'])?$_SERVER['SERVER_NAME']:"myserver";
 
-		$ttroot = "Config::get2(Config::HTTP_ROOT) . '/".basename(dirname(__DIR__))."'";
+		$ttroot = "Config::get(Config::HTTP_ROOT) . '/".basename(dirname(__DIR__))."'";
 
 		Templates::create_file($file, __DIR__ . '/templates/init_server.php', array(
 			"<?php" . PHP_EOL . PHP_EOL . "/*" => "<?php" . PHP_EOL . "/*",
@@ -284,7 +284,7 @@ class Installer {
 	private static function initDatabaseDo($dbname, $host, $user, $password) {
 		$dbh = new \PDO("mysql:host=" . $host, $user, $password);
 		$dbh->exec(
-			"CREATE DATABASE `" . $dbname . "` CHARACTER SET utf8;"
+			"CREATE DATABASE `" . $dbname . "` CHARACTER SET utf8 COLLATE utf8_general_ci;"
 		) or die("Error240! " . print_r($dbh->errorInfo(), true));
 
 		$msg = CoreDatabase::init($host, $dbname, $user, $password);

@@ -221,4 +221,8 @@ class Database {
 		$this->error = new Error($errorType, $errorInfo, $compiled_query, $backtrace_depth + 1, $halt_on_error);
 	}
 
+	public function getPdo(){
+		return $this->pdo;
+	}
+
 }
