@@ -13,7 +13,7 @@ use tt\coremodule\dbmodell\core_navigation;
 class Navigation {
 
 	/**
-	 * @var NaviEntry[]
+	 * @var core_navigation[]
 	 */
 	private $entries;
 

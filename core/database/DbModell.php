@@ -12,6 +12,8 @@ use tt\service\Error;
 
 abstract class DbModell {
 
+	protected $id;
+
 	/**
 	 * @param array $data
 	 */
