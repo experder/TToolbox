@@ -9,7 +9,9 @@
 namespace tt\coremodule\dbmodell;
 
 use tt\core\Config;
+use tt\core\database\DB;
 use tt\core\database\DbModell;
+use tt\core\navigation\NaviEntry;
 
 class core_navigation extends DbModell {
 
@@ -39,6 +41,15 @@ class core_navigation extends DbModell {
 			. " PRIMARY KEY (`" . self::ROW_id . "`),"
 			. " UNIQUE KEY `pageid` (`" . self::ROW_pageid . "`)"
 			. ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+	}
+
+	public static function sql_select($where = ""){
+		$data = DB::select("SELECT * FROM " . self::getTableName() . " ". $where);
+		$navi = array();
+		foreach ($data as $row){
+			$navi[$row[self::ROW_pageid]] = new NaviEntry($row);
+		}
+		return $navi;
 	}
 
 }

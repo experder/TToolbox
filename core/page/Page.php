@@ -10,6 +10,7 @@ namespace tt\core\page;
 
 use tt\core\CFG;
 use tt\core\Config;
+use tt\core\navigation\Navigation;
 use tt\service\debug\Stats;
 use tt\service\js\Js;
 use tt\service\ServiceStrings;
@@ -35,6 +36,8 @@ class Page {
 
 	private $html_nodes = array();
 
+	private $stylesheets = array();
+
 	private $jsScripts = array();
 	private $jsOnLoad = "";
 
@@ -45,7 +48,13 @@ class Page {
 
 	private static $next_global_id = 1;
 
+	/**
+	 * @var Navigation $navigation
+	 */
+	private $navigation = null;
+
 	private function __construct() {
+		$this->initDefaults();
 	}
 
 	/**
@@ -54,13 +63,22 @@ class Page {
 	public static function getInstance() {
 		if (self::$instance === null) {
 			self::$instance = new Page();
-			if(($ttroot=Config::get2(Config::HTTP_TTROOT, false))!==false) {
-				$j = new Jquery();
-				self::$instance->addJs($j->getScriptReference(), Jquery::JS_NAME);
-				self::$instance->addJs($ttroot . '/service/js/core.js', Js::JSID_CORE);
-			}
 		}
 		return self::$instance;
+	}
+
+	public function initDefauls(){
+
+		if(($ttroot=Config::get(Config::HTTP_TTROOT, false))!==false) {
+			$j = new Jquery();
+			$this->addJs($j->getScriptReference(), Jquery::JS_NAME);
+			$this->addJs($ttroot . '/service/js/core.js', Js::JSID_CORE);
+		}
+
+		if(($HTTP_SKIN=Config::get(Config::HTTP_SKIN, false))!==false) {
+			$this->addCss($HTTP_SKIN . "/main.css");
+		}
+
 	}
 
 	public static function getNextGlobalId($prefix="") {
@@ -72,7 +90,8 @@ class Page {
 		if ($pid === null) return $page;
 		$page->id = $pid;
 
-		//TODO: Navigation
+		$page->navigation = Navigation::fromDb();
+
 		//TODO: Breadcrumbs
 
 		return $page;
@@ -112,10 +131,9 @@ class Page {
 	}
 
 	public function getHtml() {
-		$head = $this->getMainCss();
+		$head = $this->getCssHtml();
 		$head .= "\n" . $this->getJsHtml();
-//TODO:
-$head .= "<title>".$this->id."</title>";
+		$head .= "<title>".$this->getTitle()."</title>";
 		$head = "\n<head>\n$head\n</head>";
 
 		$messages = $this->messagesToHtml();
@@ -128,7 +146,9 @@ $head .= "<title>".$this->id."</title>";
 		$body = $messages . $body;
 		$body .= $this->waitSpinner();
 		$body .= self::debugInfo();
-$body="<h1>$this->id</h1>".$body;
+		if($this->navigation){
+			$body="<nav>".$this->navigation->getHtml($this->id)."</nav>".$body;
+		}
 		$body = "\n<body onunload='t2_spinner_stop();' $bodyOnLoad>\n$body\n</body>\n";
 
 		$html = $head . $body;
@@ -172,14 +192,6 @@ $body="<h1>$this->id</h1>".$body;
 		exit;
 	}
 
-	public function getMainCss() {
-		$css = array();
-		if(($HTTP_SKIN=Config::get(Config::HTTP_SKIN, false))!==false) {
-			$css[] = "<link href=\"" . $HTTP_SKIN . "/main.css\" rel=\"stylesheet\" type=\"text/css\" />";
-		}
-		return implode("\n", $css);
-	}
-
 	public function addJs($scriptUrl, $key = null) {
 		$ok = true;
 		if ($key === null) {
@@ -187,6 +199,17 @@ $body="<h1>$this->id</h1>".$body;
 		} else {
 			if (isset($this->jsScripts[$key])) $ok = false;
 			$this->jsScripts[$key] = $scriptUrl;
+		}
+		return $ok;
+	}
+
+	public function addCss($cssUrl, $key = null) {
+		$ok = true;
+		if ($key === null) {
+			$this->stylesheets[] = $cssUrl;
+		} else {
+			if (isset($this->stylesheets[$key])) $ok = false;
+			$this->stylesheets[$key] = $cssUrl;
 		}
 		return $ok;
 	}
@@ -203,11 +226,26 @@ $body="<h1>$this->id</h1>".$body;
 		return implode("\n", $html);
 	}
 
+	public function getCssHtml() {
+		$html = array();
+		foreach ($this->stylesheets as $stylesheet) {
+			$html[] = "<link href=\"" . $stylesheet . "\" rel=\"stylesheet\" type=\"text/css\" />";
+		}
+		return implode("\n", $html);
+	}
+
 	/**
 	 * @param string $jsOnLoad
 	 */
 	public function addJsOnLoad($jsOnLoad) {
 		$this->jsOnLoad .= $jsOnLoad;
+	}
+
+	private function getTitle(){
+		$navi = $this->navigation;
+		if(!$navi)return "Error";
+		$title = $navi->getTitleRaw($this->id);
+		return htmlentities($title);
 	}
 
 	private function getFocus(){
