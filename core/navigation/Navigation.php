@@ -12,18 +12,23 @@ use tt\coremodule\dbmodell\core_navigation;
 
 class Navigation {
 
+	private static $singleton = null;
+
 	/**
 	 * @var core_navigation[]
 	 */
 	private $entries;
 
-	public function __construct($entries) {
+	private function __construct($entries) {
 		$this->entries = $entries;
 	}
 
-	public static function fromDb(){
-		$entries = core_navigation::sql_select();
-		return new Navigation($entries);
+	public static function getInstance(){
+		if(self::$singleton===null){
+			$entries = core_navigation::sql_select();
+			self::$singleton = new Navigation($entries);
+		}
+		return self::$singleton;
 	}
 
 	public function getEntryById($id){

@@ -12,6 +12,7 @@ use tt\core\database\Database;
 use tt\core\Modules;
 use tt\coremodule\dbmodell\core_config;
 use tt\coremodule\dbmodell\core_navigation;
+use tt\coremodule\pages\Admin;
 use tt\moduleapi\UpdateDatabase;
 use tt\install\Installer;
 
@@ -35,6 +36,7 @@ class CoreDatabase extends UpdateDatabase {
 		/** @see Installer::initDatabaseDo() */
 
 		$this->q(1, core_navigation::sql_001_create());
+		$this->q(2, core_navigation::toSql_insert(Admin::ROUTE, Admin::TITLE, Admin::getClass()));
 
 	}
 

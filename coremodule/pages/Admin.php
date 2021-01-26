@@ -19,6 +19,7 @@ use tt\service\ServiceStrings;
 
 class Admin extends Runner {
 
+	const TITLE = "Admin";
 	const ROUTE = "core/admin";
 
 	const CMD_updateDb = "updateDb";

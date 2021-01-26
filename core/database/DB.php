@@ -25,6 +25,7 @@ class DB {
 	public static function quote($string){
 		if ($string === null) return "NULL";
 		if (is_numeric($string)) return $string;
+		if (is_bool($string)) return $string?"TRUE":"FALSE";
 		return Database::getPrimary()->getPdo()->quote($string);
 	}
 

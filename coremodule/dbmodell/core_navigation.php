@@ -28,6 +28,11 @@ class core_navigation extends DbModell {
 	protected $title;
 	const ROW_title = "title";
 	/**
+	 * @var bool $external
+	 */
+	protected $external;
+	const ROW_external = "external";
+	/**
 	 * @var string $route
 	 */
 	protected $route;
@@ -48,6 +53,7 @@ class core_navigation extends DbModell {
 			. " `id` INT(11) NOT NULL AUTO_INCREMENT,"
 			. " `" . self::ROW_pageid . "` varchar(200) NOT NULL,"
 			. " `" . self::ROW_title . "` varchar(80) DEFAULT NULL,"
+			. " `" . self::ROW_external . "` tinyint(1) NOT NULL,"
 			. " `" . self::ROW_route . "` varchar(200) DEFAULT NULL,"
 			. " PRIMARY KEY (`id`),"
 			. " UNIQUE KEY `pageid` (`" . self::ROW_pageid . "`)"
@@ -62,10 +68,12 @@ class core_navigation extends DbModell {
 		return "INSERT INTO " . self::getTableName() . " ("
 			. "`" . self::ROW_pageid . "` ,"
 			. "`" . self::ROW_title . "` ,"
+			. "`" . self::ROW_external . "` ,"
 			. "`" . self::ROW_route . "`"
 			. ") VALUES ("
 			. DB::quote($this->pageid) . ","
 			. DB::quote($this->title) . ","
+			. DB::quote($this->external) . ","
 			. DB::quote($this->route)
 			. ");";
 	}
@@ -80,15 +88,23 @@ class core_navigation extends DbModell {
 	}
 
 	/**
+	 * @deprecated TODO
+	 */
+	public static function toSql($pageid, $title, $route=null){
+		return self::toSql_insert($pageid, $title, $route);
+	}
+	/**
 	 * @param string $pageid
 	 * @param string $title
 	 * @param string $route
+	 * @param bool $external
 	 * @return string SQL
 	 */
-	public static function toSql($pageid, $title, $route=null){
+	public static function toSql_insert($pageid, $title, $route=null, $external=false){
 		$naviEntry = new core_navigation(array(
 			"pageid"=>$pageid,
 			"title"=>$title,
+			"external"=>$external,
 			"route"=>$route,
 		));
 		return $naviEntry->sql_insert();
@@ -126,8 +142,9 @@ class core_navigation extends DbModell {
 			$title = "<b>$title</b>";
 		}
 
-		$url = $this->route;
-		if($url===null){
+		if($this->external){
+			$url = $this->route;
+		}else{
 			$url = Run::getWebUrl($this->pageid);
 		}
 

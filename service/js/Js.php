@@ -29,7 +29,7 @@ class Js {
 		} else {
 			$dataObj = $postData;
 		}
-		$api = Config::get2(Config::RUN_ALIAS_API);
+		$api = Config::get(Config::RUN_ALIAS_API);
 		return "tt_ajax_post('$api',$dataObj,function(data){{$callbackFunction}});";
 	}
 

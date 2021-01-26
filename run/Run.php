@@ -10,6 +10,7 @@ namespace tt\run;
 
 use tt\core\Autoloader;
 use tt\core\Config;
+use tt\core\navigation\Navigation;
 use tt\core\page\Page;
 use tt\service\Error;
 use tt\service\ServiceEnv;
@@ -37,7 +38,8 @@ class Run {
 	}
 
 	public static function getWebUrl($controllerClass) {
-		$controllerClass = str_replace('\\', '/', $controllerClass);
+		//TODO
+		#$controllerClass = str_replace('\\', '/', $controllerClass);
 		return Config::get(Config::RUN_ALIAS) . $controllerClass;
 	}
 
@@ -52,11 +54,9 @@ class Run {
 			new Error("TT API: No Runner specified! [ /?c= ]");
 		}
 
-		$controller = str_replace('/', '\\', $_GET["c"]);
+		$class = self::loadRunner($_GET["c"]);
 
-		$class = self::loadRunner($controller);
-
-		Page::init($controller, null);
+		Page::init($_GET["c"], null);
 
 		$response = $class->runWeb();
 
@@ -129,7 +129,12 @@ class Run {
 
 	}
 
-	private static function checkRunner($controllerClass) {
+	private static function checkRunner($controllerClassU) {
+		$controllerClass = ServiceStrings::classnameSafe($controllerClassU);
+
+		if($controllerClass!==$controllerClassU){
+			new Error("No qualified controller classname given!");
+		}
 
 		if (!$controllerClass) {
 			new Error("No qualified controller classname given!");
@@ -149,7 +154,13 @@ class Run {
 	 * @return Runner
 	 */
 	private static function loadRunner($controllerClass) {
-		$controllerClass = ServiceStrings::classnameSafe($controllerClass);
+		$naviEntry = Navigation::getInstance()->getEntryById($controllerClass);
+		if($naviEntry!==false){
+			$controllerClass = $naviEntry->getRoute();
+		}else{
+			new Error("Route not found: '$controllerClass'");
+			$controllerClass = str_replace('/', '\\', $controllerClass);
+		}
 
 		self::checkRunner($controllerClass);
 

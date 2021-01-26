@@ -235,7 +235,7 @@ class Config {
 		//Session, Authentication
 		$token = User::initSession();
 
-		//Navigation, Breadcrumbs, HTML
+		//Breadcrumbs, HTML
 		$page = Page::init($pid, $token);
 
 		return $page;

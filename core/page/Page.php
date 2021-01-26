@@ -48,11 +48,6 @@ class Page {
 
 	private static $next_global_id = 1;
 
-	/**
-	 * @var Navigation $navigation
-	 */
-	private $navigation = null;
-
 	private function __construct() {
 		$this->initDefaults();
 	}
@@ -89,8 +84,6 @@ class Page {
 		$page = self::getInstance();
 		if ($pid === null) return $page;
 		$page->id = $pid;
-
-		$page->navigation = Navigation::fromDb();
 
 		//TODO: Breadcrumbs
 
@@ -146,8 +139,8 @@ class Page {
 		$body = $messages . $body;
 		$body .= $this->waitSpinner();
 		$body .= self::debugInfo();
-		if($this->navigation){
-			$body="<nav>".$this->navigation->getHtml($this->id)."</nav>".$body;
+		{
+			$body="<nav>".Navigation::getInstance()->getHtml($this->id)."</nav>".$body;
 		}
 		$body = "\n<body onunload='t2_spinner_stop();' $bodyOnLoad>\n$body\n</body>\n";
 
@@ -242,9 +235,9 @@ class Page {
 	}
 
 	private function getTitle(){
-		$navi = $this->navigation;
-		if(!$navi)return "Error";
-		$title = $navi->getTitleRaw($this->id);
+//		$navi = $this->navigation;
+//		if(!$navi)return "Error";
+		$title = Navigation::getInstance()->getTitleRaw($this->id);
 		return htmlentities($title);
 	}
 
