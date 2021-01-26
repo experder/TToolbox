@@ -22,6 +22,7 @@ class ApiResponseHtml implements ApiResponse {
 	 * @var string $msg_type For PostToMessages (optional) Message::TYPE_
 	 */
 	protected $msg_type;
+	//TODO: stats übermitteln
 
 	protected $params = array();
 

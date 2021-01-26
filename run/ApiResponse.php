@@ -8,6 +8,7 @@
 
 namespace tt\run;
 
+//TODO: Kann weg?
 interface ApiResponse {
 
 	public function getResponseArray();

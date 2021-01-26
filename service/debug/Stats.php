@@ -61,14 +61,23 @@ class Stats {
 		return new StatsElement($title, null, "statsRuntime");
 	}
 
+	public static function getStatsPostdata(){
+		$title = "<b>POST</b>";
+		return new StatsElement($title, print_r($_POST,1), "statsPostdata pre");
+	}
+
 	/**
 	 * @return StatsElement[]
 	 */
 	public static function getAllStats(){
-		return array(
-			Stats::getStatsQueries(),
-			Stats::getStatsRuntime(),
+		$all = array(
+			self::getStatsQueries(),
+			self::getStatsRuntime(),
 		);
+		if(isset($_POST)&&$_POST){
+			$all[] = self::getStatsPostdata();
+		}
+		return $all;
 	}
 
 	public static function getAllStatsHtml(){
