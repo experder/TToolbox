@@ -31,10 +31,10 @@ use tt\service\thirdparty\LoadJs;
  * Installer handles:
  * - Creation of "init_pointer.php"
  * - Creation of "Init_project.php"
- * - Creation of "init_server.php"
- * - Creation of tt database (name specified in init_server.php)
- * - Download of third party packages
  * - Create API classes
+ * - Creation of "init_server.php"
+ * - Creation of database (name specified in init_server.php)
+ * - Download of third party packages
  */
 class Installer {
 
@@ -86,7 +86,7 @@ class Installer {
 
 			self::startWizard(
 				$msg
-				. "<script>" . Js::ajaxPostToId(self::DIVID_download_status_div, Api::CMD_GetExternalFile, Api::getClass(), array(
+				. "<script>" . Js::ajaxPostToId(self::DIVID_download_status_div, Api::CMD_GetExternalFile, Api::ROUTE, array(
 					"url" => $url,
 					"to_file" => $toFile,
 					"checksum" => $checksum,
@@ -154,7 +154,7 @@ class Installer {
 			if (($p = strpos($suggest, '/TToolbox')) !== false) {
 				$suggest = substr($suggest, 0, $p);
 			}
-			$form->addField(new FormfieldText("HTTP_ROOT", "Web root path (<a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>HTTP_ROOT</a>)", $suggest, true, array("id"=>"focus")));
+			$form->addField(new FormfieldText("HTTP_ROOT", "Web root path", $suggest, true, array("id"=>"focus")));
 
 			$form->addField(new FormfieldText("DB_HOST", "DB host", "localhost"));
 			$form->addField(new FormfieldText("DB_NAME", "DB name", "mytt"));
@@ -168,7 +168,7 @@ class Installer {
 
 			self::startWizard(
 				Message::messageToHtml(Message::TYPE_INFO,
-					"The file <a href='https://github.com/experder/TToolbox/blob/main/docs/folders.md'>CFG_SERVER_INIT_FILE</a> (<b>$file</b>) contains server specific settings."
+					"The file <b>$file</b> contains server specific settings."
 				)
 				. $form
 			);

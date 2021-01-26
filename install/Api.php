@@ -12,6 +12,9 @@ use tt\run\Runner;
 
 class Api/*TODO:Rename:InstallerApi*/ extends Runner {
 
+	const TITLE = null;
+	const ROUTE = "api_core_installer";
+
 	public static function getClass() {
 		return \tt\service\polyfill\Php5::get_class();
 	}

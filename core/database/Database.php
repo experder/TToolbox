@@ -46,6 +46,10 @@ class Database {
 	/** @var Database $primary */
 	static private $primary = null;
 
+	public static function isPrimarySet() {
+		return self::$primary!==null;
+	}
+
 	public static function getPrimary() {
 		if (self::$primary === null) {
 			new Error("ERROR_DB_NOT_INITIALIZED");

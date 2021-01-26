@@ -10,6 +10,7 @@ namespace tt\core\page;
 
 use tt\core\CFG;
 use tt\core\Config;
+use tt\core\database\Database;
 use tt\core\navigation\Navigation;
 use tt\service\debug\Stats;
 use tt\service\js\Js;
@@ -139,7 +140,7 @@ class Page {
 		$body = $messages . $body;
 		$body .= $this->waitSpinner();
 		$body .= self::debugInfo();
-		{
+		if(Database::isPrimarySet()){
 			$body="<nav>".Navigation::getInstance()->getHtml($this->id)."</nav>".$body;
 		}
 		$body = "\n<body onunload='t2_spinner_stop();' $bodyOnLoad>\n$body\n</body>\n";
@@ -235,8 +236,7 @@ class Page {
 	}
 
 	private function getTitle(){
-//		$navi = $this->navigation;
-//		if(!$navi)return "Error";
+		if(!Database::isPrimarySet())return "Error";
 		$title = Navigation::getInstance()->getTitleRaw($this->id);
 		return htmlentities($title);
 	}
