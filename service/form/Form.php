@@ -68,6 +68,21 @@ class Form {
 		$this->buttons[] = $button;
 	}
 
+	private function addCheckboxesAndRadios() {
+		$fields = $this->fields;
+
+		foreach ($this->fields as $field){
+			if ($field instanceof FormfieldRadio){
+				array_unshift($fields, new FormfieldHidden("tt_radios[]", $field->getName()));
+			}
+			if ($field instanceof FormfieldCheckbox){
+				array_unshift($fields, new FormfieldHidden("tt_checkboxes[]", $field->getName()));
+			}
+		}
+
+		return $fields;
+	}
+
 	public function toHtml() {
 		$buttons = "";
 		if ($this->buttons) {
@@ -75,7 +90,7 @@ class Form {
 					"class" => "buttons"
 				), $this->buttons);
 		}
-		$fields_html = implode("\n", $this->fields);
+		$fields_html = implode("\n", $this->addCheckboxesAndRadios());
 		$action = ($this->action === false ? "" : (" action=\"$this->action\" method='$this->method'"));
 		$params = $this->params;
 		if ($this->onSubmit) {

@@ -113,6 +113,10 @@ abstract class Formfield {
 		return $label;
 	}
 
+	public function getName(){
+		return $this->name;
+	}
+
 	/**
 	 * Every formfield has a name, a value, an id and possibly a list of some other parameters ($more_params).
 	 * This function creates the corresponding HTML-snippet.
