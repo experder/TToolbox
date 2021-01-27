@@ -38,8 +38,9 @@ class CoreDatabase extends UpdateDatabase {
 
 		$this->q(1, core_navigation::sql_001_create());
 		$this->q(2, core_navigation::toSql_insert(Admin::ROUTE, Admin::TITLE, Admin::getClass()));
-		//TODO: Make invisible!
 		$this->q(3, core_navigation::toSql_insert(Api::ROUTE, Api::TITLE, Api::getClass()));
+		//TODO: Order / invisible
+		$this->q(4, core_navigation::toSql_insert(Installer::INDEX_ID, "Installer", Installer::getClass()));
 
 	}
 

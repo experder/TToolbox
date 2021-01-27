@@ -38,11 +38,17 @@ use tt\service\thirdparty\LoadJs;
  */
 class Installer {
 
+	const INDEX_ID = "core/installer";
+
 	const DIVID_download_status_div = 'download_status_div';
 
 	const AJAXDATA_warning = "warning";
 
 	public static $additionalWizardHead = "";
+
+	public static function getClass() {
+		return \tt\service\polyfill\Php5::get_class();
+	}
 
 	public static function requireInitPointer() {
 		$file = dirname(__DIR__) . '/init_pointer.php';
@@ -233,7 +239,6 @@ class Installer {
 			"//TPL:namespace" => "namespace",
 			"'#TToolbox'" => $_REQUEST["TToolbox"],
 			"#PROJ_NAMESPACE_ROOT" => $_REQUEST["PROJ_NAMESPACE_ROOT"],
-			#"#CFG_PROJECT_DIR" => dirname(dirname(__DIR__)),
 		));
 
 		$form = new Form(null, "", false);
