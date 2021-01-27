@@ -52,7 +52,7 @@ class Stats {
 			array_unshift($queries, $query->toHtml());
 		}
 		$title = "<b>".count($queries)."</b> queries";
-		return new StatsElement($title, implode("",$queries),"statsQueries");
+		return new StatsElement($title, implode("",$queries),"statsQueries divList");
 	}
 
 	public static function getStatsRuntime(){
@@ -63,7 +63,14 @@ class Stats {
 
 	public static function getStatsPostdata(){
 		$title = "<b>POST</b>";
-		return new StatsElement($title, print_r($_POST,1), "statsPostdata pre");
+		$stats = array();
+		foreach ($_POST as $key=>$value){
+			if(is_array($value)){
+				$value = "[ ".implode(", ", $value)." ]";
+			}
+			$stats[] = "<div>[".htmlentities($key)."] => ".htmlentities($value)."</div>";
+		}
+		return new StatsElement($title, implode("", $stats), "statsPostdata divList");
 	}
 
 	/**
