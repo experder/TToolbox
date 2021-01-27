@@ -51,7 +51,9 @@ class Navigation {
 
 		foreach ($this->entries as $entry){
 
-			$html[] = $entry->getHtml($highlighted_id);
+			if ($entry->getTitle() !== null){
+				$html[] = $entry->getHtml($highlighted_id);
+			}
 
 		}
 

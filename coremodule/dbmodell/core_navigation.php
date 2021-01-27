@@ -23,12 +23,13 @@ class core_navigation extends DbModell {
 	protected $pageid;
 	const ROW_pageid = "pageid";
 	/**
-	 * @var string $title
+	 * @var string|null $title
 	 */
 	protected $title;
 	const ROW_title = "title";
 	/**
 	 * @var bool $external
+	 * @deprecated TODO
 	 */
 	protected $external;
 	const ROW_external = "external";
@@ -54,7 +55,7 @@ class core_navigation extends DbModell {
 			. " `" . self::ROW_pageid . "` varchar(200) NOT NULL,"
 			. " `" . self::ROW_title . "` varchar(80) DEFAULT NULL,"
 			. " `" . self::ROW_external . "` tinyint(1) NOT NULL,"
-			. " `" . self::ROW_route . "` varchar(200) DEFAULT NULL,"
+			. " `" . self::ROW_route . "` varchar(200) NOT NULL,"
 			. " PRIMARY KEY (`id`),"
 			. " UNIQUE KEY `pageid` (`" . self::ROW_pageid . "`)"
 			. ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
@@ -111,7 +112,7 @@ class core_navigation extends DbModell {
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getTitle() {
 		return $this->title;
@@ -134,15 +135,14 @@ class core_navigation extends DbModell {
 	public function getHtml($highlighted_id) {
 
 		$title = htmlentities($this->title);
-		if($this->title===null){
-			$title=$this->pageid;
-		}
 
 		if($this->pageid && $this->pageid==$highlighted_id){
 			$title = "<b>$title</b>";
 		}
 
-		if($this->external){
+		$external = substr($this->route, 0, 1) == '/'
+			|| strpos($this->route, ':') !== false;
+		if($external){
 			$url = $this->route;
 		}else{
 			$url = Run::getWebUrl($this->pageid);
