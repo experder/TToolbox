@@ -121,7 +121,7 @@ class Run {
 		//First argument: Controller
 		$controller = array_shift($data);
 
-		$class = self::loadRunner($controller);
+		$class = self::loadRunner($controller, false);
 
 		$response = $class->runCli($data);
 		echo $response;
@@ -150,16 +150,18 @@ class Run {
 	}
 
 	/**
-	 * @param string $controllerClass
+	 * @param string $controllerClass TODO: classOrAlias
 	 * @return Runner
 	 */
-	private static function loadRunner($controllerClass) {
-		$naviEntry = Navigation::getInstance()->getEntryById($controllerClass);
-		if($naviEntry!==false){
-			$controllerClass = $naviEntry->getRoute();
-		}else{
-			new Error("Route not found: '$controllerClass'");
-			$controllerClass = str_replace('/', '\\', $controllerClass);
+	private static function loadRunner($controllerClass, $isAlias = true) {
+		if($isAlias){
+			$naviEntry = Navigation::getInstance()->getEntryById($controllerClass);
+			if($naviEntry!==false){
+				$controllerClass = $naviEntry->getRoute();
+			}else{
+				new Error("Route not found: '$controllerClass'");
+				$controllerClass = str_replace('/', '\\', $controllerClass);
+			}
 		}
 
 		self::checkRunner($controllerClass);
