@@ -55,7 +55,7 @@ class core_navigation extends DbModell {
 			. " `" . self::ROW_pageid . "` varchar(200) NOT NULL,"
 			. " `" . self::ROW_title . "` varchar(80) DEFAULT NULL,"
 			. " `" . self::ROW_external . "` tinyint(1) NOT NULL,"
-			. " `" . self::ROW_route . "` varchar(200) NOT NULL,"
+			. " `" . self::ROW_route . "` varchar(200) DEFAULT NULL,"
 			. " PRIMARY KEY (`id`),"
 			. " UNIQUE KEY `pageid` (`" . self::ROW_pageid . "`)"
 			. ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
@@ -101,7 +101,7 @@ class core_navigation extends DbModell {
 	 * @param bool $external
 	 * @return string SQL
 	 */
-	public static function toSql_insert($pageid, $title, $route=null, $external=false){
+	public static function toSql_insert($pageid, $title=null, $route=null, $external=false){
 		$naviEntry = new core_navigation(array(
 			"pageid"=>$pageid,
 			"title"=>$title,

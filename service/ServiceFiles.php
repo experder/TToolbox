@@ -74,6 +74,7 @@ class ServiceFiles {
 	}
 
 	public static function get_contents($file) {
+		//TODO: Option: Restriction to external resources (URLs)
 		if (!file_exists($file)) {
 			new Error("File does not exist!\nFile: $file", 1);
 		}
