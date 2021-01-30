@@ -87,6 +87,12 @@ abstract class Formfield {
 		$this->tooltip = $tooltip;
 	}
 
+	public function setParam($key, $value, $overwrite=true){
+		if (isset($this->more_params[$key]) && !$overwrite)return false;
+		$this->more_params[$key]=$value;
+		return true;
+	}
+
 	protected function getValue() {
 		return $this->value;
 	}
