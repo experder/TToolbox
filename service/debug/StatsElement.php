@@ -28,7 +28,7 @@ class StatsElement {
 	}
 
 	public function toHtml(){
-		$id = Page::getNextGlobalId("id");
+		$id = Page::getNextGlobalId();
 		if($this->content){
 			$btn = "<div class='statsBtn expand' onclick=\"$('#$id').toggle(400);\">$this->title</div>";
 			$class = 'statsContent'.($this->class?" ".$this->class:"");

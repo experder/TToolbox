@@ -8,7 +8,9 @@
 
 namespace tt\service\form;
 
+use tt\core\page\Page;
 use tt\service\Html;
+use tt\service\js\Js;
 use tt\service\ServiceStrings;
 
 class Form {
@@ -54,6 +56,14 @@ class Form {
 			$this->buttons[] = "<input type='submit' value='" . ServiceStrings::escape_value_html($submit_text) . "'>";
 		}
 
+	}
+
+	public static function ajaxToMessages($cmd, $pageid, $submit="Submit") {
+		$id = Page::getNextGlobalId();
+		$form = new Form($cmd, "", $submit, "post", array("id" => $id));
+		$form->addField(new FormfieldHidden("class", $pageid));
+		$form->onSubmit .= Js::ajaxPostToMessages(null, null, "$('#$id').serializeArray()") . "return false;";
+		return $form;
 	}
 
 	public function addField(Formfield $formfield) {

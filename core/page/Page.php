@@ -77,7 +77,7 @@ class Page {
 
 	}
 
-	public static function getNextGlobalId($prefix="") {
+	public static function getNextGlobalId($prefix="id") {
 		return $prefix.(self::$next_global_id++);
 	}
 
