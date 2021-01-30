@@ -43,12 +43,12 @@ class Node {
 	 *                    arrays of $nodes are also allowed.
 	 */
 	public static function check_type($node, $cutBacktrace = 0) {
-		if (is_array($node)) {
-			foreach ($node as $n) {
-				self::check_type($n, $cutBacktrace + 1);
-			}
-			return;
-		}
+//		if (is_array($node)) {
+//			foreach ($node as $n) {
+//				self::check_type($n, $cutBacktrace + 1);
+//			}
+//			return;
+//		}
 
 		if (!is_string($node)
 			&& !method_exists($node, '__toString')

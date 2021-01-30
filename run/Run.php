@@ -88,6 +88,14 @@ class Run {
 
 		$response = $class->runApi($cmd, $input_data);
 
+		if($response===false){
+			new Error(get_class($class) . ": Unknown command " . ($cmd === null ? "(null)" : "'$cmd'") . "!");
+		}
+
+		if(!($response instanceof ApiResponseHtml)){
+			new Error(get_class($class) . ": runApi('$cmd'): Invalid return value!");
+		}
+
 		$json = json_encode($response->getResponseArray());
 		echo $json;
 		exit;

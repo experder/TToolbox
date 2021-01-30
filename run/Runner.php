@@ -12,6 +12,48 @@ use tt\service\Error;
 
 class Runner {
 
+	//TODO:Template!
+//
+//	const PAGEID = "pls.define";
+//
+//	const CMD_cmd1 = "cmd1";
+//
+//	public static function getClass() {
+//		return \tt\service\polyfill\Php5::get_class();
+//	}
+//
+//	/**
+//	 * @inheritdoc
+//	 */
+//	public function runWeb() {
+//		$html = [];
+//
+//
+//
+//		return $html;
+//	}
+//
+//	/**
+//	 * @inheritdoc
+//	 */
+//	public function runApi($cmd = null, array $data = array()) {
+//		switch ($cmd) {
+//			case self::CMD_:
+//
+//				$html = "...";
+//
+//				return new ApiResponseHtml(
+//					true,
+//					$html
+//					#,array(),Message::TYPE_
+//				);
+//				break;
+//			default:
+//				return false;
+//				break;
+//		}
+//	}
+
 	/**
 	 * @param array $args
 	 * @return string plaintext

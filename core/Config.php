@@ -36,6 +36,7 @@ class Config {
 	const PLATFORM_WINDOWS = 1;
 	const PLATFORM_LINUX = 2;
 
+	const PROJ_TITLE = 'PROJ_TITLE';
 	const CFG_PROJECT_DIR = 'CFG_PROJECT_DIR';
 	const PROJ_NAMESPACE_ROOT = 'PROJ_NAMESPACE_ROOT';
 	const CFG_DIR = 'CFG_DIR';

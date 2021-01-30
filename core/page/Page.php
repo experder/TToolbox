@@ -110,14 +110,14 @@ class Page {
 	 */
 	public function add($node) {
 
-		Node::check_type($node, 1);
-
 		if (is_array($node)) {
 			foreach ($node as $n) {
 				$this->add($n);
 			}
 			return $this;
 		}
+
+		Node::check_type($node, 1);
 
 		$this->html_nodes[] = $node;
 
@@ -238,6 +238,9 @@ class Page {
 	private function getTitle(){
 		if(!Database::isPrimarySet())return "Error";
 		$title = Navigation::getInstance()->getTitleRaw($this->id);
+		if(($proj_title=Config::get(Config::PROJ_TITLE,false))!==false){
+			$title .= " - ".$proj_title;
+		}
 		return htmlentities($title);
 	}
 

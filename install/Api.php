@@ -13,6 +13,7 @@ use tt\run\Runner;
 class Api/*TODO:Rename:InstallerApi*/ extends Runner {
 
 	const TITLE = null;
+	//TODO: Rename: pageid
 	const ROUTE = "api_core_installer";
 
 	public static function getClass() {

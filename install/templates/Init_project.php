@@ -18,6 +18,8 @@ class Init_project {
 
 	public static function loadConfig() {
 
+		Config::set(Config::PROJ_TITLE, null);
+
 		Config::set(Config::PROJ_NAMESPACE_ROOT, '#PROJ_NAMESPACE_ROOT');
 
 		Config::set(Config::CFG_DIR, __DIR__);
