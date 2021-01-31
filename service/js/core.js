@@ -4,11 +4,13 @@
  * TT comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
-//TODO:Prototype!
 
+tt_tools = {};
 
+tt_tools.globalCounter = 0;
+tt_tools.disableKeys = false;
 
-function tt_ajax_post(url, data_object, Funktion) {
+tt_tools.ajaxPost = function(url, data_object, Funktion) {
 	$.ajax({
 		type: 'POST',
 		url: url,
@@ -24,13 +26,13 @@ function tt_ajax_post(url, data_object, Funktion) {
 				}
 				let msg = '';
 				if (data.error_msg) {
-					msg = htmlEntities(data.error_msg);
+					msg = tt_tools.htmlEntities(data.error_msg);
 				} else {
 					msg = 'Response doesn\'t have \'error_msg\' value. See console for response object.';
 					console.log(data);
 				}
 				let message = "<h1>Ajax returns error!</h1><pre class='dev'>" + url + '</pre><div class=\'ajax_response\'>' + msg + backtrace + "</div>";
-				tt_error(message);
+				tt_tools.error(message);
 			}
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
@@ -38,11 +40,11 @@ function tt_ajax_post(url, data_object, Funktion) {
 			if (jqXHR.readyState === 0) {
 				message = "Could not connect to the server. Please check your network connection.";
 			} else if (String(textStatus) === 'parsererror' && String(errorThrown) === 'SyntaxError: JSON.parse: unexpected character at line 1 column 1 of the JSON data') {
-				let id = 'id_' + next_global_id();
+				let id = 'id_' + tt_tools.nextGlobalId();
 				message = '<div class="dev"><h1>Invalid JSON</h1>'
 					+ '<input type="button" value="raw" onclick="$(\'#' + id + '\').toggle(400);" />'
-					+ '<div class="dev ajax_response raw" id="' + id + '" style="display: none;">' + htmlEntities(jqXHR.responseText) + '</div>'
-					+ '<div class="dev ajax_response">' + htmltrim(jqXHR.responseText) + '</div>'
+					+ '<div class="dev ajax_response raw" id="' + id + '" style="display: none;">' + tt_tools.htmlEntities(jqXHR.responseText) + '</div>'
+					+ '<div class="dev ajax_response">' + tt_tools.htmltrim(jqXHR.responseText) + '</div>'
 					+ '</div>';
 			} else if (String(textStatus) === 'parsererror' && String(errorThrown) === 'SyntaxError: JSON.parse: unexpected end of data at line 1 column 1 of the JSON data') {
 				message = '<div class="dev"><h1>Empty response</h1>See console for request object.</div>';
@@ -52,61 +54,61 @@ function tt_ajax_post(url, data_object, Funktion) {
 			} else {
 				message = '<div class="dev"><h1>' + textStatus + '</h1>' + errorThrown + '<pre>' + url + '<br>Status code: ' + jqXHR.status + '</pre><div class="dev ajax_response">' + jqXHR.responseText + '</div></div>';
 			}
-			tt_error(message);
+			tt_tools.error(message);
 		}
 	});
-}
+};
 
-let global_counter = 0;
+tt_tools.nextGlobalId = function(){
+	return ++this.globalCounter;
+};
 
-function next_global_id() {
-	return ++global_counter;
-}
-
-function htmlEntities(str) {
+tt_tools.htmlEntities = function(str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-}
+};
 
-function tt_error(message, classname = 'error ajax_error') {
+tt_tools.error = function(message, classname = 'error ajax_error') {
 	let msg = $('<div>', {'class': 'message ' + classname}).html(message);
 	let msgDiv = $('#tt_pg_messages');
 	msgDiv.append(msg);
-	t2_spinner_stop();
-	tt_scroll_to(msgDiv.children().last());
-}
+	this.spinnerStop();
+	this.scrollTo(msgDiv.children().last());
+};
 
-function htmltrim(string) {
+tt_tools.htmltrim = function(string) {
 	string = string.replace(new RegExp("<br ?/?>"), "\n");
 	string = string.trimLeft();
 	return string;
-}
+};
 
-function tt_scroll_to(jQo, millis = 400) {
+tt_tools.scrollTo = function(jQo, millis = 400) {
 	$('html, body').animate({
 		scrollTop: jQo.offset().top
 	}, millis);
-}
+};
 
 /*
        WAIT SPINNER
  */
-function t2_spinner_start() {
+tt_tools.spinnerStart = function() {
 	let uS = document.getElementById('uploadSpinner');
 	if (uS) uS.style.display = "block";
-	scope_disableKeys = true;
-}
+	this.disableKeys = true;
+};
 
-function t2_spinner_stop() {
+tt_tools.spinnerStop = function() {
 	let uS = document.getElementById('uploadSpinner');
 	if (uS) uS.style.display = "none";
-	scope_disableKeys = false;
-}
+	this.disableKeys = false;
+};
 
-let scope_disableKeys = false;
-window.addEventListener('keydown', function (event) {
-	if (scope_disableKeys === true) {
-		event.preventDefault();
-		return false;
-	}
+
+$(function(){
+	window.addEventListener('keydown', function (event) {
+		if (tt_tools.disableKeys === true) {
+			event.preventDefault();
+			return false;
+		}
+	});
 });
 

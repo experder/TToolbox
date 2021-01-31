@@ -1,2 +1,3 @@
-function t2_spinner_start() {
-}
+tt_tools = {};
+tt_tools.spinnerStart = function () {
+};

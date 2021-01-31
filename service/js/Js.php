@@ -30,7 +30,7 @@ class Js {
 			$dataObj = $postData;
 		}
 		$api = Config::get(Config::RUN_ALIAS_API);
-		return "tt_ajax_post('$api',$dataObj,function(data){{$callbackFunction}});";
+		return "tt_tools.ajaxPost('$api',$dataObj,function(data){{$callbackFunction}});";
 	}
 
 	public static function ajaxPostToId($id, $cmd, $controller, $postData = array(), $responseBody = "html", $callbackFunction = "") {
@@ -45,7 +45,7 @@ class Js {
 			if(data.msg_type){
 				classname = data.msg_type;
 			}
-			tt_error(data.$responseBody,classname);
+			tt_tools.error(data.$responseBody,classname);
 		
 		" . $callbackFunction;
 		return self::ajaxPost($cmd, $controller, $postData, $callbackFunction);

@@ -28,7 +28,7 @@ class Form {
 
 	private $params;
 
-	public $onSubmit = "t2_spinner_start();";
+	public $onSubmit = "tt_tools.spinnerStart();";
 
 	/**
 	 * @param string|false $action An URL that is called on form submission.

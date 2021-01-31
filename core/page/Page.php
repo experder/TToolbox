@@ -143,7 +143,7 @@ class Page {
 		if (Database::isPrimarySet()) {
 			$body = "<nav>" . Navigation::getInstance()->getHtml($this->id) . "</nav>" . $body;
 		}
-		$body = "\n<body onunload='t2_spinner_stop();' $bodyOnLoad>\n$body\n</body>\n";
+		$body = "\n<body onunload='tt_tools.spinnerStop();' $bodyOnLoad>\n$body\n</body>\n";
 
 		$html = $head . $body;
 		$html = "<!DOCTYPE html><html>$html</html>";
