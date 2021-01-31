@@ -10,8 +10,8 @@ namespace tt\core;
 
 class CFG {
 
-	public static function DEVMODE(){
-		return Config::get2(Config::DEVMODE);
+	public static function DEVMODE() {
+		return Config::get(Config::DEVMODE);
 	}
 
 }

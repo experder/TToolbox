@@ -14,18 +14,18 @@ class DB {
 		return Database::getPrimary()->insertAssoc($table, $data_set);
 	}
 
-	public static function select($query, $substitutions=null){
+	public static function select($query, $substitutions = null) {
 		return Database::getPrimary()->select($query, $substitutions);
 	}
 
-	public static function insert($query, $substitutions=null){
+	public static function insert($query, $substitutions = null) {
 		return Database::getPrimary()->insert($query, $substitutions);
 	}
 
-	public static function quote($string){
+	public static function quote($string) {
 		if ($string === null) return "NULL";
 		if (is_numeric($string)) return $string;
-		if (is_bool($string)) return $string?"TRUE":"FALSE";
+		if (is_bool($string)) return $string ? "TRUE" : "FALSE";
 		return Database::getPrimary()->getPdo()->quote($string);
 	}
 

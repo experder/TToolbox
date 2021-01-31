@@ -103,13 +103,13 @@ class Autoloader {
 				"tt" => dirname(__DIR__),
 			);
 
-			if (($r=Config::get(Config::PROJ_NAMESPACE_ROOT, false)) !== false) {
+			if (($r = Config::get(Config::PROJ_NAMESPACE_ROOT, false)) !== false) {
 				self::$all_namespace_roots[$r] = Config::get(Config::CFG_PROJECT_DIR);
 			}
 
 			$additionalNamespaceRoots = \tt\api\Autoloader::getNamespaceRoots();
-			if(is_array($additionalNamespaceRoots)){
-				foreach ($additionalNamespaceRoots as $namespace=>$folder){
+			if (is_array($additionalNamespaceRoots)) {
+				foreach ($additionalNamespaceRoots as $namespace => $folder) {
 					self::$all_namespace_roots[$namespace] = $folder;
 				}
 			}

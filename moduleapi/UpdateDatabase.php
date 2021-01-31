@@ -37,42 +37,43 @@ abstract class UpdateDatabase {
 		return $this->ver;
 	}
 
-	public static function updateAll(){
+	public static function updateAll() {
 		$responses = array();
-		foreach (\tt\core\Modules::getAllModules() as $module){
+		foreach (\tt\core\Modules::getAllModules() as $module) {
 			$updater = $module->getUpdateDatabase();
-			if($updater instanceof UpdateDatabase){
+			if ($updater instanceof UpdateDatabase) {
 				$responses[] = $updater->startUpdate();
-			}else{
-				$responses[] = "Module '".$module->getModuleId()."': NO UPDATER DEFINED.";
+			} else {
+				$responses[] = "Module '" . $module->getModuleId() . "': NO UPDATER DEFINED.";
 			}
 		}
 		return $responses;
 	}
 
-	public function startUpdate(){
+	public function startUpdate() {
 		$this->ver_old = $this->getVersion();
 		$this->ver = $this->ver_old;
 		$this->doUpdate();
-		if($this->ver_old==$this->ver){
-			return "Module '".$this->module->getModuleId()."': Nothing new. Current version: ".$this->ver;
+		if ($this->ver_old == $this->ver) {
+			return "Module '" . $this->module->getModuleId() . "': Nothing new. Current version: " . $this->ver;
 		}
-		return "Module '".$this->module->getModuleId()."' updated from version $this->ver_old to $this->ver.";
+		return "Module '" . $this->module->getModuleId() . "' updated from version $this->ver_old to $this->ver.";
 	}
 
 	protected function q($ver, $query) {
-		if($this->ver+1 == $ver){
+		if ($this->ver + 1 == $ver) {
 			Database::getPrimary()->_query($query);
-			$ver_new = $this->ver+1;
+			$ver_new = $this->ver + 1;
 			$this->setVersion($ver_new);
 			$this->ver = $this->getVersion();
 		}
 	}
 
-	private function setVersion($ver){
+	private function setVersion($ver) {
 		Config::setValue($ver, Config::DBCFG_DB_VERSION, $this->module->getModuleId());
 	}
-	private function getVersion(){
+
+	private function getVersion() {
 		$ver = Config::getValue(Config::DBCFG_DB_VERSION, $this->module->getModuleId(), null, 0);
 		return $ver;
 	}

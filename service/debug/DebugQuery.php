@@ -27,7 +27,7 @@ class DebugQuery {
 	}
 
 	public function toHtml() {
-		return "<div>".htmlentities($this->queryString)."</div>";
+		return "<div>" . htmlentities($this->queryString) . "</div>";
 	}
 
 }

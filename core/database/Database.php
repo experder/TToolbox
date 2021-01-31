@@ -47,7 +47,7 @@ class Database {
 	static private $primary = null;
 
 	public static function isPrimarySet() {
-		return self::$primary!==null;
+		return self::$primary !== null;
 	}
 
 	public static function getPrimary() {
@@ -100,11 +100,11 @@ class Database {
 		return self::$primary;
 	}
 
-	public function insert($query, $substitutions=null) {
+	public function insert($query, $substitutions = null) {
 		return $this->_query($query, $substitutions, self::RETURN_LASTINSERTID);
 	}
 
-	public function select($query, $substitutions=null) {
+	public function select($query, $substitutions = null) {
 		return $this->_query($query, $substitutions, self::RETURN_ASSOC);
 	}
 
@@ -129,7 +129,7 @@ class Database {
 	 * @param int    $return_type Database::RETURN_...
 	 * @return string|array|int|null
 	 */
-	public function _query($query, $substitutions=null, $return_type=0) {
+	public function _query($query, $substitutions = null, $return_type = 0) {
 		$statement = $this->pdo->prepare($query);
 		$ok = @$statement->execute($substitutions);
 		$this->debuginfo($statement, $query);
@@ -154,7 +154,7 @@ class Database {
 	}
 
 	private function debuginfo(\PDOStatement $statement, $query) {
-		if(CFG::DEVMODE()){
+		if (CFG::DEVMODE()) {
 
 			ob_flush();
 			ob_start();
@@ -194,12 +194,12 @@ class Database {
 		$errorCode = $eInfo[0];
 		$errorInfo = "[$errorCode] " . $eInfo[2];
 
-		if($errorCode=="HY093"){
-			new Error("Invalid parameter number: parameter was not defined", $cut_backtrace+1);
+		if ($errorCode == "HY093") {
+			new Error("Invalid parameter number: parameter was not defined", $cut_backtrace + 1);
 		}
 
 		#new Error($query." /// ".print_r($substitutions,1)." /// ".print_r($statement->errorInfo(),1));
-		new Error(print_r($statement->errorInfo(),1));
+		new Error(print_r($statement->errorInfo(), 1));
 		return;
 		$eInfo = $statement->errorInfo();
 		$errorCode = $eInfo[0];
@@ -225,7 +225,7 @@ class Database {
 		$this->error = new Error($errorType, $errorInfo, $compiled_query, $backtrace_depth + 1, $halt_on_error);
 	}
 
-	public function getPdo(){
+	public function getPdo() {
 		return $this->pdo;
 	}
 

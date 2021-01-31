@@ -58,7 +58,7 @@ class Form {
 
 	}
 
-	public static function ajaxToMessages($cmd, $pageid, $submit="Submit") {
+	public static function ajaxToMessages($cmd, $pageid, $submit = "Submit") {
 		$id = Page::getNextGlobalId();
 		$form = new Form($cmd, "", $submit, "post", array("id" => $id));
 		$form->addField(new FormfieldHidden("class", $pageid));
@@ -81,11 +81,11 @@ class Form {
 	private function addCheckboxesAndRadios() {
 		$fields = $this->fields;
 
-		foreach ($this->fields as $field){
-			if ($field instanceof FormfieldRadio){
+		foreach ($this->fields as $field) {
+			if ($field instanceof FormfieldRadio) {
 				array_unshift($fields, new FormfieldHidden("tt_radios[]", $field->getName()));
 			}
-			if ($field instanceof FormfieldCheckbox){
+			if ($field instanceof FormfieldCheckbox) {
 				array_unshift($fields, new FormfieldHidden("tt_checkboxes[]", $field->getName()));
 			}
 		}

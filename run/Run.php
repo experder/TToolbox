@@ -88,11 +88,11 @@ class Run {
 
 		$response = $class->runApi($cmd, $input_data);
 
-		if($response===false){
+		if ($response === false) {
 			new Error(get_class($class) . ": Unknown command " . ($cmd === null ? "(null)" : "'$cmd'") . "!");
 		}
 
-		if(!($response instanceof ApiResponseHtml)){
+		if (!($response instanceof ApiResponseHtml)) {
 			new Error(get_class($class) . ": runApi('$cmd'): Invalid return value!");
 		}
 
@@ -140,7 +140,8 @@ class Run {
 	private static function checkRunner($controllerClassU) {
 		$controllerClass = ServiceStrings::classnameSafe($controllerClassU);
 
-		if($controllerClass!==$controllerClassU){
+		//TODO: Service function for this check:
+		if ($controllerClass !== $controllerClassU) {
 			new Error("No qualified controller classname given!");
 		}
 
@@ -162,11 +163,11 @@ class Run {
 	 * @return Runner
 	 */
 	private static function loadRunner($controllerClass, $isAlias = true) {
-		if($isAlias){
+		if ($isAlias) {
 			$naviEntry = Navigation::getInstance()->getEntryById($controllerClass);
-			if($naviEntry!==false){
+			if ($naviEntry !== false) {
 				$controllerClass = $naviEntry->getRoute();
-			}else{
+			} else {
 				new Error("Route not found: '$controllerClass'");
 				$controllerClass = str_replace('/', '\\', $controllerClass);
 			}

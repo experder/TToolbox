@@ -26,7 +26,7 @@ class Error {
 		$this->message = $message;
 
 		if (!self::$recursion_protection) {
-			self::withNoDependencies("(ERROR IN ERROR HANDLING!) " .$this->message);
+			self::withNoDependencies("(ERROR IN ERROR HANDLING!) " . $this->message);
 		}
 		self::$recursion_protection = false;
 

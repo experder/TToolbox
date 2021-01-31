@@ -29,7 +29,7 @@ Config::set(Config::HTTP_ROOT, '#HTTP_ROOT');
 
 Config::set(Config::HTTP_TTROOT, '#HTTP_TTROOT');
 
-Config::set(Config::HTTP_SKIN, Config::get(Config::HTTP_ROOT) .'/'. basename(Config::get(Config::CFG_DIR)) . '/skins/skin1');
+Config::set(Config::HTTP_SKIN, Config::get(Config::HTTP_ROOT) . '/' . basename(Config::get(Config::CFG_DIR)) . '/skins/skin1');
 
 Config::set(Config::HTTP_3RDPARTY, Config::get(Config::HTTP_ROOT) . '/thirdparty');
 

@@ -43,19 +43,19 @@ class core_navigation extends DbModell {
 	 * @return string
 	 */
 	public static function getTableName() {
-		if(self::$table_name===null){
+		if (self::$table_name === null) {
 			self::$table_name = Config::get(Config::DB_CORE_PREFIX) . '_navigation';
 		}
 		return self::$table_name;
 	}
 
-	public static function sql_001_create(){
+	public static function sql_001_create() {
 		return "CREATE TABLE " . self::getTableName() . " ("
 			. " `id` INT(11) NOT NULL AUTO_INCREMENT,"
-			. " `" . self::ROW_pageid . "` varchar(200) NOT NULL,"
-			. " `" . self::ROW_title . "` varchar(80) DEFAULT NULL,"
-			. " `" . self::ROW_external . "` tinyint(1) NOT NULL,"
-			. " `" . self::ROW_route . "` varchar(200) DEFAULT NULL,"
+			. " `" . self::ROW_pageid . "` VARCHAR(200) NOT NULL,"
+			. " `" . self::ROW_title . "` VARCHAR(80) DEFAULT NULL,"
+			. " `" . self::ROW_external . "` TINYINT(1) NOT NULL,"
+			. " `" . self::ROW_route . "` VARCHAR(200) DEFAULT NULL,"
 			. " PRIMARY KEY (`id`),"
 			. " UNIQUE KEY `pageid` (`" . self::ROW_pageid . "`)"
 			. ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
@@ -79,10 +79,10 @@ class core_navigation extends DbModell {
 			. ");";
 	}
 
-	public static function sql_select($where = ""){
-		$data = DB::select("SELECT * FROM " . self::getTableName() . " ". $where);
+	public static function sql_select($where = "") {
+		$data = DB::select("SELECT * FROM " . self::getTableName() . " " . $where);
 		$navi = array();
-		foreach ($data as $row){
+		foreach ($data as $row) {
 			$navi[$row[self::ROW_pageid]] = new core_navigation($row);
 		}
 		return $navi;
@@ -91,22 +91,23 @@ class core_navigation extends DbModell {
 	/**
 	 * @deprecated TODO
 	 */
-	public static function toSql($pageid, $title, $route=null){
+	public static function toSql($pageid, $title, $route = null) {
 		return self::toSql_insert($pageid, $title, $route);
 	}
+
 	/**
 	 * @param string $pageid
 	 * @param string $title
 	 * @param string $route
-	 * @param bool $external
+	 * @param bool   $external
 	 * @return string SQL
 	 */
-	public static function toSql_insert($pageid, $title=null, $route=null, $external=false){
+	public static function toSql_insert($pageid, $title = null, $route = null, $external = false) {
 		$naviEntry = new core_navigation(array(
-			"pageid"=>$pageid,
-			"title"=>$title,
-			"external"=>$external,
-			"route"=>$route,
+			"pageid" => $pageid,
+			"title" => $title,
+			"external" => $external,
+			"route" => $route,
 		));
 		return $naviEntry->sql_insert();
 	}
@@ -136,15 +137,15 @@ class core_navigation extends DbModell {
 
 		$title = htmlentities($this->title);
 
-		if($this->pageid && $this->pageid==$highlighted_id){
+		if ($this->pageid && $this->pageid == $highlighted_id) {
 			$title = "<b>$title</b>";
 		}
 
 		$external = substr($this->route, 0, 1) == '/'
 			|| strpos($this->route, ':') !== false;
-		if($external){
+		if ($external) {
 			$url = $this->route;
-		}else{
+		} else {
 			$url = Run::getWebUrl($this->pageid);
 		}
 

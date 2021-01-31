@@ -35,12 +35,12 @@ class Admin extends Runner {
 
 		$form = new Form(null, "", "Update DB");
 		$form->onSubmit .= (Js::ajaxPostToMessages(null, null, "{
-			class:'".ServiceStrings::escape_value_js(self::ROUTE)."',
-			cmd:'".self::CMD_updateDb."',
+			class:'" . ServiceStrings::escape_value_js(self::ROUTE) . "',
+			cmd:'" . self::CMD_updateDb . "',
 		}"))
 			. "return false;";
 
-		$html.=$form;
+		$html .= $form;
 
 		return $html;
 	}
@@ -53,7 +53,7 @@ class Admin extends Runner {
 			case self::CMD_updateDb:
 
 				$responses = UpdateDatabase::updateAll();
-				$response = "Updated database.<pre>".print_r($responses,1)."</pre>";
+				$response = "Updated database.<pre>" . print_r($responses, 1) . "</pre>";
 
 				return new ApiResponseHtml(
 					true,

@@ -63,22 +63,22 @@ class Page {
 		return self::$instance;
 	}
 
-	public function initDefaults(){
+	public function initDefaults() {
 
-		if(($ttroot=Config::get(Config::HTTP_TTROOT, false))!==false) {
+		if (($ttroot = Config::get(Config::HTTP_TTROOT, false)) !== false) {
 			$j = new Jquery();
 			$this->addJs($j->getScriptReference(), Jquery::JS_NAME);
 			$this->addJs($ttroot . '/service/js/core.js', Js::JSID_CORE);
 		}
 
-		if(($HTTP_SKIN=Config::get(Config::HTTP_SKIN, false))!==false) {
+		if (($HTTP_SKIN = Config::get(Config::HTTP_SKIN, false)) !== false) {
 			$this->addCss($HTTP_SKIN . "/main.css");
 		}
 
 	}
 
-	public static function getNextGlobalId($prefix="id") {
-		return $prefix.(self::$next_global_id++);
+	public static function getNextGlobalId($prefix = "id") {
+		return $prefix . (self::$next_global_id++);
 	}
 
 	public static function init($pid, $token) {
@@ -127,7 +127,7 @@ class Page {
 	public function getHtml() {
 		$head = $this->getCssHtml();
 		$head .= "\n" . $this->getJsHtml();
-		$head .= "<title>".$this->getTitle()."</title>";
+		$head .= "<title>" . $this->getTitle() . "</title>";
 		$head = "\n<head>\n$head\n</head>";
 
 		$messages = $this->messagesToHtml();
@@ -140,8 +140,8 @@ class Page {
 		$body = $messages . $body;
 		$body .= $this->waitSpinner();
 		$body .= self::debugInfo();
-		if(Database::isPrimarySet()){
-			$body="<nav>".Navigation::getInstance()->getHtml($this->id)."</nav>".$body;
+		if (Database::isPrimarySet()) {
+			$body = "<nav>" . Navigation::getInstance()->getHtml($this->id) . "</nav>" . $body;
 		}
 		$body = "\n<body onunload='t2_spinner_stop();' $bodyOnLoad>\n$body\n</body>\n";
 
@@ -150,9 +150,9 @@ class Page {
 		return $html;
 	}
 
-	public static function debugInfo(){
-		if(!CFG::DEVMODE())return "";
-		return "\n".Stats::getAllStatsHtml();
+	public static function debugInfo() {
+		if (!CFG::DEVMODE()) return "";
+		return "\n" . Stats::getAllStatsHtml();
 	}
 
 	private function waitSpinner() {
@@ -235,33 +235,33 @@ class Page {
 		$this->jsOnLoad .= $jsOnLoad;
 	}
 
-	private function getTitle(){
-		if(!Database::isPrimarySet())return "Error";
+	private function getTitle() {
+		if (!Database::isPrimarySet()) return "Error";
 		$title = Navigation::getInstance()->getTitleRaw($this->id);
-		if(($proj_title=Config::get(Config::PROJ_TITLE,false))!==false){
-			$title .= " - ".$proj_title;
+		if (($proj_title = Config::get(Config::PROJ_TITLE, false)) !== false) {
+			$title .= " - " . $proj_title;
 		}
 		return htmlentities($title);
 	}
 
-	private function getFocus(){
+	private function getFocus() {
 		$focus = $this->focus;
-		if($focus===null || $focus===true){
-			$focus=":input:enabled:visible:first";
+		if ($focus === null || $focus === true) {
+			$focus = ":input:enabled:visible:first";
 		}
 		return $focus;
 	}
 
-	private function getJsOnLoadHtml(){
-		$js=$this->jsOnLoad;
+	private function getJsOnLoadHtml() {
+		$js = $this->jsOnLoad;
 
 		$focus = $this->getFocus();
-		if($focus!==false){
-			$js.="$('$focus').focus();";
+		if ($focus !== false) {
+			$js .= "$('$focus').focus();";
 		}
 
-		if(!$js)return"";
-		return "onload=\"".ServiceStrings::escape_value_html($js)."\"";
+		if (!$js) return "";
+		return "onload=\"" . ServiceStrings::escape_value_html($js) . "\"";
 	}
 
 	/**

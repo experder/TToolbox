@@ -27,7 +27,6 @@ class ApiResponseHtml implements ApiResponse {
 	protected $params = array();
 
 	/**
-	 * ApiResponseWeb constructor.
 	 * @param bool   $ok
 	 * @param string $html
 	 * @param array  $params
@@ -37,24 +36,24 @@ class ApiResponseHtml implements ApiResponse {
 		$this->ok = $ok;
 		$this->html = $html;
 		$this->msg_type = $msg_type;
-		if($ok!==null){
-			$params["ok"]=$ok;
+		if ($ok !== null) {
+			$params["ok"] = $ok;
 		}
-		if($html!==null){
-			$params["html"]=$html;
+		if ($html !== null) {
+			$params["html"] = $html;
 		}
-		if($msg_type!==null){
-			$params["msg_type"]=$msg_type;
+		if ($msg_type !== null) {
+			$params["msg_type"] = $msg_type;
 		}
 		$this->params = $params;
 	}
 
-	public static function createResponse($ok = null, $html = null, array $params = array(), $msg_type = null){
+	public static function createResponse($ok = null, $html = null, array $params = array(), $msg_type = null) {
 		$arh = new ApiResponseHtml($ok, $html, $params, $msg_type);
 		return $arh->getResponseArray();
 	}
 
-	public function getResponseArray(){
+	public function getResponseArray() {
 		return $this->params;
 	}
 

@@ -23,35 +23,35 @@ class Navigation {
 		$this->entries = $entries;
 	}
 
-	public static function getInstance(){
-		if(self::$singleton===null){
+	public static function getInstance() {
+		if (self::$singleton === null) {
 			$entries = core_navigation::sql_select();
 			self::$singleton = new Navigation($entries);
 		}
 		return self::$singleton;
 	}
 
-	public function getEntryById($id){
-		if(!isset($this->entries[$id])){
+	public function getEntryById($id) {
+		if (!isset($this->entries[$id])) {
 			return false;
 		}
 		return $this->entries[$id];
 	}
 
-	public function getTitleRaw($id){
+	public function getTitleRaw($id) {
 		$entry = $this->getEntryById($id);
-		if($entry===false){
+		if ($entry === false) {
 			return $id;
 		}
 		return $entry->getTitle();
 	}
 
-	public function getHtml($highlighted_id){
+	public function getHtml($highlighted_id) {
 		$html = array();
 
-		foreach ($this->entries as $entry){
+		foreach ($this->entries as $entry) {
 
-			if ($entry->getTitle() !== null){
+			if ($entry->getTitle() !== null) {
 				$html[] = $entry->getHtml($highlighted_id);
 			}
 

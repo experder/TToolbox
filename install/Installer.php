@@ -67,7 +67,7 @@ class Installer {
 		if (!ServiceEnv::requestCmd('createWebPointer')) {
 			$form = new Form("createWebPointer", "", "Create init_pointer.php");
 			$suggest = "dirname(__DIR__).'/TTconfig/Init_project.php'";
-			$form->addField(new FormfieldText("val_webpath", "Path to Init_project.php", $suggest, true, array("id"=>"focus")));
+			$form->addField(new FormfieldText("val_webpath", "Path to Init_project.php", $suggest, true, array("id" => "focus")));
 			$m = new Message(Message::TYPE_INFO,
 				"The file <b>$file</b> (excluded from the repo) points to <b>Init_project.php</b>."
 			);
@@ -160,7 +160,7 @@ class Installer {
 			if (($p = strpos($suggest, '/TToolbox')) !== false) {
 				$suggest = substr($suggest, 0, $p);
 			}
-			$form->addField(new FormfieldText("HTTP_ROOT", "Web root path", $suggest, true, array("id"=>"focus")));
+			$form->addField(new FormfieldText("HTTP_ROOT", "Web root path", $suggest, true, array("id" => "focus")));
 
 			$form->addField(new FormfieldText("DB_HOST", "DB host", "localhost"));
 			$form->addField(new FormfieldText("DB_NAME", "DB name", "mytt"));
@@ -184,9 +184,9 @@ class Installer {
 		if (PHP_OS == 'WINNT') $platform = "PLATFORM_WINDOWS";
 		if (PHP_OS == 'Linux') $platform = "PLATFORM_LINUX";
 
-		$servername = isset($_SERVER['SERVER_NAME'])?$_SERVER['SERVER_NAME']:"myserver";
+		$servername = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : "myserver";
 
-		$ttroot = "Config::get(Config::HTTP_ROOT) . '/".basename(dirname(__DIR__))."'";
+		$ttroot = "Config::get(Config::HTTP_ROOT) . '/" . basename(dirname(__DIR__)) . "'";
 
 		Templates::create_file($file, __DIR__ . '/templates/init_server.php', array(
 			"<?php" . PHP_EOL . PHP_EOL . "/*" => "<?php" . PHP_EOL . "/*",
@@ -221,7 +221,7 @@ class Installer {
 
 			$suggest = "dirname(__DIR__) . '/" . basename(dirname(__DIR__)) . "'";
 			$form->addField(new FormfieldText("TToolbox", "Path to TToolbox", $suggest, true, array(
-				"id"=>"focus",
+				"id" => "focus",
 			)));
 
 			$suggest = strtolower(basename(dirname(dirname(__DIR__))));
@@ -339,7 +339,7 @@ class Installer {
 		$head .= "<script>$js</script>";
 		$head .= self::$additionalWizardHead;
 
-		if ($ttroot=Config::get(Config::HTTP_TTROOT, false))
+		if ($ttroot = Config::get(Config::HTTP_TTROOT, false))
 			$head .= LoadJs::htmlScript($ttroot . '/service/js/core.js');
 
 		$head = "<head>$head</head>";
@@ -348,7 +348,7 @@ class Installer {
 		$html .= "<div id='tt_pg_messages'></div>";
 		$html .= $body;
 
-		$html = "<body onload='".ServiceStrings::escape_value_html(self::onloadFocusJs())."'>$html</body>";
+		$html = "<body onload='" . ServiceStrings::escape_value_html(self::onloadFocusJs()) . "'>$html</body>";
 
 		$html = $head . $html;
 		$html = "<!DOCTYPE html><html>$html</html>";

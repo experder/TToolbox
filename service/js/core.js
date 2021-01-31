@@ -75,7 +75,7 @@ function tt_error(message, classname = 'error ajax_error') {
 	tt_scroll_to(msgDiv.children().last());
 }
 
-function htmltrim(string){
+function htmltrim(string) {
 	string = string.replace(new RegExp("<br ?/?>"), "\n");
 	string = string.trimLeft();
 	return string;

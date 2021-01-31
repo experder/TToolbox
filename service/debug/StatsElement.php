@@ -21,20 +21,20 @@ class StatsElement {
 	 * @param string $content HTML
 	 * @param string $class CSS class
 	 */
-	public function __construct($title, $content, $class=null) {
+	public function __construct($title, $content, $class = null) {
 		$this->title = $title;
 		$this->content = $content;
 		$this->class = $class;
 	}
 
-	public function toHtml(){
+	public function toHtml() {
 		$id = Page::getNextGlobalId();
-		if($this->content){
+		if ($this->content) {
 			$btn = "<div class='statsBtn expand' onclick=\"$('#$id').toggle(400);\">$this->title</div>";
-			$class = 'statsContent'.($this->class?" ".$this->class:"");
+			$class = 'statsContent' . ($this->class ? " " . $this->class : "");
 			$content = "<div class='$class'>$this->content</div>";
 			$content = "<div class='contentWrapper' id='$id'>$content</div>";
-			return $btn.$content;
+			return $btn . $content;
 		}
 		return "<div class='statsBtn'>$this->title</div>";
 	}

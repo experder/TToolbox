@@ -60,10 +60,11 @@ class Config {
 	/**
 	 * @deprecated TODO
 	 */
-	public static function get2($cfgId, $else=null) {
+	public static function get2($cfgId, $else = null) {
 		return self::get($cfgId, $else);
 	}
-	public static function get($cfgId, $else=null) {
+
+	public static function get($cfgId, $else = null) {
 
 		if (isset(self::$settings[$cfgId])) {
 			return self::$settings[$cfgId];
@@ -71,6 +72,7 @@ class Config {
 
 		return $else;
 	}
+
 	public static function getChecked($cfgId) {
 
 		if (isset(self::$settings[$cfgId])) {
@@ -89,19 +91,19 @@ class Config {
 
 		$database = Database::getPrimary();
 
-		$data = $database->_query("SELECT ".core_config::ROW_content." FROM ".core_config::getTableName()." WHERE ".core_config::ROW_idstring."=:ID AND ".core_config::ROW_module."=:MOD AND ".core_config::ROW_userid."<=>:USR LIMIT 1;", array(
-			":ID"=>$id,
-			":USR"=>$user,
-			":MOD"=>$module,
+		$data = $database->_query("SELECT " . core_config::ROW_content . " FROM " . core_config::getTableName() . " WHERE " . core_config::ROW_idstring . "=:ID AND " . core_config::ROW_module . "=:MOD AND " . core_config::ROW_userid . "<=>:USR LIMIT 1;", array(
+			":ID" => $id,
+			":USR" => $user,
+			":MOD" => $module,
 		), Database::RETURN_ASSOC);
 
-		if(!$data || !is_array($data) || count($data)<1){
+		if (!$data || !is_array($data) || count($data) < 1) {
 			return $default_value;
 		}
 
-		if(count($data)>1){
+		if (count($data) > 1) {
 			new Error(
-				"Config database corrupt! Multiple entries found for \"$id\" (module '$module'".($user?", user #$user":"").")."
+				"Config database corrupt! Multiple entries found for \"$id\" (module '$module'" . ($user ? ", user #$user" : "") . ")."
 			);
 		}
 
@@ -113,15 +115,15 @@ class Config {
 	}
 
 	private static function recallVal($module, $key, $user = null) {
-		$user_index = 'u' . ($user?:0);
+		$user_index = 'u' . ($user ?: 0);
 		if (!isset(self::$config_cache[$module][$user_index][$key])) {
 			return false;
 		}
 		return self::$config_cache[$module][$user_index][$key];
 	}
 
-	private static function storeVal($value, $module, $key, $user=null) {
-		$user_index = 'u' . ($user?:0);
+	private static function storeVal($value, $module, $key, $user = null) {
+		$user_index = 'u' . ($user ?: 0);
 		self::$config_cache[$module][$user_index][$key] = $value;
 	}
 
@@ -129,7 +131,7 @@ class Config {
 
 		//Will we have to UPDATE or INSERT?
 		$data_exists = DB::select(
-			"SELECT ".core_config::ROW_id
+			"SELECT " . core_config::ROW_id
 			. " FROM " . core_config::getTableName()
 			. " WHERE " . core_config::ROW_idstring . "=:ID"
 			. " AND " . core_config::ROW_module . "=:MOD"
@@ -141,27 +143,27 @@ class Config {
 			)
 		);
 
-		if($data_exists){
+		if ($data_exists) {
 			//UPDATE
-			if(count($data_exists)>1){
+			if (count($data_exists) > 1) {
 				new Error("Config database is corrupt! Duplicate entry for '$key'!");
 			}
 			$id = $data_exists[0][core_config::ROW_id];
 			Database::getPrimary()->_query(
 				"UPDATE " . core_config::getTableName()
 				. " SET " . core_config::ROW_content . "=:VAL"
-				. " WHERE " . core_config::ROW_id . "=".$id,
+				. " WHERE " . core_config::ROW_id . "=" . $id,
 				array(
 					":VAL" => $value,
 				)
 			);
-		}else{
+		} else {
 			//INSERT
 			DB::insertAssoc(core_config::getTableName(), array(
-				core_config::ROW_idstring=>$key,
-				core_config::ROW_content=>$value,
-				core_config::ROW_module=>$module,
-				core_config::ROW_userid=>$user,
+				core_config::ROW_idstring => $key,
+				core_config::ROW_content => $value,
+				core_config::ROW_module => $module,
+				core_config::ROW_userid => $user,
 			));
 		}
 
@@ -209,7 +211,7 @@ class Config {
 	}
 
 	private static function checkProjectInitialization() {
-		if(!self::$project_initialized){
+		if (!self::$project_initialized) {
 			new Error("Please initialize project settings. (require 'Init_project.php')", 2);
 		}
 	}

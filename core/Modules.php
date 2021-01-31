@@ -30,44 +30,44 @@ class Modules {
 	private function __construct() {
 	}
 
-	public static function getInstance(){
-		if(self::$instance===null){
+	public static function getInstance() {
+		if (self::$instance === null) {
 			self::$instance = new Modules();
 		}
 		return self::$instance;
 	}
 
-	public static function getAllModules(){
+	public static function getAllModules() {
 		$modules = self::getInstance()->modules;
-		if($modules===null){
+		if ($modules === null) {
 			new Error("Modules not initialized!");
 		}
 		return $modules;
 	}
 
-	public function register(Module $module){
+	public function register(Module $module) {
 		$module_id = $module->getModuleId();
 
-		if(preg_replace("/[^a-z_0-9]/","",$module_id)!==$module_id || strlen($module_id)>Modules::MODULE_ID_MAXLENGTH){
+		if (preg_replace("/[^a-z_0-9]/", "", $module_id) !== $module_id || strlen($module_id) > Modules::MODULE_ID_MAXLENGTH) {
 			new Error("Invalid module ID: '$module_id'");
 		}
 
 		$this->modules[$module_id] = $module;
 	}
 
-	public function getModule($module_id){
-		if(!isset($this->modules[$module_id])){
+	public function getModule($module_id) {
+		if (!isset($this->modules[$module_id])) {
 			new Error("Module not registered: '$module_id'");
 		}
 		$module = $this->modules[$module_id];
 		return $module;
 	}
 
-	public static function init(){
+	public static function init() {
 
 		$m = Modules::getInstance();
 
-		$m->modules=array();
+		$m->modules = array();
 
 		$m->register(new CoreModule());
 
