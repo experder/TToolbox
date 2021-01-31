@@ -143,7 +143,7 @@ class Page {
 		if (Database::isPrimarySet()) {
 			$body = "<nav>" . Navigation::getInstance()->getHtml($this->id) . "</nav>" . $body;
 		}
-		$body = "\n<body onunload='tt_tools.spinnerStop();' $bodyOnLoad>\n$body\n</body>\n";
+		$body = "\n<body onunload='if(typeof tt_tools!==\"undefined\")tt_tools.spinnerStop();' $bodyOnLoad>\n$body\n</body>\n";
 
 		$html = $head . $body;
 		$html = "<!DOCTYPE html><html>$html</html>";
@@ -257,7 +257,7 @@ class Page {
 
 		$focus = $this->getFocus();
 		if ($focus !== false) {
-			$js .= "$('$focus').focus();";
+			$js .= "if(typeof $!==\"undefined\")$('$focus').focus();";
 		}
 
 		if (!$js) return "";

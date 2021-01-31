@@ -31,8 +31,8 @@ use tt\service\thirdparty\LoadJs;
  * Installer handles:
  * - Creation of "init_pointer.php"
  * - Creation of "Init_project.php"
- * - Create API classes
  * - Creation of "init_server.php"
+ * - Create API classes
  * - Creation of database (name specified in init_server.php)
  * //TODO: Create core tables
  * - Download of third party packages
