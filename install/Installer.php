@@ -34,6 +34,7 @@ use tt\service\thirdparty\LoadJs;
  * - Create API classes
  * - Creation of "init_server.php"
  * - Creation of database (name specified in init_server.php)
+ * //TODO: Create core tables
  * - Download of third party packages
  */
 class Installer {
@@ -217,7 +218,7 @@ class Installer {
 		Autoloader::init();
 
 		if (!ServiceEnv::requestCmd('cmdCreateInit')) {
-			$form = new Form("cmdCreateInit", "", "Create Init_project.php");
+			$form = new Form("cmdCreateInit", "", "Create ".basename($file));
 
 			$suggest = "dirname(__DIR__) . '/" . basename(dirname(__DIR__)) . "'";
 			$form->addField(new FormfieldText("TToolbox", "Path to TToolbox", $suggest, true, array(

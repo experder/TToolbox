@@ -53,6 +53,7 @@ class Autoloader {
 
 	private static function loadApiClass($class_name) {
 		if (!preg_match("/^tt\\\\api\\\\(.*)\$/", $class_name, $matches)) return false;
+		if(Config::get(Config::CFG_API_DIR,false)===false)return false;
 		require_once dirname(__DIR__) . '/service/ServiceEnv.php';
 
 		$name_api = $matches[1];
@@ -96,8 +97,8 @@ class Autoloader {
 		return false;
 	}
 
-	private static function getAllNamespaceRoots() {
-		if (self::$all_namespace_roots === null) {
+	public static function getAllNamespaceRoots($force_reload=false) {
+		if (self::$all_namespace_roots === null || $force_reload) {
 
 			self::$all_namespace_roots = array(
 				"tt" => dirname(__DIR__),
@@ -107,10 +108,12 @@ class Autoloader {
 				self::$all_namespace_roots[$r] = Config::get(Config::CFG_PROJECT_DIR);
 			}
 
-			$additionalNamespaceRoots = \tt\api\Autoloader::getNamespaceRoots();
-			if (is_array($additionalNamespaceRoots)) {
-				foreach ($additionalNamespaceRoots as $namespace => $folder) {
-					self::$all_namespace_roots[$namespace] = $folder;
+			if(Config::get(Config::CFG_API_DIR,false)!==false){
+				$additionalNamespaceRoots = \tt\api\Autoloader::getNamespaceRoots();
+				if(is_array($additionalNamespaceRoots)){
+					foreach ($additionalNamespaceRoots as $namespace=>$folder){
+						self::$all_namespace_roots[$namespace] = $folder;
+					}
 				}
 			}
 		}
@@ -130,6 +133,7 @@ class Autoloader {
 	private static function notFound($class, $cutBacktrace = 0) {
 		if (!Autoloader::$abort_on_error) return false;
 		require_once dirname(__DIR__) . '/service/Error.php';
+		require_once dirname(__DIR__) . '/service/ServiceEnv.php';
 		new Error("Can't autoload \"$class\"!", $cutBacktrace + 1);
 		return null;
 	}

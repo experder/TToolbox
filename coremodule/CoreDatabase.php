@@ -25,7 +25,9 @@ class CoreDatabase extends UpdateDatabase {
 
 		$db->_query(core_config::sql_001_create());
 
-		$updater = Modules::getInstance()->getModule(CoreModule::MODULE_ID)->getUpdateDatabase();
+		#$updater = Modules::getInstance()->getModule(CoreModule::MODULE_ID)->getUpdateDatabase();
+		$modCore = new CoreModule();
+		$updater = $modCore->getUpdateDatabase();
 
 		$msg = $updater->startUpdate();
 

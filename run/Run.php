@@ -177,7 +177,7 @@ class Run {
 
 		$class = new $controllerClass();
 
-		if (!$class instanceof Runner) {
+		if (!($class instanceof Runner)) {
 			new Error("Controller class '$controllerClass' does not extend 'tt\\run\\Runner'!");
 		}
 

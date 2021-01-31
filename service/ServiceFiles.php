@@ -61,7 +61,9 @@ class ServiceFiles {
 			}
 		}
 		if ($success === false) {
-			$platform = Config::get2(Config::CFG_PLATFORM);
+			$platform = Config::get(Config::CFG_PLATFORM);
+#			echo "error!";exit;
+			//TODO: message is not shown for init_pointer.php
 			new Error("Couldn't store file \"$filename\". Please check rights."
 				. (($platform == Config::PLATFORM_UNKNOWN
 					|| $platform == Config::PLATFORM_LINUX)
