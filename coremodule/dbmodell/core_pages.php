@@ -231,10 +231,10 @@ private static $temp_counter=0;
 			$url=null;
 		}
 
-		$link = $title;
-
 		if($url!==false){
 			$link = "<a href='$url'>$title</a>";
+		}else{
+			$link = "<span class='pseudo_a'>$title</span>";
 		}
 
 		$html=array();
