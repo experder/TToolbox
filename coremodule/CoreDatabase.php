@@ -9,11 +9,9 @@
 namespace tt\coremodule;
 
 use tt\core\database\Database;
-use tt\core\Modules;
 use tt\coremodule\dbmodell\core_config;
-use tt\coremodule\dbmodell\core_navigation;
+use tt\coremodule\dbmodell\core_pages;
 use tt\coremodule\pages\Admin;
-use tt\install\Api;
 use tt\moduleapi\UpdateDatabase;
 use tt\install\Installer;
 
@@ -38,11 +36,16 @@ class CoreDatabase extends UpdateDatabase {
 
 		/** @see Installer::initDatabaseDo() */
 
-		$this->q(1, core_navigation::sql_001_create());
-		$this->q(2, core_navigation::toSql_insert(Admin::ROUTE, "Admin", Admin::getClass()));
-		$this->q(3, core_navigation::toSql_insert(Api::ROUTE, Api::TITLE, Api::getClass()));
-		//TODO: Order / invisible
-		$this->q(4, core_navigation::toSql_insert(Installer::INDEX_ID, null, Installer::getClass()));
+		$this->q(1, core_pages::sql_001_create());
+		$this->q(2, core_pages::sql_002_constraint1());
+
+		$this->q(3, core_pages::toSql_insert(Admin::PAGEID, core_pages::TYPE_web, "Admin", Admin::getClass()));
+
+//		$this->q(1, core_navigation::sql_001_create());
+//		$this->q(2, core_navigation::toSql_insert(Admin::ROUTE, "Admin", Admin::getClass()));
+//		$this->q(3, core_navigation::toSql_insert(Api::ROUTE, Api::TITLE, Api::getClass()));
+//		//TODO: Order / invisible
+//		$this->q(4, core_navigation::toSql_insert(Installer::INDEX_ID, null, Installer::getClass()));
 
 	}
 

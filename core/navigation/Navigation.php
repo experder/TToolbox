@@ -8,14 +8,14 @@
 
 namespace tt\core\navigation;
 
-use tt\coremodule\dbmodell\core_navigation;
+use tt\coremodule\dbmodell\core_pages;
 
 class Navigation {
 
 	private static $singleton = null;
 
 	/**
-	 * @var core_navigation[]
+	 * @var core_pages[]
 	 */
 	private $entries;
 
@@ -25,7 +25,7 @@ class Navigation {
 
 	public static function getInstance() {
 		if (self::$singleton === null) {
-			$entries = core_navigation::sql_select();
+			$entries = core_pages::sql_select();
 			self::$singleton = new Navigation($entries);
 		}
 		return self::$singleton;
@@ -46,16 +46,33 @@ class Navigation {
 		return $entry->getTitle();
 	}
 
+	/**
+	 * @return core_pages[]
+	 */
+	public function getHierarchy() {
+		$root = array();
+		foreach ($this->entries as $entry){
+			$parent = $entry->getParentEntry();
+			if($parent===false){
+				$root[] = $entry;
+			}else{
+				$parent->addChildEntry($entry);
+			}
+		}
+		return $root;
+	}
+
 	public function getHtml($highlighted_id) {
 		$html = array();
 
-		foreach ($this->entries as $entry) {
+		$root = array();
+		foreach ($this->getHierarchy() as $entry) {
 
-			if ($entry->getTitle() !== null) {
-				$html[] = $entry->getHtml($highlighted_id);
-			}
+			$next = $entry->getHtml($highlighted_id);
+			if($next!==false)$root[]=$next;
 
 		}
+		$html[] = "<ul><li>".implode("</li><li>", $root)."</li></ul>";
 
 		return implode("", $html);
 	}

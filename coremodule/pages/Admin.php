@@ -19,6 +19,10 @@ use tt\service\ServiceStrings;
 
 class Admin extends Runner {
 
+	const PAGEID = "core/admin";
+	/**
+	 * @deprecated TODO
+	 */
 	const ROUTE = "core/admin";
 
 	const CMD_updateDb = "updateDb";

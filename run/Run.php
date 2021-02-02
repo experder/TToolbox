@@ -102,17 +102,6 @@ class Run {
 
 	}
 
-	/**
-	 * Example:
-	 *
-	 * php TToolbox/run/cli.php myproject\\Myrunner foo bar
-	 *
-	 * class Myrunner extends Runner {
-	 *   public function runCli(array $data = array()) {
-	 *     return "You said: " . print_r($data, 1);
-	 *   }
-	 * }
-	 */
 	private static function doRunCli() {
 
 		global $argv;
@@ -159,14 +148,15 @@ class Run {
 	}
 
 	/**
-	 * @param string $controllerClass TODO: classOrAlias
+	 * @param string $controllerClass
+	 * @param bool   $isAlias
 	 * @return Runner
 	 */
 	private static function loadRunner($controllerClass, $isAlias = true) {
 		if ($isAlias) {
 			$naviEntry = Navigation::getInstance()->getEntryById($controllerClass);
 			if ($naviEntry !== false) {
-				$controllerClass = $naviEntry->getRoute();
+				$controllerClass = $naviEntry->getLink();
 			} else {
 				new Error("Route not found: '$controllerClass'");
 				$controllerClass = str_replace('/', '\\', $controllerClass);
