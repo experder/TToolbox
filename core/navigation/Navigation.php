@@ -19,6 +19,11 @@ class Navigation {
 	 */
 	private $entries;
 
+	/**
+	 * @var core_pages[] $breadcrumbs
+	 */
+	private $breadcrumbs = null;
+
 	private function __construct($entries) {
 		$this->entries = $entries;
 	}
@@ -31,6 +36,10 @@ class Navigation {
 		return self::$singleton;
 	}
 
+	/**
+	 * @param string $id
+	 * @return core_pages|false
+	 */
 	public function getEntryById($id) {
 		if (!isset($this->entries[$id])) {
 			return false;
@@ -62,6 +71,23 @@ class Navigation {
 		return $root;
 	}
 
+	/**
+	 * @param string $highlighted_id
+	 * @return core_pages[]
+	 */
+	public function getBreadcrumbs($highlighted_id){
+		if($this->breadcrumbs===null){
+			$this->breadcrumbs=$this->evaluateBreadcrumbs($highlighted_id);
+		}
+		return $this->breadcrumbs;
+	}
+	private function evaluateBreadcrumbs($highlighted_id){
+		$entry = $this->getEntryById($highlighted_id);
+		if($entry===false)return false;
+		$breadcrumbs = $entry->getBreadcrumbs();
+		return $breadcrumbs;
+	}
+
 	public function getHtml($highlighted_id) {
 		$html = array();
 
@@ -73,6 +99,10 @@ class Navigation {
 
 		}
 		$html[] = "<ul><li>".implode("</li><li>", $root)."</li></ul>";
+
+//		foreach ($this->getBreadcrumbs($highlighted_id) as $item) {
+//			$html[] = "--->".$item->getTitle();
+//		}
 
 		return implode("", $html);
 	}

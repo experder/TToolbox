@@ -148,6 +148,17 @@ class core_pages extends DbModell {
 		return $this->title;
 	}
 
+	public function getBreadcrumbs(){
+		$parent = $this->getParentEntry();
+		if($parent!==false){
+			$breads = $parent->getBreadcrumbs();
+		}else{
+			$breads = array();
+		}
+		$breads[] = $this;
+		return $breads;
+	}
+
 	/**
 	 * @return string|null
 	 */
@@ -170,7 +181,7 @@ class core_pages extends DbModell {
 	}
 
 	/**
-	 * @return core_pages
+	 * @return core_pages|false
 	 */
 	public function getParentEntry() {
 		if($this->parentEntry===null){
@@ -199,7 +210,9 @@ private static $temp_counter=0;
 
 		$title = htmlentities($this->title);
 
-		if ($this->pageid == $highlighted_id) {
+		#if ($this->pageid == $highlighted_id)
+		if(in_array($this, Navigation::getInstance()->getBreadcrumbs($highlighted_id)))
+		{
 			$title = "<b>$title</b>";
 		}
 

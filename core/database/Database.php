@@ -132,9 +132,9 @@ class Database {
 	public function _query($query, $substitutions = null, $return_type = 0) {
 		$statement = $this->pdo->prepare($query);
 		$ok = @$statement->execute($substitutions);
-		$this->debuginfo($statement, $query);
+		$compiledQuery = $this->debuginfo($statement, $query);
 		if (!$ok) {
-			$this->error_handling($statement, $query, $substitutions, 1);
+			$this->error_handling($statement, $query, $substitutions, 1, $compiledQuery);
 			return null;
 		}
 		switch ($return_type) {
@@ -154,21 +154,20 @@ class Database {
 	}
 
 	private function debuginfo(\PDOStatement $statement, $query) {
-		if (CFG::DEVMODE()) {
-
-			ob_flush();
-			ob_start();
-			$statement->debugDumpParams();
-			$debugDump = ob_get_clean();
-			$compiled_query = DebugTools::getCompiledQueryFromDebugDump($debugDump);
-			if (!$compiled_query) {
-				$compiled_query = ($debugDump ?: $query);
-			}
-
-			Stats::getSingleton()->addQuery(new DebugQuery($compiled_query));
-
+		if (!CFG::DEVMODE()) {
+			return null;
 		}
-		return;
+		ob_flush();
+		ob_start();
+		$statement->debugDumpParams();
+		$debugDump = ob_get_clean();
+		$compiled_query = DebugTools::getCompiledQueryFromDebugDump($debugDump);
+		if (!$compiled_query) {
+			$compiled_query = ($debugDump ?: $query);
+		}
+
+		Stats::getSingleton()->addQuery(new DebugQuery($compiled_query));
+		return $compiled_query;
 		if (Config::$DEVMODE) {
 			$backtrace = debug_backtrace();
 
@@ -189,7 +188,7 @@ class Database {
 		}
 	}
 
-	private function /*TODO:*/error_handling(\PDOStatement $statement, $query, $substitutions, $cut_backtrace = 0) {
+	private function /*TODO:*/error_handling(\PDOStatement $statement, $query, $substitutions, $cut_backtrace = 0, $compiledQuery) {
 		$eInfo = $statement->errorInfo();
 		$errorCode = $eInfo[0];
 		$errorInfo = "[$errorCode] " . $eInfo[2];
@@ -199,7 +198,7 @@ class Database {
 		}
 
 		#new Error($query." /// ".print_r($substitutions,1)." /// ".print_r($statement->errorInfo(),1));
-		new Error(print_r($statement->errorInfo(), 1));
+		new Error(print_r($statement->errorInfo(), 1)."-----------\n".$compiledQuery);
 		return;
 		$eInfo = $statement->errorInfo();
 		$errorCode = $eInfo[0];
