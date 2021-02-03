@@ -8,12 +8,14 @@
 
 namespace tt\coremodule\dbmodell;
 
+use tt\core\CFG;
 use tt\core\Config;
 use tt\core\database\DB;
 use tt\core\database\DbModell;
 use tt\core\navigation\Navigation;
 use tt\run\Run;
 use tt\service\Error;
+use tt\service\ServiceStrings;
 
 class core_pages extends DbModell {
 
@@ -208,12 +210,14 @@ private static $temp_counter=0;
 		if(self::$temp_counter++>100)return "RECURSION!!!";//TODO:Recursion in navigation
 		if($this->title===null && !$this->childEntries)return false;
 
-		$title = htmlentities($this->title);
+		$title_ = htmlentities($this->title);
 
-		#if ($this->pageid == $highlighted_id)
-		if(in_array($this, Navigation::getInstance()->getBreadcrumbs($highlighted_id)))
-		{
-			$title = "<b>$title</b>";
+		if(in_array($this, Navigation::getInstance()->getBreadcrumbs($highlighted_id))) {
+			$high = true;
+			$title = "<b>$title_</b>";
+		}else{
+			$high = false;
+			$title = $title_;
 		}
 
 		if ($this->type=='web'){
@@ -231,10 +235,14 @@ private static $temp_counter=0;
 			$url=null;
 		}
 
+		$cssId = "id_".ServiceStrings::cssClassSafe($this->pageid);
+		if(CFG::DEVMODE())$title_.=" [$cssId]";
+		$titleVal = $this->parent===null?"title='$title_'":"";
+
 		if($url!==false){
-			$link = "<a href='$url'>$title</a>";
+			$link = "<a href='$url' $titleVal>$title</a>";
 		}else{
-			$link = "<span class='pseudo_a'>$title</span>";
+			$link = "<span class='pseudo_a' $titleVal>$title</span>";
 		}
 
 		$html=array();
@@ -249,10 +257,12 @@ private static $temp_counter=0;
 				$childsHtml[] = $childHtml;
 			}
 
-			$html[] = "<ul><li>".implode("</li><li>", $childsHtml)."</li></ul>";
+			$html[] = "<ul>".implode("\n", $childsHtml)."</ul>";
 		}
 
-		return implode("", $html);
+		$highclass = $high?" high":"";
+
+		return "<li class='$cssId$highclass'>".implode("\n", $html)."</li>";
 
 	}
 

@@ -98,7 +98,7 @@ class Navigation {
 			if($next!==false)$root[]=$next;
 
 		}
-		$html[] = "<ul><li>".implode("</li><li>", $root)."</li></ul>";
+		$html[] = "<ul>".implode("\n", $root)."</ul>";
 
 //		foreach ($this->getBreadcrumbs($highlighted_id) as $item) {
 //			$html[] = "--->".$item->getTitle();
