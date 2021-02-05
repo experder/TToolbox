@@ -47,8 +47,19 @@ class ServiceFiles {
 	public static function save($filename, $content, $append = false) {
 		$dirname = dirname($filename);
 		if (!is_dir($dirname)) {
-			mkdir($dirname, 0755, true);
+			@mkdir($dirname, 0755, true);
 		}
+
+		if(!is_dir($dirname)){
+			$platform = Config::get(Config::CFG_PLATFORM);
+			new Error("Couldn't create directory \"$dirname\". Please check rights."
+				. (($platform == Config::PLATFORM_UNKNOWN
+					|| $platform == Config::PLATFORM_LINUX)
+					? "\nTry this:\nsudo chmod 777 '" . dirname($dirname) . "/' -R"
+					: "")
+			);
+		}
+
 		$success = false;
 
 		if (is_resource($content)) {
