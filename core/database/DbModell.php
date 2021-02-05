@@ -14,6 +14,8 @@ abstract class DbModell {
 
 	protected $id;
 
+	private static $singleton0=null;
+
 	/**
 	 * @param array $data
 	 */
@@ -21,6 +23,17 @@ abstract class DbModell {
 		if (is_array($data)) {
 			$this->setData($data);
 		}
+	}
+
+	/**
+	 * @return DbModell
+	 */
+	public static function getSingleton0(){
+		if(self::$singleton0===null){
+			$classname = get_called_class();
+			self::$singleton0=new $classname(null);
+		}
+		return self::$singleton0;
 	}
 
 	public function setData($data_array) {
@@ -39,9 +52,8 @@ abstract class DbModell {
 
 	/**
 	 * @return string
-	 * TODO: Not static!
 	 */
-	public static function getTableName() {
+	public function getTableName2() {
 		return "UNDEFINED!";
 	}
 

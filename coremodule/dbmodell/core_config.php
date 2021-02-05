@@ -25,7 +25,7 @@ class core_config extends DbModell {
 	/**
 	 * @return string
 	 */
-	public static function getTableName() {
+	public function getTableName2() {
 		if (self::$table_name === null) {
 			new Error("Table name not set!");
 		}
@@ -40,7 +40,7 @@ class core_config extends DbModell {
 	}
 
 	public static function sql_001_create() {
-		return "CREATE TABLE " . self::getTableName() . " ("
+		return "CREATE TABLE " . self::getSingleton0()->getTableName2() . " ("
 			. " `" . self::ROW_id . "` INT(11) NOT NULL AUTO_INCREMENT,"
 			. " `" . self::ROW_idstring . "` VARCHAR(200) NOT NULL,"
 			. " `" . self::ROW_module . "` VARCHAR(" . Modules::MODULE_ID_MAXLENGTH . ") NOT NULL,"
