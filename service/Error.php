@@ -11,6 +11,7 @@ namespace tt\service;
 use tt\core\page\Message;
 use tt\core\page\Page;
 use tt\run\ApiResponseHtml;
+use tt\service\debug\DebugTools;
 
 class Error {
 

@@ -57,13 +57,6 @@ class Config {
 		self::$settings[$cfgId] = $value;
 	}
 
-	/**
-	 * @deprecated TODO
-	 */
-	public static function get2($cfgId, $else = null) {
-		return self::get($cfgId, $else);
-	}
-
 	public static function get($cfgId, $else = null) {
 
 		if (isset(self::$settings[$cfgId])) {

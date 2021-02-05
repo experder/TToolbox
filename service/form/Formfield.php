@@ -101,7 +101,7 @@ abstract class Formfield {
 		$tooltip = $this->tooltip;
 
 		//Developers see the fieldname
-		if (Config::get2(Config::DEVMODE, false)) {
+		if (Config::get(Config::DEVMODE, false)) {
 			$tooltip .= " [" . $this->name . "]";
 		}
 

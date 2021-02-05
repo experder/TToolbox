@@ -20,10 +20,6 @@ use tt\service\ServiceStrings;
 class Admin extends Runner {
 
 	const PAGEID = "core/admin";
-	/**
-	 * @deprecated TODO
-	 */
-	const ROUTE = "core/admin";
 
 	const CMD_updateDb = "updateDb";
 
@@ -39,7 +35,7 @@ class Admin extends Runner {
 
 		$form = new Form(null, "", "Update DB");
 		$form->onSubmit .= (Js::ajaxPostToMessages(null, null, "{
-			class:'" . ServiceStrings::escape_value_js(self::ROUTE) . "',
+			class:'" . ServiceStrings::escape_value_js(self::PAGEID) . "',
 			cmd:'" . self::CMD_updateDb . "',
 		}"))
 			. "return false;";
