@@ -34,7 +34,6 @@ use tt\service\thirdparty\LoadJs;
  * - Creation of "init_server.php"
  * - Create API classes
  * - Creation of database (name specified in init_server.php)
- * //TODO: Create core tables
  * - Download of third party packages
  */
 class Installer {

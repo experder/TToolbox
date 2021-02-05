@@ -60,7 +60,7 @@ class Error {
 
 		//Autoloader:
 		require_once dirname(__DIR__) . '/service/ServiceEnv.php';
-		require_once dirname(__DIR__) . '/service/DebugTools.php';
+		require_once dirname(__DIR__) . '/service/debug/DebugTools.php';
 		require_once dirname(__DIR__) . '/core/page/Message.php';
 		require_once dirname(__DIR__) . '/core/page/Page.php';
 

@@ -212,7 +212,8 @@ private static $temp_counter=0;
 
 		$title_ = htmlentities($this->title);
 
-		if(in_array($this, Navigation::getInstance()->getBreadcrumbs($highlighted_id))) {
+		$crumbs = Navigation::getInstance()->getBreadcrumbs($highlighted_id);
+		if($crumbs && in_array($this, $crumbs)) {
 			$high = true;
 			$title = "<b>$title_</b>";
 		}else{

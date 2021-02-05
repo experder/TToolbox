@@ -188,7 +188,7 @@ class Database {
 		}
 	}
 
-	private function /*TODO:*/error_handling(\PDOStatement $statement, $query, $substitutions, $cut_backtrace = 0, $compiledQuery) {
+	private function error_handling(\PDOStatement $statement, $query, $substitutions, $cut_backtrace = 0, $compiledQuery) {
 		$eInfo = $statement->errorInfo();
 		$errorCode = $eInfo[0];
 		$errorInfo = "[$errorCode] " . $eInfo[2];
@@ -197,31 +197,7 @@ class Database {
 			new Error("Invalid parameter number: parameter was not defined", $cut_backtrace + 1);
 		}
 
-		#new Error($query." /// ".print_r($substitutions,1)." /// ".print_r($statement->errorInfo(),1));
-		new Error(print_r($statement->errorInfo(), 1)."-----------\n".$compiledQuery);
-		return;
-		$eInfo = $statement->errorInfo();
-		$errorCode = $eInfo[0];
-		$errorInfo = "[$errorCode] " . $eInfo[2];
-		$errorType = Error::TYPE_SQL;
-		if (!$eInfo[2]) {
-			if ($errorCode === 'HY093'/*Invalid parameter number: parameter was not defined*/) {
-				$errorInfo = "Invalid parameter number: parameter was not defined";
-			}
-		}
-		if ($errorCode === "42S02"/*Unknown table*/) {
-			$errorType = Error::TYPE_TABLE_NOT_FOUND;
-		}
-		ob_flush();
-		ob_start();
-		$statement->debugDumpParams();
-		$debugDump = ob_get_clean();
-		$compiled_query = self::get_compiled_query_from_debugDump($debugDump);
-		if (!$compiled_query) {
-			$compiled_query = ($debugDump ?: $query);
-		}
-
-		$this->error = new Error($errorType, $errorInfo, $compiled_query, $backtrace_depth + 1, $halt_on_error);
+		new Error($errorInfo."\n-----------\n".$compiledQuery);
 	}
 
 	public function getPdo() {
