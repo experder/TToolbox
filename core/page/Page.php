@@ -141,7 +141,9 @@ class Page {
 		$body .= $this->waitSpinner();
 		$body .= self::debugInfo();
 		if (Database::isPrimarySet()) {
-			$body = "<nav>" . Navigation::getInstance()->getHtml($this->id) . "</nav>" . $body;
+			$body = "<nav class='menu'>" . Navigation::getInstance()->getHtml($this->id) . "</nav>"
+//TODO:				."<nav class='breadcrumbs'>".Navigation::getInstance()->getBreadcrumbsHtml()."</nav>"
+				. $body;
 		}
 		$body = "\n<body onunload='if(typeof tt_tools!==\"undefined\")tt_tools.spinnerStop();' $bodyOnLoad>\n$body\n</body>\n";
 

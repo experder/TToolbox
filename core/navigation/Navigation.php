@@ -88,6 +88,16 @@ class Navigation {
 		return $breadcrumbs;
 	}
 
+	public function getBreadcrumbsHtml(){
+		$html = array();
+		foreach ($this->getBreadcrumbs(null) as $item) {
+			$bc = $item->getHtmlInner(false);
+			if($bc)$html[] = $bc;
+		}
+		$string = implode("\n<span class='breadcrumb_next'>&gt;</span> ",$html);
+		return $string;
+	}
+
 	public function getHtml($highlighted_id) {
 		$html = array();
 
@@ -99,10 +109,6 @@ class Navigation {
 
 		}
 		$html[] = "<ul>".implode("\n", $root)."</ul>";
-
-//		foreach ($this->getBreadcrumbs($highlighted_id) as $item) {
-//			$html[] = "--->".$item->getTitle();
-//		}
 
 		return implode("", $html);
 	}

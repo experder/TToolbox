@@ -205,21 +205,14 @@ class core_pages extends DbModell {
 	public function getChildEntries() {
 		return $this->childEntries;
 	}
+
 private static $temp_counter=0;
-	public function getHtml($highlighted_id) {
-		if(self::$temp_counter++>100)return "RECURSION!!!";//TODO:Recursion in navigation
-		if($this->title===null && !$this->childEntries)return false;
-
-		$title_ = htmlentities($this->title);
-
-		$crumbs = Navigation::getInstance()->getBreadcrumbs($highlighted_id);
-		if($crumbs && in_array($this, $crumbs)) {
-			$high = true;
-			$title = "<b>$title_</b>";
-		}else{
-			$high = false;
-			$title = $title_;
-		}
+	/**
+	 * @param bool $title
+	 * @return string|null
+	 */
+	public function getHtmlInner($title) {
+		if($this->title===null)return null;
 
 		if ($this->type=='web'){
 			$url = Run::getWebUrl($this->pageid);
@@ -236,19 +229,31 @@ private static $temp_counter=0;
 			$url=null;
 		}
 
-		$cssId = "id_".ServiceStrings::cssClassSafe($this->pageid);
-		if(CFG::DEVMODE())$title_.=" [$cssId]";
-		$titleVal = $this->parent===null?"title='$title_'":"";
+		$title_ = htmlentities($this->title);
+
+		$titleTag = ($title?$title_:"");
+		if(CFG::DEVMODE())$titleTag.=" [id_".ServiceStrings::cssClassSafe($this->pageid)."]";
+
+		$titleVal = $titleTag?"title='$titleTag'":"";
 
 		if($url!==false){
-			$link = "<a href='$url' $titleVal>$title</a>";
+			$link = "<a href='".htmlentities($url)."' $titleVal>$title_</a>";
 		}else{
-			$link = "<span class='pseudo_a' $titleVal>$title</span>";
+			$link = "<span class='pseudo_a' $titleVal>$title_</span>";
 		}
 
-		$html=array();
-		$html[]=$link;
+		return $link;
+	}
 
+	public function getHtml($highlighted_id) {
+		if(self::$temp_counter++>100)return "RECURSION!!!";//TODO:Recursion in navigation
+		if($this->title===null && !$this->childEntries)return false;
+
+		//Link:
+		$inner = $this->getHtmlInner($this->parent===null);
+
+		//Children:
+		$html=array($inner);
 		if($this->childEntries){
 			$childsHtml = array();
 
@@ -261,10 +266,14 @@ private static $temp_counter=0;
 			$html[] = "<ul>".implode("\n", $childsHtml)."</ul>";
 		}
 
+		//Highlighting:
+		$crumbs = Navigation::getInstance()->getBreadcrumbs($highlighted_id);
+		$high = ($crumbs && in_array($this, $crumbs));
 		$highclass = $high?" high":"";
 
+		//Ouput:
+		$cssId = "id_".ServiceStrings::cssClassSafe($this->pageid);
 		return "<li class='$cssId$highclass'>".implode("\n", $html)."</li>";
-
 	}
 
 }
