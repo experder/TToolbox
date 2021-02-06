@@ -67,13 +67,13 @@ class core_pages extends DbModell {
 	 */
 	public function getTableName2() {
 		if (self::$table_name === null) {
-			self::$table_name = Config::get(Config::DB_CORE_PREFIX) . '_pages';
+			self::$table_name = Config::getChecked(Config::DB_CORE_PREFIX) . '_pages';
 		}
 		return self::$table_name;
 	}
 
 	public static function sql_001_create() {
-		return "CREATE TABLE " . self::getSingleton0()->getTableName2() . " ("
+		return "CREATE TABLE " . self::getSingleton()->getTableName2() . " ("
 			. " `id` INT(11) NOT NULL AUTO_INCREMENT,"
 			. " `" . self::ROW_pageid . "` VARCHAR(200) NOT NULL,"
 			. " `" . self::ROW_title . "` VARCHAR(80) DEFAULT NULL,"
@@ -92,31 +92,11 @@ class core_pages extends DbModell {
 //	}
 
 	public static function sql_002_constraint1() {
-		return "ALTER TABLE " . self::getSingleton0()->getTableName2() . " ADD CONSTRAINT `core_pages_ibfk_1` FOREIGN KEY (`parent`) REFERENCES " . self::getSingleton0()->getTableName2() . " (`pageid`);";
-	}
-
-	/**
-	 * TODO: Generic!
-	 * @return string
-	 */
-	public function sql_insert() {
-		return "INSERT INTO " . self::getSingleton0()->getTableName2() . " ("
-			. "`" . self::ROW_pageid . "` ,"
-			. "`" . self::ROW_title . "` ,"
-			. "`" . self::ROW_parent . "` ,"
-			. "`" . self::ROW_type . "` ,"
-			. "`" . self::ROW_link . "`"
-			. ") VALUES ("
-			. DB::quote($this->pageid) . ","
-			. DB::quote($this->title) . ","
-			. DB::quote($this->parent) . ","
-			. DB::quote($this->type) . ","
-			. DB::quote($this->link)
-			. ");";
+		return "ALTER TABLE " . self::getSingleton()->getTableName2() . " ADD CONSTRAINT `core_pages_ibfk_1` FOREIGN KEY (`parent`) REFERENCES " . self::getSingleton()->getTableName2() . " (`pageid`);";
 	}
 
 	public static function sql_select($where = "") {
-		$data = DB::select("SELECT * FROM " . self::getSingleton0()->getTableName2() . " " . $where);
+		$data = DB::select("SELECT * FROM " . self::getSingleton()->getTableName2() . " " . $where);
 		$navi = array();
 		foreach ($data as $row) {
 			$navi[$row[self::ROW_pageid]] = new core_pages($row);

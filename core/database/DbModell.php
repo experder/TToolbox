@@ -14,7 +14,7 @@ abstract class DbModell {
 
 	protected $id;
 
-	private static $singleton0=null;
+	private static $singletons=array();
 
 	/**
 	 * @param array $data
@@ -28,12 +28,12 @@ abstract class DbModell {
 	/**
 	 * @return DbModell
 	 */
-	public static function getSingleton0(){
-		if(self::$singleton0===null){
-			$classname = get_called_class();
-			self::$singleton0=new $classname(null);
+	public static function getSingleton(){
+		$classname = get_called_class();
+		if(!isset(self::$singletons[$classname])){
+			self::$singletons[$classname]=new $classname(null);
 		}
-		return self::$singleton0;
+		return self::$singletons[$classname];
 	}
 
 	public function setData($data_array) {
@@ -55,6 +55,22 @@ abstract class DbModell {
 	 */
 	public function getTableName2() {
 		return "UNDEFINED!";
+	}
+
+	public function sql_insert() {
+		$fields = get_object_vars($this);
+		unset($fields['id']);
+		$keys = array();
+		$values = array();
+		foreach ($fields as $key=>$value){
+			$keys[] = "`$key`";
+			$values[] = DB::quote($value);
+		}
+		return "INSERT INTO " . $this->getTableName2() . " ("
+			.implode(",",$keys)
+			.") VALUES ("
+			.implode(",",$values)
+			.");";
 	}
 
 }

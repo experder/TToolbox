@@ -40,7 +40,7 @@ class core_config extends DbModell {
 	}
 
 	public static function sql_001_create() {
-		return "CREATE TABLE " . self::getSingleton0()->getTableName2() . " ("
+		return "CREATE TABLE " . self::getSingleton()->getTableName2() . " ("
 			. " `" . self::ROW_id . "` INT(11) NOT NULL AUTO_INCREMENT,"
 			. " `" . self::ROW_idstring . "` VARCHAR(200) NOT NULL,"
 			. " `" . self::ROW_module . "` VARCHAR(" . Modules::MODULE_ID_MAXLENGTH . ") NOT NULL,"

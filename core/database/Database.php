@@ -127,14 +127,15 @@ class Database {
 	 * @param string $query
 	 * @param array  $substitutions
 	 * @param int    $return_type Database::RETURN_...
+	 * @param int    $cutBacktrace
 	 * @return string|array|int|null
 	 */
-	public function _query($query, $substitutions = null, $return_type = 0) {
+	public function _query($query, $substitutions = null, $return_type = 0, $cutBacktrace=0) {
 		$statement = $this->pdo->prepare($query);
 		$ok = @$statement->execute($substitutions);
 		$compiledQuery = $this->debuginfo($statement, $query);
 		if (!$ok) {
-			$this->error_handling($statement, $query, $substitutions, 1, $compiledQuery);
+			$this->error_handling($statement, $cutBacktrace+1, $compiledQuery);
 			return null;
 		}
 		switch ($return_type) {
@@ -188,7 +189,7 @@ class Database {
 		}
 	}
 
-	private function error_handling(\PDOStatement $statement, $query, $substitutions, $cut_backtrace = 0, $compiledQuery) {
+	private function error_handling(\PDOStatement $statement, $cut_backtrace = 0, $compiledQuery) {
 		$eInfo = $statement->errorInfo();
 		$errorCode = $eInfo[0];
 		$errorInfo = "[$errorCode] " . $eInfo[2];
@@ -197,7 +198,7 @@ class Database {
 			new Error("Invalid parameter number: parameter was not defined", $cut_backtrace + 1);
 		}
 
-		new Error($errorInfo."\n-----------\n".$compiledQuery);
+		new Error($errorInfo."\n-----------\n".$compiledQuery, $cut_backtrace + 1);
 	}
 
 	public function getPdo() {

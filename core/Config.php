@@ -84,7 +84,7 @@ class Config {
 
 		$database = Database::getPrimary();
 
-		$data = $database->_query("SELECT " . core_config::ROW_content . " FROM " . core_config::getSingleton0()->getTableName2() . " WHERE " . core_config::ROW_idstring . "=:ID AND " . core_config::ROW_module . "=:MOD AND " . core_config::ROW_userid . "<=>:USR LIMIT 1;", array(
+		$data = $database->_query("SELECT " . core_config::ROW_content . " FROM " . core_config::getSingleton()->getTableName2() . " WHERE " . core_config::ROW_idstring . "=:ID AND " . core_config::ROW_module . "=:MOD AND " . core_config::ROW_userid . "<=>:USR LIMIT 1;", array(
 			":ID" => $id,
 			":USR" => $user,
 			":MOD" => $module,
@@ -125,7 +125,7 @@ class Config {
 		//Will we have to UPDATE or INSERT?
 		$data_exists = DB::select(
 			"SELECT " . core_config::ROW_id
-			. " FROM " . core_config::getSingleton0()->getTableName2()
+			. " FROM " . core_config::getSingleton()->getTableName2()
 			. " WHERE " . core_config::ROW_idstring . "=:ID"
 			. " AND " . core_config::ROW_module . "=:MOD"
 			. " AND " . core_config::ROW_userid . "<=>:USR",
@@ -143,7 +143,7 @@ class Config {
 			}
 			$id = $data_exists[0][core_config::ROW_id];
 			Database::getPrimary()->_query(
-				"UPDATE " . core_config::getSingleton0()->getTableName2()
+				"UPDATE " . core_config::getSingleton()->getTableName2()
 				. " SET " . core_config::ROW_content . "=:VAL"
 				. " WHERE " . core_config::ROW_id . "=" . $id,
 				array(
@@ -152,7 +152,7 @@ class Config {
 			);
 		} else {
 			//INSERT
-			DB::insertAssoc(core_config::getSingleton0()->getTableName2(), array(
+			DB::insertAssoc(core_config::getSingleton()->getTableName2(), array(
 				core_config::ROW_idstring => $key,
 				core_config::ROW_content => $value,
 				core_config::ROW_module => $module,

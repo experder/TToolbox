@@ -83,10 +83,10 @@ class Page {
 
 	public static function init($pid, $token) {
 		$page = self::getInstance();
-		if ($pid === null) return $page;
-		$page->id = $pid;
 
-		//TODO: Breadcrumbs
+		if ($pid === null) return $page;
+
+		$page->id = $pid;
 
 		return $page;
 	}

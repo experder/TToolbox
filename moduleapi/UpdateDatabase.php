@@ -60,9 +60,9 @@ abstract class UpdateDatabase {
 		return "Module '" . $this->module->getModuleId() . "' updated from version $this->ver_old to $this->ver.";
 	}
 
-	protected function q($ver, $query) {
+	protected function q($ver, $query, $cutBacktrace=0) {
 		if ($this->ver + 1 == $ver) {
-			Database::getPrimary()->_query($query);
+			Database::getPrimary()->_query($query, null, 0, $cutBacktrace+1);
 			$ver_new = $this->ver + 1;
 			$this->setVersion($ver_new);
 			$this->ver = $this->getVersion();
