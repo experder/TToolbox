@@ -142,7 +142,7 @@ class Page {
 		$body .= self::debugInfo();
 		if (Database::isPrimarySet()) {
 			$body = "<nav class='menu'>" . Navigation::getInstance()->getHtml($this->id) . "</nav>"
-//TODO:				."<nav class='breadcrumbs'>".Navigation::getInstance()->getBreadcrumbsHtml()."</nav>"
+				. Navigation::getInstance()->getBreadcrumbsHtml()
 				. $body;
 		}
 		$body = "\n<body onunload='if(typeof tt_tools!==\"undefined\")tt_tools.spinnerStop();' $bodyOnLoad>\n$body\n</body>\n";

@@ -89,13 +89,15 @@ class Navigation {
 	}
 
 	public function getBreadcrumbsHtml(){
+		$breadcrumbs = $this->getBreadcrumbs(null);
+		if(!$breadcrumbs || count($breadcrumbs)<2)return "";
 		$html = array();
-		foreach ($this->getBreadcrumbs(null) as $item) {
+		foreach ($breadcrumbs as $item) {
 			$bc = $item->getHtmlInner(false);
 			if($bc)$html[] = $bc;
 		}
 		$string = implode("\n<span class='breadcrumb_next'>&gt;</span> ",$html);
-		return $string;
+		return "<nav class='breadcrumbs'>$string</nav>";
 	}
 
 	public function getHtml($highlighted_id) {
