@@ -27,6 +27,7 @@ abstract class Formfield {
 	 * @var array All params except "name", "value" and "id".
 	 */
 	protected $more_params;
+	protected $disabled = false;
 
 	//Label:
 	protected $title;
@@ -85,6 +86,10 @@ abstract class Formfield {
 
 	public function setTooltip($tooltip) {
 		$this->tooltip = $tooltip;
+	}
+
+	public function setDisbled(){
+		$this->disabled=true;
 	}
 
 	public function setParam($key, $value, $overwrite = true) {
@@ -149,7 +154,9 @@ abstract class Formfield {
 			}
 		}
 
-		return Html::tag_keyValues($params);
+		$disabledHtml = $this->disabled?" disabled":"";
+
+		return Html::tag_keyValues($params).$disabledHtml;
 	}
 
 	/**
