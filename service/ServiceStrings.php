@@ -70,4 +70,8 @@ class ServiceStrings {
 		return preg_replace("/[^a-zA-Z0-9\\-_\\x80-\\xff]/", "", $string);
 	}
 
+	public static function startsWith($needle, $haystack) {
+		return mb_substr($haystack, 0, mb_strlen($needle))===$needle;
+	}
+
 }
