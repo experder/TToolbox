@@ -40,12 +40,6 @@ class CoreDatabase extends UpdateDatabase {
 
 		$this->q(3, core_pages::toSql_insert(Admin::PAGEID, core_pages::TYPE_web, "Admin", Admin::getClass()));
 
-//		$this->q(1, core_navigation::sql_001_create());
-//		$this->q(2, core_navigation::toSql_insert(Admin::ROUTE, "Admin", Admin::getClass()));
-//		$this->q(3, core_navigation::toSql_insert(Api::ROUTE, Api::TITLE, Api::getClass()));
-//		//TODO: Order / invisible
-//		$this->q(4, core_navigation::toSql_insert(Installer::INDEX_ID, null, Installer::getClass()));
-
 	}
 
 }

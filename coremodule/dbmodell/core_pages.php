@@ -62,6 +62,8 @@ class core_pages extends DbModell {
 	 */
 	private $childEntries = array();
 
+	private static $limit_depth = 99;
+
 	/**
 	 * @return string
 	 */
@@ -131,6 +133,9 @@ class core_pages extends DbModell {
 	}
 
 	public function getBreadcrumbs(){
+		if(self::$limit_depth--<1){
+			new Error("Maximum depth of navigation exeeded! Possible recursion. ".$this->pageid);
+		}
 		$parent = $this->getParentEntry();
 		if($parent!==false){
 			$breads = $parent->getBreadcrumbs();
@@ -186,7 +191,6 @@ class core_pages extends DbModell {
 		return $this->childEntries;
 	}
 
-private static $temp_counter=0;
 	/**
 	 * @param bool $title
 	 * @return string|null
@@ -226,7 +230,6 @@ private static $temp_counter=0;
 	}
 
 	public function getHtml($highlighted_id) {
-		if(self::$temp_counter++>100)return "RECURSION!!!";//TODO:Recursion in navigation
 		if($this->title===null && !$this->childEntries)return false;
 
 		//Link:
