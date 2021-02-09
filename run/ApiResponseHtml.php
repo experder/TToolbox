@@ -8,7 +8,7 @@
 
 namespace tt\run;
 
-class ApiResponseHtml implements ApiResponse {
+class ApiResponseHtml{
 
 	/**
 	 * @var bool $ok

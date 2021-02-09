@@ -10,9 +10,6 @@ namespace tt\moduleapi;
 
 use tt\core\Modules;
 
-/**
- * TODO Move to "core"
- */
 interface Module {
 
 	/**

@@ -11,9 +11,6 @@ namespace tt\moduleapi;
 use tt\core\Config;
 use tt\core\database\Database;
 
-/**
- * TODO Move to "core"
- */
 abstract class UpdateDatabase {
 
 	/**
