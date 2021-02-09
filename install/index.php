@@ -14,7 +14,7 @@ use tt\core\page\PG;
 require_once __DIR__ . '/Installer.php';
 Installer::requireInitPointer();
 
-Init_project::initWeb(Installer::INDEX_ID);
+Init_project::initWeb(Installer::PAGEID);
 
 PG::add("Ready.");
 

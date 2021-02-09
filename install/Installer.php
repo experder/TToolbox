@@ -8,11 +8,14 @@
 
 namespace tt\install;
 
+require_once dirname(__DIR__).'/run/Runner.php';
+
 use tt\core\Autoloader;
 use tt\core\Config;
 use tt\core\page\Message;
 use tt\coremodule\CoreDatabase;
 use tt\run\ApiResponseHtml;
+use tt\run\Runner;
 use tt\service\Error;
 use tt\service\form\Form;
 use tt\service\form\FormfieldPassword;
@@ -36,13 +39,15 @@ use tt\service\thirdparty\LoadJs;
  * - Creation of database (name specified in init_server.php)
  * - Download of third party packages
  */
-class Installer {
+class Installer extends Runner {
 
-	const INDEX_ID = "core/installer";
+	const PAGEID = "core/installer";
 
 	const DIVID_download_status_div = 'download_status_div';
 
 	const AJAXDATA_warning = "warning";
+
+	const CMD_GetExternalFile = 'cmdGetExternalFile';
 
 	public static $additionalWizardHead = "";
 
@@ -83,7 +88,7 @@ class Installer {
 	}
 
 	public static function getExternalFile($url, $toFile, $onSuccessJs = "", $checksum = false) {
-		if (!ServiceEnv::requestCmd(Api::CMD_GetExternalFile)) {
+		if (!ServiceEnv::requestCmd(self::CMD_GetExternalFile)) {
 
 			$msg = "Downloading <b>$url</b>...";
 			$m = new Message(Message::TYPE_INFO, $msg);
@@ -92,7 +97,7 @@ class Installer {
 
 			self::startWizard(
 				$msg
-				. "<script>" . Js::ajaxPostToId(self::DIVID_download_status_div, Api::CMD_GetExternalFile, Api::ROUTE, array(
+				. "<script>" . Js::ajaxPostToId(self::DIVID_download_status_div, self::CMD_GetExternalFile, self::PAGEID, array(
 					"url" => $url,
 					"to_file" => $toFile,
 					"checksum" => $checksum,
@@ -354,6 +359,19 @@ class Installer {
 		$html = "<!DOCTYPE html><html>$html</html>";
 
 		return $html;
+	}
+
+	public function runApi($cmd = null, array $data = array()) {
+		switch ($cmd) {
+			case self::CMD_GetExternalFile:
+				list($url, $toFile) = $this->requiredFieldsFromData($data, array("url", "to_file"), false);
+				$checksum = (isset($data["checksum"]) && $data["checksum"] !== 'false') ? $data["checksum"] : false;
+				return Installer::doGetExternalFile($url, $toFile, $checksum);
+				break;
+			default:
+				return null;
+				break;
+		}
 	}
 
 }
