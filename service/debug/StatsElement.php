@@ -39,4 +39,12 @@ class StatsElement {
 		return "<div class='statsBtn'>$this->title</div>";
 	}
 
+	public function toJson() {
+		return array(
+			"title"=>$this->title,
+			"class"=>$this->class,
+			"content"=>$this->content,
+		);
+	}
+
 }

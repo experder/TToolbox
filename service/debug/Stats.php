@@ -17,6 +17,8 @@ class Stats {
 	 */
 	private $queries = array();
 
+	public static $apiClass = null;
+
 	/**
 	 * @var Stats $singleton
 	 */
@@ -73,6 +75,27 @@ class Stats {
 		return new StatsElement($title, implode("", $stats), "statsPostdata divList");
 	}
 
+	public static function getStatsAjax() {
+		$title = "<b>AJAX</b>";
+		$stats = array();
+
+		if(self::$apiClass!==null){
+			$stats[] = "<div>CLASS: ".self::$apiClass."</div>";
+		}else{
+			$stats[] = "<div>URI: ".$_SERVER['REQUEST_URI']."</div>";
+		}
+
+		$stats[] = "POST:";
+		foreach ($_POST as $key => $value) {
+			if (is_array($value)) {
+				$value = "[ " . implode(", ", $value) . " ]";
+			}
+			$stats[] = "<div class='postrow'>" . htmlentities($key) . "=" . htmlentities($value) . "</div>";
+		}
+
+		return new StatsElement($title, implode("", $stats), "statsAjax");
+	}
+
 	/**
 	 * @return StatsElement[]
 	 */
@@ -87,6 +110,18 @@ class Stats {
 		return $all;
 	}
 
+	/**
+	 * @return StatsElement[]
+	 */
+	public static function getAllStats2() {
+		$all = array(
+			self::getStatsAjax(),
+			self::getStatsQueries(),
+			self::getStatsRuntime(),
+		);
+		return $all;
+	}
+
 	public static function getAllStatsHtml() {
 		$html = array();
 		foreach (self::getAllStats() as $element) {
@@ -94,6 +129,14 @@ class Stats {
 		}
 		$html = "<div class='tt_stats'>" . implode("\n", $html) . "</div>";
 		return $html;
+	}
+
+	public static function getAllStatsJson() {
+		$json = array();
+		foreach (self::getAllStats2() as $element) {
+			$json[] = $element->toJson();
+		}
+		return $json;
 	}
 
 }

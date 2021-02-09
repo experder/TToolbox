@@ -8,6 +8,8 @@
 
 namespace tt\run;
 
+use tt\service\debug\Stats;
+
 class ApiResponseHtml{
 
 	/**
@@ -22,7 +24,6 @@ class ApiResponseHtml{
 	 * @var string $msg_type For PostToMessages (optional) Message::TYPE_
 	 */
 	protected $msg_type;
-	//TODO: stats übermitteln
 
 	protected $params = array();
 
@@ -48,13 +49,10 @@ class ApiResponseHtml{
 		$this->params = $params;
 	}
 
-	public static function createResponse($ok = null, $html = null, array $params = array(), $msg_type = null) {
-		$arh = new ApiResponseHtml($ok, $html, $params, $msg_type);
-		return $arh->getResponseArray();
-	}
-
 	public function getResponseArray() {
-		return $this->params;
+		$params = $this->params;
+		$params["tt_stats"] = Stats::getAllStatsJson();
+		return $params;
 	}
 
 }

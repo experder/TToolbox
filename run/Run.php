@@ -9,9 +9,11 @@
 namespace tt\run;
 
 use tt\core\Autoloader;
+use tt\core\CFG;
 use tt\core\Config;
 use tt\core\navigation\Navigation;
 use tt\core\page\Page;
+use tt\service\debug\Stats;
 use tt\service\Error;
 use tt\service\ServiceEnv;
 use tt\service\ServiceStrings;
@@ -161,6 +163,10 @@ class Run {
 				new Error("Route not found: '$controllerClass'");
 				$controllerClass = str_replace('/', '\\', $controllerClass);
 			}
+		}
+
+		if(CFG::DEVMODE()){
+			Stats::$apiClass = $controllerClass;
 		}
 
 		self::checkRunner($controllerClass);

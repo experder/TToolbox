@@ -34,6 +34,9 @@ tt_tools.ajaxPost = function(url, data_object, Funktion) {
 				let message = "<h1>Ajax returns error!</h1><pre class='dev'>" + url + '</pre><div class=\'ajax_response\'>' + msg + backtrace + "</div>";
 				tt_tools.error(message);
 			}
+			if(data.tt_stats){
+				tt_tools.addStats(data.tt_stats);
+			}
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			let message;
@@ -73,6 +76,27 @@ tt_tools.error = function(message, classname = 'error ajax_error') {
 	msgDiv.append(msg);
 	this.spinnerStop();
 	this.scrollTo(msgDiv.children().last());
+};
+
+tt_tools.addStats = function(stats) {
+	let target = $('div.tt_stats');
+	stats.forEach(function(stat){
+		let statHtml = tt_tools.statToHtml(stat.title, stat.class, stat.content);
+		let statObj = $.parseHTML(statHtml);
+		target.append(statObj);
+	});
+};
+
+tt_tools.statToHtml = function($title, $class, $content) {
+	let id = 'ida'+tt_tools.nextGlobalId();
+	if($content){
+		let btn = "<div class='statsBtn expand ajax_stat' onclick=\"$('#"+id+"').toggle(400);\">"+$title+"</div>";
+		let classes = "statsContent"+($class?" "+$class:"");
+		$content = "<div class='"+classes+"'>"+$content+"</div>";
+		$content = "<div class='contentWrapper' id='"+id+"'>"+$content+"</div>";
+		return btn+$content;
+	}
+	return "<div class='statsBtn ajax_stat'>"+$title+"</div>";
 };
 
 tt_tools.htmltrim = function(string) {
