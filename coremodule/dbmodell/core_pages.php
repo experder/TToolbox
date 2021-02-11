@@ -196,17 +196,13 @@ class core_pages extends DbModell {
 	 * @return string|null
 	 */
 	public function getHtmlInner($title) {
-		if($this->title===null)return null;
+		if($this->title===null || $this->type==self::TYPE_api)return null;
 
-		if ($this->type=='web'){
+		if ($this->type==self::TYPE_web){
 			$url = Run::getWebUrl($this->pageid);
-		}else if ($this->type=='api'){
-			$url = Config::get(Config::RUN_ALIAS_API) . $this->link;
-		}else if ($this->type=='ext'){
+		}else if ($this->type==self::TYPE_ext || $this->type==self::TYPE_int){
 			$url = $this->link;
-		}else if ($this->type=='int'){
-			$url = $this->link;
-		}else if ($this->type=='sup'){
+		}else if ($this->type==self::TYPE_sup){
 			$url = false;
 		}else{
 			new Error("Unknown page type of '$this->pageid'!");
@@ -221,7 +217,8 @@ class core_pages extends DbModell {
 		$titleVal = $titleTag?"title='$titleTag'":"";
 
 		if($url!==false){
-			$link = "<a href='".htmlentities($url)."' $titleVal>$title_</a>";
+			$targetBlank = ($this->type==self::TYPE_ext?"target='_blank' ":"");
+			$link = "<a {$targetBlank}href='".htmlentities($url)."' $titleVal>$title_</a>";
 		}else{
 			$link = "<span class='pseudo_a' $titleVal>$title_</span>";
 		}

@@ -39,15 +39,13 @@ class Run {
 
 	}
 
-	public static function getWebUrl($controllerClass) {
-		//TODO
-		#$controllerClass = str_replace('\\', '/', $controllerClass);
-		return Config::get(Config::RUN_ALIAS) . $controllerClass;
+	public static function getWebUrl($pageId) {
+		return Config::get(Config::RUN_ALIAS) . $pageId;
 	}
 
-	public static function getWebLink($controllerClass, $linkTitle = null) {
-		if ($linkTitle === null) $linkTitle = $controllerClass;
-		return "<a href='" . self::getWebUrl($controllerClass) . "'>" . $linkTitle . "</a>";
+	public static function getWebLink($pageId, $linkTitle = null) {
+		if ($linkTitle === null) $linkTitle = $pageId;
+		return "<a href='" . self::getWebUrl($pageId) . "'>" . $linkTitle . "</a>";
 	}
 
 	private static function doRunWeb() {

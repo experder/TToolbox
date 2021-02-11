@@ -35,7 +35,7 @@ class Runner {
 	}
 
 	/**
-	 * @return string HTML
+	 * @return string|array HTML
 	 */
 	public function runWeb() {
 		new Error("runWeb is not defined in " . get_class($this));
