@@ -54,6 +54,12 @@ class core_pages extends DbModell {
 	const ROW_link = "link";
 
 	/**
+	 * @var int|null $orderby
+	 */
+	protected $orderby;
+	const ROW_orderby = "orderby";
+
+	/**
 	 * @var core_pages $parentEntry
 	 */
 	private $parentEntry = null;
@@ -83,6 +89,7 @@ class core_pages extends DbModell {
 			. " `" . self::ROW_parent . "` varchar(200) DEFAULT NULL,"
 			. " `" . self::ROW_type . "` enum('web','api','ext','int','sup') NOT NULL,"
 			. " `" . self::ROW_link . "` VARCHAR(200) DEFAULT NULL,"
+			. " `" . self::ROW_orderby . "` INT NULL,"
 			. " PRIMARY KEY (`id`),"
 			. " UNIQUE KEY `pageid` (`" . self::ROW_pageid . "`),"
 			. " KEY `parent` (`parent`)"
@@ -98,7 +105,7 @@ class core_pages extends DbModell {
 	}
 
 	public static function sql_select($where = "") {
-		$data = DB::select("SELECT * FROM " . self::getSingleton()->getTableName2() . " " . $where);
+		$data = DB::select("SELECT * FROM " . self::getSingleton()->getTableName2() . " " . $where." ORDER BY orderby;");
 		$navi = array();
 		foreach ($data as $row) {
 			$navi[$row[self::ROW_pageid]] = new core_pages($row);
@@ -112,15 +119,17 @@ class core_pages extends DbModell {
 	 * @param null|string $title
 	 * @param null|string $link
 	 * @param null|string $parent
+	 * @param null|int    $orderby
 	 * @return string SQL
 	 */
-	public static function toSql_insert($pageid, $type, $title=null, $link=null, $parent=null) {
+	public static function toSql_insert($pageid, $type, $title=null, $link=null, $parent=null, $orderby=null) {
 		$naviEntry = new core_pages(array(
 			"pageid" => $pageid,
 			"title" => $title,
 			"type" => $type,
 			"link" => $link,
 			"parent" => $parent,
+			"orderby" => $orderby,
 		));
 		return $naviEntry->sql_insert();
 	}
