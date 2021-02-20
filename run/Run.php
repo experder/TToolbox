@@ -126,15 +126,9 @@ class Run {
 
 	}
 
-	private static function checkRunner($controllerClassU) {
-		$controllerClass = ServiceStrings::classnameSafe($controllerClassU);
+	private static function checkRunner($controllerClass) {
 
-		//TODO: Service function for this check:
-		if ($controllerClass !== $controllerClassU) {
-			new Error("No qualified controller classname given!");
-		}
-
-		if (!$controllerClass) {
+		if (!ServiceStrings::classnameSafeCheck($controllerClass)) {
 			new Error("No qualified controller classname given!");
 		}
 

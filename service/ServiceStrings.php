@@ -65,6 +65,11 @@ class ServiceStrings {
 		return preg_replace("/[^\\\\a-z0-9_\\x80-\\xff]/i", "", $string);
 	}
 
+	public static function classnameSafeCheck($string) {
+		$string_checked = self::classnameSafe($string);
+		return (($string_checked===$string) && $string);
+	}
+
 	public static function cssClassSafe($string) {
 		//https://www.w3.org/TR/CSS2/syndata.html#characters
 		return preg_replace("/[^a-zA-Z0-9\\-_\\x80-\\xff]/", "", $string);
