@@ -42,7 +42,12 @@ tt_tools.ajaxPost = function(url, data_object, Funktion) {
 			let message;
 			if (jqXHR.readyState === 0) {
 				message = "Could not connect to the server. Please check your network connection.";
-			} else if (String(textStatus) === 'parsererror' && String(errorThrown) === 'SyntaxError: JSON.parse: unexpected character at line 1 column 1 of the JSON data') {
+			} else if (
+				String(textStatus) === 'parsererror'
+				&& ((String(errorThrown) === 'SyntaxError: JSON.parse: unexpected character at line 1 column 1 of the JSON data')
+					||(String(errorThrown).substr(0,76)==='SyntaxError: JSON.parse: unexpected non-whitespace character after JSON data')
+				)
+			) {
 				let id = 'id_' + tt_tools.nextGlobalId();
 				message = '<div class="dev"><h1>Invalid JSON</h1>'
 					+ '<input type="button" value="raw" onclick="$(\'#' + id + '\').toggle(400);" />'
