@@ -237,6 +237,10 @@ class Page {
 		$this->jsOnLoad .= $jsOnLoad;
 	}
 
+	public function getId() {
+		return $this->id;
+	}
+
 	private function getTitle() {
 		if (!Database::isPrimarySet()) return "Error";
 		$title = Navigation::getInstance()->getTitleRaw($this->id);
