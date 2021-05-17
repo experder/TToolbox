@@ -105,7 +105,7 @@ class core_pages extends DbModell {
 	}
 
 	public static function sql_select($where = "") {
-		$data = DB::select("SELECT * FROM " . self::getSingleton()->getTableName2() . " " . $where." ORDER BY orderby;");
+		$data = DB::select("SELECT * FROM " . self::getSingleton()->getTableName2() . " " . $where." ORDER BY IFNULL(orderby,0);");
 		$navi = array();
 		foreach ($data as $row) {
 			$navi[$row[self::ROW_pageid]] = new core_pages($row);
