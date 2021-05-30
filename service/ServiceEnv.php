@@ -53,6 +53,11 @@ class ServiceEnv {
 		require_once $file;
 	}
 
+	/**
+	 * @param string $key
+	 * @param string $default
+	 * @return string
+	 */
 	public static function requestValue($key, $default = null) {
 		if (isset($_REQUEST[$key])) {
 			return $_REQUEST[$key];

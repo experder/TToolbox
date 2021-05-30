@@ -108,6 +108,13 @@ class Database {
 		return $this->_query($query, $substitutions, self::RETURN_ASSOC);
 	}
 
+	public function quote($string) {
+		if ($string === null) return "NULL";
+		if (is_numeric($string)) return $string;
+		if (is_bool($string)) return $string ? "TRUE" : "FALSE";
+		return $this->getPdo()->quote($string);
+	}
+
 	public function insertAssoc($table, $data_set) {
 
 		$keys_array = array_keys($data_set);

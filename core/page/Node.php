@@ -18,7 +18,7 @@ class Node {
 	private $node;
 
 	/**
-	 * @param mixed $node must be of a type described in \t2\core\Node::check_type
+	 * @param mixed $node must be of a type described in Node::check_type
 	 * @see \tt\core\page\Node::check_type
 	 */
 	public function __construct($node) {
@@ -41,6 +41,7 @@ class Node {
 	 * @param mixed $node must be string or have function __toString(),
 	 *                    numbers are also allowed, NULL is also allowed,
 	 *                    arrays of $nodes are also allowed.
+	 * @param int   $cutBacktrace
 	 */
 	public static function check_type($node, $cutBacktrace = 0) {
 //		if (is_array($node)) {

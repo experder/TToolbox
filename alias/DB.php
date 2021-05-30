@@ -6,42 +6,26 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\core\database;
+namespace tt\alias;
 
-/**
- * @deprecated
- */
+use tt\core\database\Database;
+
 class DB {
 
-	/**
-	 * @deprecated
-	 */
 	public static function insertAssoc($table, $data_set) {
 		return Database::getPrimary()->insertAssoc($table, $data_set);
 	}
 
-	/**
-	 * @deprecated
-	 */
 	public static function select($query, $substitutions = null) {
 		return Database::getPrimary()->select($query, $substitutions);
 	}
 
-	/**
-	 * @deprecated
-	 */
 	public static function insert($query, $substitutions = null) {
 		return Database::getPrimary()->insert($query, $substitutions);
 	}
 
-	/**
-	 * @deprecated
-	 */
 	public static function quote($string) {
-		if ($string === null) return "NULL";
-		if (is_numeric($string)) return $string;
-		if (is_bool($string)) return $string ? "TRUE" : "FALSE";
-		return Database::getPrimary()->getPdo()->quote($string);
+		return Database::getPrimary()->quote($string);
 	}
 
 }

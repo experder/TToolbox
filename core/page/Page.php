@@ -42,6 +42,8 @@ class Page {
 	private $jsScripts = array();
 	private $jsOnLoad = "";
 
+	private $head_additional_html = "";
+
 	/**
 	 * @var bool|string $focus TRUE,FALSE or selector. Example: "#name"
 	 */
@@ -104,7 +106,7 @@ class Page {
 	}
 
 	/**
-	 * @param mixed $node must be of a type described in \t2\core\Node::check_type
+	 * @param mixed $node must be of a type described in Node::check_type
 	 * @see \tt\core\page\Node::check_type
 	 * @return Page $this
 	 */
@@ -128,6 +130,7 @@ class Page {
 		$head = $this->getCssHtml();
 		$head .= "\n" . $this->getJsHtml();
 		$head .= "<title>" . $this->getTitle() . "</title>";
+		$head .= $this->head_additional_html;
 		$head = "\n<head>\n$head\n</head>";
 
 		$messages = $this->messagesToHtml();
@@ -208,6 +211,17 @@ class Page {
 			$this->stylesheets[$key] = $cssUrl;
 		}
 		return $ok;
+	}
+
+	public function addHeadAdditionalHtml($head_additional_html) {
+		$this->head_additional_html .= $head_additional_html;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getHeadAdditionalHtml() {
+		return $this->head_additional_html;
 	}
 
 	public function getJsScripts() {
