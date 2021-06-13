@@ -6,32 +6,32 @@
  * certain conditions. See the GNU General Public License (file 'LICENSE' in the root directory) for more details.
  */
 
-namespace tt\core\page;
+namespace tt\alias;
 
-/**
- * @deprecated
- */
+use tt\core\page\Message;
+use tt\core\page\Page;
+
 class PG {
 
-	/**
-	 * @deprecated
-	 */
 	public static function addMessage(Message $message) {
 		Page::getInstance()->addMessage($message);
 	}
 
-	/**
-	 * @deprecated
-	 */
 	public static function deliver() {
 		Page::getInstance()->deliver();
 	}
 
 	/**
-	 * @deprecated
+	 * @param mixed $node must be of a type described in Node::check_type
+	 * @see \tt\core\page\Node::check_type
+	 * @return Page $this
 	 */
 	public static function add($node) {
 		return Page::getInstance()->add($node);
+	}
+
+	public static function getId(){
+		return Page::getInstance()->getId();
 	}
 
 }
