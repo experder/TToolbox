@@ -8,11 +8,11 @@
 
 namespace tt\coremodule\dbmodell;
 
+use tt\api\Navigation;
 use tt\core\CFG;
 use tt\core\Config;
 use tt\core\database\DB;
 use tt\core\database\DbModell;
-use tt\core\navigation\Navigation;
 use tt\run\Run;
 use tt\service\Error;
 use tt\service\ServiceStrings;

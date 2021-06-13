@@ -11,7 +11,7 @@ namespace tt\core\page;
 use tt\core\CFG;
 use tt\core\Config;
 use tt\core\database\Database;
-use tt\core\navigation\Navigation;
+use tt\api\Navigation;
 use tt\service\debug\Stats;
 use tt\service\js\Js;
 use tt\service\ServiceStrings;
