@@ -239,6 +239,7 @@ class Page {
 	public function getCssHtml() {
 		$html = array();
 		foreach ($this->stylesheets as $stylesheet) {
+			if(Config::get(Config::CSS_NOCACHE,false))$stylesheet.="?".time();
 			$html[] = "<link href=\"" . $stylesheet . "\" rel=\"stylesheet\" type=\"text/css\" />";
 		}
 		return implode("\n", $html);

@@ -48,6 +48,7 @@ class Config {
 	const HTTP_3RDPARTY = 'HTTP_3RDPARTY';
 	const CFG_PLATFORM = 'CFG_PLATFORM';
 	const DEVMODE = 'DEVMODE';
+	const CSS_NOCACHE = 'CSS_NOCACHE';
 	const HTTP_ROOT = 'HTTP_ROOT';
 	const RUN_ALIAS = 'RUN_ALIAS';
 	const RUN_ALIAS_API = 'RUN_ALIAS_API';
