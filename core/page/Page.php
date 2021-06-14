@@ -262,7 +262,7 @@ class Page {
 		if (!Database::isPrimarySet()) return "Error";
 		$title = Navigation::getInstance()->getTitleRaw($this->id);
 		if (($proj_title = Config::get(Config::PROJ_TITLE, false)) !== false) {
-			$title .= " - " . $proj_title;
+			$title .= ($title?" - ":"") . $proj_title;
 		}
 		return htmlentities($title);
 	}
