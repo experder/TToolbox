@@ -8,6 +8,7 @@
 
 namespace tt\core\page;
 
+use tt\api\PageWrapper;
 use tt\core\CFG;
 use tt\core\Config;
 use tt\core\database\Database;
@@ -141,6 +142,7 @@ class Page {
 		$body = $this->getBodyHtml();
 		$body = "\n<div class='inner_body'>\n$body\n</div>";
 		$body = $messages . $body;
+		$body = PageWrapper::getHead($this->id).$body.PageWrapper::getFoot($this->id);
 		$body .= $this->waitSpinner();
 		$body .= self::debugInfo();
 		if (Database::isPrimarySet()) {
