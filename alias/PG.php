@@ -17,6 +17,14 @@ class PG {
 		Page::getInstance()->addMessage($message);
 	}
 
+	/**
+	 * @param string $type Message::TYPE_
+	 * @param string $message
+	 */
+	public static function addMessageText($type, $message) {
+		Page::addMessageText($type, $message);
+	}
+
 	public static function deliver() {
 		Page::getInstance()->deliver();
 	}
