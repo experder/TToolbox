@@ -8,6 +8,7 @@
 
 namespace tt\core\database;
 
+use tt\alias\DB;
 use tt\service\Error;
 
 abstract class DbModell {

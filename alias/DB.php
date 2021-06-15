@@ -9,6 +9,7 @@
 namespace tt\alias;
 
 use tt\core\database\Database;
+use tt\coremodule\dbmodell\core_pages;
 
 class DB {
 
@@ -26,6 +27,10 @@ class DB {
 
 	public static function quote($string) {
 		return Database::getPrimary()->quote($string);
+	}
+
+	public static function getTableName_core_pages() {
+		return core_pages::getSingleton()->getTableName2();
 	}
 
 }
