@@ -10,7 +10,7 @@ namespace tt\core\api_default;
 
 class Autoloader {
 
-	public static function getNamespaceRoots(){
+	public static function getNamespaceRoots() {
 		return array(
 			#""=>"",
 		);

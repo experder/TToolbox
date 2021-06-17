@@ -60,11 +60,11 @@ class Navigation {
 	 */
 	public function getHierarchy() {
 		$root = array();
-		foreach ($this->entries as $entry){
+		foreach ($this->entries as $entry) {
 			$parent = $entry->getParentEntry();
-			if($parent===false){
+			if ($parent === false) {
 				$root[] = $entry;
-			}else{
+			} else {
 				$parent->addChildEntry($entry);
 			}
 		}
@@ -75,28 +75,29 @@ class Navigation {
 	 * @param string $highlighted_id
 	 * @return core_pages[]
 	 */
-	public function getBreadcrumbs($highlighted_id){
-		if($this->breadcrumbs===null){
-			$this->breadcrumbs=$this->evaluateBreadcrumbs($highlighted_id);
+	public function getBreadcrumbs($highlighted_id) {
+		if ($this->breadcrumbs === null) {
+			$this->breadcrumbs = $this->evaluateBreadcrumbs($highlighted_id);
 		}
 		return $this->breadcrumbs;
 	}
-	private function evaluateBreadcrumbs($highlighted_id){
+
+	private function evaluateBreadcrumbs($highlighted_id) {
 		$entry = $this->getEntryById($highlighted_id);
-		if($entry===false)return false;
+		if ($entry === false) return false;
 		$breadcrumbs = $entry->getBreadcrumbs();
 		return $breadcrumbs;
 	}
 
-	public function getBreadcrumbsHtml(){
+	public function getBreadcrumbsHtml() {
 		$breadcrumbs = $this->getBreadcrumbs(null);
-		if(!$breadcrumbs || count($breadcrumbs)<2)return "";
+		if (!$breadcrumbs || count($breadcrumbs) < 2) return "";
 		$html = array();
 		foreach ($breadcrumbs as $item) {
 			$bc = $item->getHtmlInner(false);
-			if($bc)$html[] = $bc;
+			if ($bc) $html[] = $bc;
 		}
-		$string = implode("\n<span class='breadcrumb_next'>&gt;</span> ",$html);
+		$string = implode("\n<span class='breadcrumb_next'>&gt;</span> ", $html);
 		return "<nav class='breadcrumbs'>$string</nav>";
 	}
 
@@ -107,10 +108,10 @@ class Navigation {
 		foreach ($this->getHierarchy() as $entry) {
 
 			$next = $entry->getHtml($highlighted_id);
-			if($next!==false)$root[]=$next;
+			if ($next !== false) $root[] = $next;
 
 		}
-		$html[] = "<ul>".implode("\n", $root)."</ul>";
+		$html[] = "<ul>" . implode("\n", $root) . "</ul>";
 
 		return implode("", $html);
 	}

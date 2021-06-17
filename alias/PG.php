@@ -38,7 +38,7 @@ class PG {
 		return Page::getInstance()->add($node);
 	}
 
-	public static function getId(){
+	public static function getId() {
 		return Page::getInstance()->getId();
 	}
 

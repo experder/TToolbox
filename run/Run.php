@@ -157,7 +157,7 @@ class Run {
 			}
 		}
 
-		if(CFG::DEVMODE()){
+		if (CFG::DEVMODE()) {
 			Stats::$apiClass = $controllerClass;
 		}
 

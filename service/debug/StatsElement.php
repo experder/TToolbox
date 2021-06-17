@@ -41,9 +41,9 @@ class StatsElement {
 
 	public function toJson() {
 		return array(
-			"title"=>$this->title,
-			"class"=>$this->class,
-			"content"=>$this->content,
+			"title" => $this->title,
+			"class" => $this->class,
+			"content" => $this->content,
 		);
 	}
 

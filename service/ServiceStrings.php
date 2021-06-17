@@ -67,7 +67,7 @@ class ServiceStrings {
 
 	public static function classnameSafeCheck($string) {
 		$string_checked = self::classnameSafe($string);
-		return (($string_checked===$string) && $string);
+		return (($string_checked === $string) && $string);
 	}
 
 	public static function cssClassSafe($string) {
@@ -76,7 +76,7 @@ class ServiceStrings {
 	}
 
 	public static function startsWith($needle, $haystack) {
-		return mb_substr($haystack, 0, mb_strlen($needle))===$needle;
+		return mb_substr($haystack, 0, mb_strlen($needle)) === $needle;
 	}
 
 }

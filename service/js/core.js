@@ -10,7 +10,7 @@ tt_tools = {};
 tt_tools.globalCounter = 0;
 tt_tools.disableKeys = false;
 
-tt_tools.ajaxPost = function(url, data_object, Funktion) {
+tt_tools.ajaxPost = function (url, data_object, Funktion) {
 	$.ajax({
 		type: 'POST',
 		url: url,
@@ -34,7 +34,7 @@ tt_tools.ajaxPost = function(url, data_object, Funktion) {
 				let message = "<h1>Ajax returns error!</h1><pre class='dev'>" + url + '</pre><div class=\'ajax_response\'>' + msg + backtrace + "</div>";
 				tt_tools.error(message);
 			}
-			if(data.tt_stats){
+			if (data.tt_stats) {
 				tt_tools.addStats(data.tt_stats);
 			}
 		},
@@ -45,7 +45,7 @@ tt_tools.ajaxPost = function(url, data_object, Funktion) {
 			} else if (
 				String(textStatus) === 'parsererror'
 				&& ((String(errorThrown) === 'SyntaxError: JSON.parse: unexpected character at line 1 column 1 of the JSON data')
-					||(String(errorThrown).substr(0,76)==='SyntaxError: JSON.parse: unexpected non-whitespace character after JSON data')
+					|| (String(errorThrown).substr(0, 76) === 'SyntaxError: JSON.parse: unexpected non-whitespace character after JSON data')
 				)
 			) {
 				let id = 'id_' + tt_tools.nextGlobalId();
@@ -67,15 +67,15 @@ tt_tools.ajaxPost = function(url, data_object, Funktion) {
 	});
 };
 
-tt_tools.nextGlobalId = function(){
+tt_tools.nextGlobalId = function () {
 	return ++this.globalCounter;
 };
 
-tt_tools.htmlEntities = function(str) {
+tt_tools.htmlEntities = function (str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 };
 
-tt_tools.error = function(message, classname = 'error ajax_error') {
+tt_tools.error = function (message, classname = 'error ajax_error') {
 	let msg = $('<div>', {'class': 'message ' + classname}).html(message);
 	let msgDiv = $('#tt_pg_messages');
 	msgDiv.append(msg);
@@ -83,34 +83,34 @@ tt_tools.error = function(message, classname = 'error ajax_error') {
 	this.scrollTo(msgDiv.children().last());
 };
 
-tt_tools.addStats = function(stats) {
+tt_tools.addStats = function (stats) {
 	let target = $('div.tt_stats');
-	stats.forEach(function(stat){
+	stats.forEach(function (stat) {
 		let statHtml = tt_tools.statToHtml(stat.title, stat.class, stat.content);
 		let statObj = $.parseHTML(statHtml);
 		target.append(statObj);
 	});
 };
 
-tt_tools.statToHtml = function($title, $class, $content) {
-	let id = 'ida'+tt_tools.nextGlobalId();
-	if($content){
-		let btn = "<div class='statsBtn expand ajax_stat' onclick=\"$('#"+id+"').toggle(400);\">"+$title+"</div>";
-		let classes = "statsContent"+($class?" "+$class:"");
-		$content = "<div class='"+classes+"'>"+$content+"</div>";
-		$content = "<div class='contentWrapper' id='"+id+"'>"+$content+"</div>";
-		return btn+$content;
+tt_tools.statToHtml = function ($title, $class, $content) {
+	let id = 'ida' + tt_tools.nextGlobalId();
+	if ($content) {
+		let btn = "<div class='statsBtn expand ajax_stat' onclick=\"$('#" + id + "').toggle(400);\">" + $title + "</div>";
+		let classes = "statsContent" + ($class ? " " + $class : "");
+		$content = "<div class='" + classes + "'>" + $content + "</div>";
+		$content = "<div class='contentWrapper' id='" + id + "'>" + $content + "</div>";
+		return btn + $content;
 	}
-	return "<div class='statsBtn ajax_stat'>"+$title+"</div>";
+	return "<div class='statsBtn ajax_stat'>" + $title + "</div>";
 };
 
-tt_tools.htmltrim = function(string) {
+tt_tools.htmltrim = function (string) {
 	string = string.replace(new RegExp("<br ?/?>"), "\n");
 	string = string.trimLeft();
 	return string;
 };
 
-tt_tools.scrollTo = function(jQo, millis = 400) {
+tt_tools.scrollTo = function (jQo, millis = 400) {
 	$('html, body').animate({
 		scrollTop: jQo.offset().top
 	}, millis);
@@ -119,20 +119,20 @@ tt_tools.scrollTo = function(jQo, millis = 400) {
 /*
        WAIT SPINNER
  */
-tt_tools.spinnerStart = function() {
+tt_tools.spinnerStart = function () {
 	let uS = document.getElementById('uploadSpinner');
 	if (uS) uS.style.display = "block";
 	this.disableKeys = true;
 };
 
-tt_tools.spinnerStop = function() {
+tt_tools.spinnerStop = function () {
 	let uS = document.getElementById('uploadSpinner');
 	if (uS) uS.style.display = "none";
 	this.disableKeys = false;
 };
 
 
-$(function(){
+$(function () {
 	window.addEventListener('keydown', function (event) {
 		if (tt_tools.disableKeys === true) {
 			event.preventDefault();

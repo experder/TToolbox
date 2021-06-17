@@ -142,7 +142,7 @@ class Page {
 		$body = $this->getBodyHtml();
 		$body = "\n<div class='inner_body'>\n$body\n</div>";
 		$body = $messages . $body;
-		$body = PageWrapper::getHead($this->id).$body.PageWrapper::getFoot($this->id);
+		$body = PageWrapper::getHead($this->id) . $body . PageWrapper::getFoot($this->id);
 		$body .= $this->waitSpinner();
 		$body .= self::debugInfo();
 		if (Database::isPrimarySet()) {
@@ -241,7 +241,7 @@ class Page {
 	public function getCssHtml() {
 		$html = array();
 		foreach ($this->stylesheets as $stylesheet) {
-			if(Config::get(Config::CSS_NOCACHE,false))$stylesheet.="?".time();
+			if (Config::get(Config::CSS_NOCACHE, false)) $stylesheet .= "?" . time();
 			$html[] = "<link href=\"" . $stylesheet . "\" rel=\"stylesheet\" type=\"text/css\" />";
 		}
 		return implode("\n", $html);
@@ -262,7 +262,7 @@ class Page {
 		if (!Database::isPrimarySet()) return "Error";
 		$title = Navigation::getInstance()->getTitleRaw($this->id);
 		if (($proj_title = Config::get(Config::PROJ_TITLE, false)) !== false) {
-			$title .= ($title?" - ":"") . $proj_title;
+			$title .= ($title ? " - " : "") . $proj_title;
 		}
 		return htmlentities($title);
 	}

@@ -10,7 +10,7 @@ namespace tt\run;
 
 use tt\service\debug\Stats;
 
-class ApiResponseHtml{
+class ApiResponseHtml {
 
 	/**
 	 * @var bool $ok

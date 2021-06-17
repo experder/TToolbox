@@ -50,7 +50,7 @@ class ServiceFiles {
 			@mkdir($dirname, 0755, true);
 		}
 
-		if(!is_dir($dirname)){
+		if (!is_dir($dirname)) {
 			$platform = Config::get(Config::CFG_PLATFORM);
 			new Error("Couldn't create directory \"$dirname\". Please check rights."
 				. (($platform == Config::PLATFORM_UNKNOWN

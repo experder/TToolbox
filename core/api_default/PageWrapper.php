@@ -10,10 +10,11 @@ namespace tt\core\api_default;
 
 class PageWrapper {
 
-	public static function getHead($pageId){
+	public static function getHead($pageId) {
 		return "<div class='outer_body'>";
 	}
-	public static function getFoot($pageId){
+
+	public static function getFoot($pageId) {
 		return "</div>";
 	}
 

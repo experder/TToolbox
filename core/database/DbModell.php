@@ -15,7 +15,7 @@ abstract class DbModell {
 
 	protected $id;
 
-	private static $singletons=array();
+	private static $singletons = array();
 
 	/**
 	 * @param array $data
@@ -29,10 +29,10 @@ abstract class DbModell {
 	/**
 	 * @return DbModell
 	 */
-	public static function getSingleton(){
+	public static function getSingleton() {
 		$classname = get_called_class();
-		if(!isset(self::$singletons[$classname])){
-			self::$singletons[$classname]=new $classname(null);
+		if (!isset(self::$singletons[$classname])) {
+			self::$singletons[$classname] = new $classname(null);
 		}
 		return self::$singletons[$classname];
 	}
@@ -63,15 +63,15 @@ abstract class DbModell {
 		unset($fields['id']);
 		$keys = array();
 		$values = array();
-		foreach ($fields as $key=>$value){
+		foreach ($fields as $key => $value) {
 			$keys[] = "`$key`";
 			$values[] = DB::quote($value);
 		}
 		return "INSERT INTO " . $this->getTableName2() . " ("
-			.implode(",",$keys)
-			.") VALUES ("
-			.implode(",",$values)
-			.");";
+			. implode(",", $keys)
+			. ") VALUES ("
+			. implode(",", $values)
+			. ");";
 	}
 
 }

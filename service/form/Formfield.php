@@ -88,8 +88,8 @@ abstract class Formfield {
 		$this->tooltip = $tooltip;
 	}
 
-	public function setDisbled(){
-		$this->disabled=true;
+	public function setDisbled() {
+		$this->disabled = true;
 	}
 
 	public function setParam($key, $value, $overwrite = true) {
@@ -154,9 +154,9 @@ abstract class Formfield {
 			}
 		}
 
-		$disabledHtml = $this->disabled?" disabled":"";
+		$disabledHtml = $this->disabled ? " disabled" : "";
 
-		return Html::tag_keyValues($params).$disabledHtml;
+		return Html::tag_keyValues($params) . $disabledHtml;
 	}
 
 	/**

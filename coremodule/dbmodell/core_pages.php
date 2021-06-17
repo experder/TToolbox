@@ -85,9 +85,8 @@ class core_pages extends DbModell {
 			. " `id` INT(11) NOT NULL AUTO_INCREMENT,"
 			. " `" . self::ROW_pageid . "` VARCHAR(200) NOT NULL,"
 			. " `" . self::ROW_title . "` VARCHAR(80) DEFAULT NULL,"
-//			. " `" . self::ROW_parent . "` INT(11) DEFAULT NULL,"
-			. " `" . self::ROW_parent . "` varchar(200) DEFAULT NULL,"
-			. " `" . self::ROW_type . "` enum('web','api','ext','int','sup') NOT NULL,"
+			. " `" . self::ROW_parent . "` VARCHAR(200) DEFAULT NULL,"
+			. " `" . self::ROW_type . "` ENUM('web','api','ext','int','sup') NOT NULL,"
 			. " `" . self::ROW_link . "` VARCHAR(200) DEFAULT NULL,"
 			. " `" . self::ROW_orderby . "` INT NULL,"
 			. " PRIMARY KEY (`id`),"
@@ -96,16 +95,12 @@ class core_pages extends DbModell {
 			. ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 	}
 
-//	public static function sql_002_constraint1() {
-//		return "ALTER TABLE " . self::getTableName() . " ADD CONSTRAINT `core_pages_ibfk_1` FOREIGN KEY (`parent`) REFERENCES " . self::getTableName() . " (`id`);";
-//	}
-
 	public static function sql_002_constraint1() {
 		return "ALTER TABLE " . self::getSingleton()->getTableName2() . " ADD CONSTRAINT `core_pages_ibfk_1` FOREIGN KEY (`parent`) REFERENCES " . self::getSingleton()->getTableName2() . " (`pageid`);";
 	}
 
 	public static function sql_select($where = "") {
-		$data = DB::select("SELECT * FROM " . self::getSingleton()->getTableName2() . " " . $where." ORDER BY IFNULL(orderby,0);");
+		$data = DB::select("SELECT * FROM " . self::getSingleton()->getTableName2() . " " . $where . " ORDER BY IFNULL(orderby,0);");
 		$navi = array();
 		foreach ($data as $row) {
 			$navi[$row[self::ROW_pageid]] = new core_pages($row);
@@ -122,7 +117,7 @@ class core_pages extends DbModell {
 	 * @param null|int    $orderby
 	 * @return string SQL
 	 */
-	public static function toSql_insert($pageid, $type, $title=null, $link=null, $parent=null, $orderby=null) {
+	public static function toSql_insert($pageid, $type, $title = null, $link = null, $parent = null, $orderby = null) {
 		$naviEntry = new core_pages(array(
 			"pageid" => $pageid,
 			"title" => $title,
@@ -141,14 +136,14 @@ class core_pages extends DbModell {
 		return $this->title;
 	}
 
-	public function getBreadcrumbs(){
-		if(self::$limit_depth--<1){
-			new Error("Maximum depth of navigation exeeded! Possible recursion. ".$this->pageid);
+	public function getBreadcrumbs() {
+		if (self::$limit_depth-- < 1) {
+			new Error("Maximum depth of navigation exeeded! Possible recursion. " . $this->pageid);
 		}
 		$parent = $this->getParentEntry();
-		if($parent!==false){
+		if ($parent !== false) {
 			$breads = $parent->getBreadcrumbs();
-		}else{
+		} else {
 			$breads = array();
 		}
 		$breads[] = $this;
@@ -180,7 +175,7 @@ class core_pages extends DbModell {
 	 * @return core_pages|false
 	 */
 	public function getParentEntry() {
-		if($this->parentEntry===null){
+		if ($this->parentEntry === null) {
 			$this->parentEntry = Navigation::getInstance()->getEntryById($this->parent);
 		}
 		return $this->parentEntry;
@@ -205,30 +200,30 @@ class core_pages extends DbModell {
 	 * @return string|null
 	 */
 	public function getHtmlInner($title) {
-		if($this->title===null || $this->type==self::TYPE_api)return null;
+		if ($this->title === null || $this->type == self::TYPE_api) return null;
 
-		if ($this->type==self::TYPE_web){
+		if ($this->type == self::TYPE_web) {
 			$url = Run::getWebUrl($this->pageid);
-		}else if ($this->type==self::TYPE_ext || $this->type==self::TYPE_int){
+		} else if ($this->type == self::TYPE_ext || $this->type == self::TYPE_int) {
 			$url = $this->link;
-		}else if ($this->type==self::TYPE_sup){
+		} else if ($this->type == self::TYPE_sup) {
 			$url = false;
-		}else{
+		} else {
 			new Error("Unknown page type of '$this->pageid'!");
-			$url=null;
+			$url = null;
 		}
 
 		$title_ = htmlentities($this->title);
 
-		$titleTag = ($title?$title_:"");
-		if(CFG::DEVMODE())$titleTag.=" [id_".ServiceStrings::cssClassSafe($this->pageid)."]";
+		$titleTag = ($title ? $title_ : "");
+		if (CFG::DEVMODE()) $titleTag .= " [id_" . ServiceStrings::cssClassSafe($this->pageid) . "]";
 
-		$titleVal = $titleTag?"title='$titleTag'":"";
+		$titleVal = $titleTag ? "title='$titleTag'" : "";
 
-		if($url!==false){
-			$targetBlank = ($this->type==self::TYPE_ext?"target='_blank' ":"");
-			$link = "<a {$targetBlank}href='".htmlentities($url)."' $titleVal>$title_</a>";
-		}else{
+		if ($url !== false) {
+			$targetBlank = ($this->type == self::TYPE_ext ? "target='_blank' " : "");
+			$link = "<a {$targetBlank}href='" . htmlentities($url) . "' $titleVal>$title_</a>";
+		} else {
 			$link = "<span class='pseudo_a' $titleVal>$title_</span>";
 		}
 
@@ -236,33 +231,33 @@ class core_pages extends DbModell {
 	}
 
 	public function getHtml($highlighted_id) {
-		if($this->title===null && !$this->childEntries)return false;
+		if ($this->title === null && !$this->childEntries) return false;
 
 		//Link:
-		$inner = $this->getHtmlInner($this->parent===null);
+		$inner = $this->getHtmlInner($this->parent === null);
 
 		//Children:
-		$html=array($inner);
-		if($this->childEntries){
+		$html = array($inner);
+		if ($this->childEntries) {
 			$childsHtml = array();
 
-			foreach ($this->childEntries as $entry){
+			foreach ($this->childEntries as $entry) {
 				$childHtml = $entry->getHtml($highlighted_id);
-				if($childHtml===false && $this->title===false)return false;
+				if ($childHtml === false && $this->title === false) return false;
 				$childsHtml[] = $childHtml;
 			}
 
-			$html[] = "<ul>".implode("\n", $childsHtml)."</ul>";
+			$html[] = "<ul>" . implode("\n", $childsHtml) . "</ul>";
 		}
 
 		//Highlighting:
 		$crumbs = Navigation::getInstance()->getBreadcrumbs($highlighted_id);
 		$high = ($crumbs && in_array($this, $crumbs));
-		$highclass = $high?" high":"";
+		$highclass = $high ? " high" : "";
 
 		//Ouput:
-		$cssId = "id_".ServiceStrings::cssClassSafe($this->pageid);
-		return "<li class='$cssId$highclass'>".implode("\n", $html)."</li>";
+		$cssId = "id_" . ServiceStrings::cssClassSafe($this->pageid);
+		return "<li class='$cssId$highclass'>" . implode("\n", $html) . "</li>";
 	}
 
 }

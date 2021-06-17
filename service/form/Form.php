@@ -104,7 +104,7 @@ class Form {
 		$action = ($this->action === false ? "" : (" action=\"$this->action\" method='$this->method'"));
 		$params = $this->params;
 		if ($this->onSubmit) {
-			$params["onsubmit"] = $this->onSubmit.(isset($params["onsubmit"])?$params["onsubmit"]:"");
+			$params["onsubmit"] = $this->onSubmit . (isset($params["onsubmit"]) ? $params["onsubmit"] : "");
 		}
 		return "<form$action " . Html::tag_keyValues($params) . ">\n$fields_html$buttons\n</form>";
 	}

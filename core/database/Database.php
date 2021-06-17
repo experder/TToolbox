@@ -9,7 +9,6 @@
 namespace tt\core\database;
 
 use tt\core\CFG;
-use tt\core\Config;
 use tt\install\Installer;
 use tt\service\debug\DebugQuery;
 use tt\service\debug\DebugTools;
@@ -137,12 +136,12 @@ class Database {
 	 * @param int    $cutBacktrace
 	 * @return string|array|int|null
 	 */
-	public function _query($query, $substitutions = null, $return_type = 0, $cutBacktrace=0) {
+	public function _query($query, $substitutions = null, $return_type = 0, $cutBacktrace = 0) {
 		$statement = $this->pdo->prepare($query);
 		$ok = @$statement->execute($substitutions);
 		$compiledQuery = $this->debuginfo($statement, $query);
 		if (!$ok) {
-			$this->error_handling($statement, $cutBacktrace+1, $compiledQuery);
+			$this->error_handling($statement, $cutBacktrace + 1, $compiledQuery);
 			return null;
 		}
 		switch ($return_type) {
@@ -176,24 +175,6 @@ class Database {
 
 		Stats::getSingleton()->addQuery(new DebugQuery($compiled_query));
 		return $compiled_query;
-		if (Config::$DEVMODE) {
-			$backtrace = debug_backtrace();
-
-
-			$caller = (isset($backtrace[$backtrace_depth + 1]['function']) ? $backtrace[$backtrace_depth + 1]['function'] . " " : "")
-				. "( " . Debug::backtrace($backtrace_depth + 1, "\n", false) . " )";
-
-			$core_query_class = "";
-			if ($caller2 = in_array(str_replace('\\', '/', $caller), Debug::get_core_queries())) {
-				$core_query_class = " core_query_class";
-				Debug::$queries_corequeries_count++;
-				Debug::mark_core_query_checked($caller2);
-			}
-
-			$query_html = (new Html("span", $caller, array("class" => "detail_functionSource$core_query_class")))
-				. "\n" . (new Html("span", htmlentities($compiled_query), array("class" => "detail_sqlDump$core_query_class")));
-			Debug::$queries[] = $query_html;
-		}
 	}
 
 	private function error_handling(\PDOStatement $statement, $cut_backtrace = 0, $compiledQuery) {
@@ -205,7 +186,7 @@ class Database {
 			new Error("Invalid parameter number: parameter was not defined", $cut_backtrace + 1);
 		}
 
-		new Error($errorInfo."\n-----------\n".$compiledQuery, $cut_backtrace + 1);
+		new Error($errorInfo . "\n-----------\n" . $compiledQuery, $cut_backtrace + 1);
 	}
 
 	public function getPdo() {

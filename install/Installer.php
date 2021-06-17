@@ -8,7 +8,7 @@
 
 namespace tt\install;
 
-require_once dirname(__DIR__).'/run/Runner.php';
+require_once dirname(__DIR__) . '/run/Runner.php';
 
 use tt\core\Autoloader;
 use tt\core\Config;
@@ -222,7 +222,7 @@ class Installer extends Runner {
 		Autoloader::init();
 
 		if (!ServiceEnv::requestCmd('cmdCreateInit')) {
-			$form = new Form("cmdCreateInit", "", "Create ".basename($file));
+			$form = new Form("cmdCreateInit", "", "Create " . basename($file));
 
 			$suggest = "dirname(__DIR__) . '/" . basename(dirname(__DIR__)) . "'";
 			$form->addField(new FormfieldText("TToolbox", "Path to TToolbox", $suggest, true, array(

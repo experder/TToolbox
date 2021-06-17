@@ -79,10 +79,10 @@ class Stats {
 		$title = "<b>AJAX</b>";
 		$stats = array();
 
-		if(self::$apiClass!==null){
-			$stats[] = "<div>CLASS: ".self::$apiClass."</div>";
-		}else{
-			$stats[] = "<div>URI: ".$_SERVER['REQUEST_URI']."</div>";
+		if (self::$apiClass !== null) {
+			$stats[] = "<div>CLASS: " . self::$apiClass . "</div>";
+		} else {
+			$stats[] = "<div>URI: " . $_SERVER['REQUEST_URI'] . "</div>";
 		}
 
 		$stats[] = "POST:";
