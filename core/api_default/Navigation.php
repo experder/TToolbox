@@ -17,14 +17,14 @@ class Navigation {
 	/**
 	 * @var core_pages[]
 	 */
-	private $entries;
+	protected $entries;
 
 	/**
 	 * @var core_pages[] $breadcrumbs
 	 */
 	private $breadcrumbs = null;
 
-	private function __construct($entries) {
+	protected function __construct($entries) {
 		$this->entries = $entries;
 	}
 
