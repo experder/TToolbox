@@ -8,7 +8,7 @@
 
 namespace tt\core;
 
-use tt\core\database\DB;
+use tt\alias\DB;
 use tt\coremodule\dbmodell\core_config;
 use tt\core\database\Database;
 use tt\core\page\Page;

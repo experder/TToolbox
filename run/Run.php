@@ -10,7 +10,7 @@ namespace tt\run;
 
 use tt\api\Navigation;
 use tt\core\Autoloader;
-use tt\core\CFG;
+use tt\alias\CFG;
 use tt\core\Config;
 use tt\core\page\Page;
 use tt\service\debug\Stats;

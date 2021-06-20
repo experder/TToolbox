@@ -9,7 +9,7 @@
 namespace tt\install;
 
 use tt\config\Init_project;
-use tt\core\page\PG;
+use tt\alias\PG;
 
 require_once __DIR__ . '/Installer.php';
 Installer::requireInitPointer();

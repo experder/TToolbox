@@ -9,7 +9,7 @@
 namespace tt\core\page;
 
 use tt\api\PageWrapper;
-use tt\core\CFG;
+use tt\alias\CFG;
 use tt\core\Config;
 use tt\core\database\Database;
 use tt\api\Navigation;

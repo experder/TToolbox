@@ -8,7 +8,7 @@
 
 namespace tt\core\database;
 
-use tt\core\CFG;
+use tt\alias\CFG;
 use tt\install\Installer;
 use tt\service\debug\DebugQuery;
 use tt\service\debug\DebugTools;

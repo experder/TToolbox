@@ -9,7 +9,7 @@
 namespace tt\coremodule\dbmodell;
 
 use tt\api\Navigation;
-use tt\core\CFG;
+use tt\alias\CFG;
 use tt\core\Config;
 use tt\alias\DB;
 use tt\core\database\DbModell;
