@@ -107,6 +107,12 @@ class Database {
 		return $this->_query($query, $substitutions, self::RETURN_ASSOC);
 	}
 
+	public function select_single($query, $substitutions = null) {
+		$data = $this->select($query, $substitutions);
+		if(!$data)return false;
+		return $data[0];
+	}
+
 	public function quote($string) {
 		if ($string === null) return "NULL";
 		if (is_numeric($string)) return $string;

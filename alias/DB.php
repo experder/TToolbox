@@ -21,6 +21,10 @@ class DB {
 		return Database::getPrimary()->select($query, $substitutions);
 	}
 
+	public static function select_single($query, $substitutions = null) {
+		return Database::getPrimary()->select_single($query, $substitutions);
+	}
+
 	public static function insert($query, $substitutions = null) {
 		return Database::getPrimary()->insert($query, $substitutions);
 	}
