@@ -86,12 +86,32 @@ class ServiceFiles {
 		return $success;
 	}
 
+	//TODO:CamelCase
 	public static function get_contents($file) {
 		//TODO: Option: Restriction to external resources (URLs)
 		if (!file_exists($file)) {
 			new Error("File does not exist!\nFile: $file", 1);
 		}
 		return file_get_contents($file);
+	}
+
+	public static function dirList($path, $absolute=false, $utf8_out = true, $exclude_assoc = array()) {
+		if (!file_exists($path)) return false;
+		$dir = opendir($path);
+		if (!$dir) return false;
+		$files = array();
+		while (false !== ($file = readdir($dir))) {
+			if ($file == '.' || $file == '..' || isset($exclude_assoc[$file])){
+				continue;
+			}
+			$entry = ($utf8_out ? utf8_encode($file) : $file);
+			if($absolute){
+				$entry = $path."/".$entry;
+			}
+			$files[] = $entry;
+		}
+		closedir($dir);
+		return $files;
 	}
 
 }
