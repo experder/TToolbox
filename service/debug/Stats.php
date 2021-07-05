@@ -51,7 +51,8 @@ class Stats {
 	public static function getStatsQueries() {
 		$queries = array();
 		foreach (self::getSingleton()->getQueries() as $query) {
-			array_unshift($queries, $query->toHtml());
+			#array_unshift($queries, $query->toHtml());
+			$queries[] = $query->toHtml();
 		}
 		$title = "<b>" . count($queries) . "</b> queries";
 		return new StatsElement($title, implode("", $queries), "statsQueries divList");
