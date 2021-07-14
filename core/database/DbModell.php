@@ -48,7 +48,11 @@ abstract class DbModell {
 				$this->$key = $value;
 			}
 		}
+	}
 
+	public function getDataArray() {
+		$data = get_object_vars($this);
+		return $data;
 	}
 
 	/**

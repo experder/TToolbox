@@ -38,3 +38,5 @@ Config::set(Config::RUN_ALIAS_API, Config::get(Config::HTTP_TTROOT) . '/run_api/
 Config::set(Config::RUN_ALIAS, Config::get(Config::HTTP_TTROOT) . '/run/?c=');
 
 Config::set(Config::CFG_PLATFORM, '#PLATFORM');
+
+Config::set(Config::CSS_NOCACHE, false);
