@@ -21,7 +21,7 @@ class Templates {
 	 * @param array  $replacements
 	 * @return string
 	 */
-	public static function load($file, $replacements) {
+	public static function load($file, $replacements=array()) {
 		if (!file_exists($file)) {
 			new Error("Template file \"$file\" not found!");
 		}

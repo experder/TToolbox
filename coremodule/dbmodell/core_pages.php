@@ -45,7 +45,7 @@ class core_pages extends DbModell {
 	/**
 	 * @var string $type core_pages::TYPE_ ['web','api','ext','int','sup']
 	 */
-	protected $type;
+	protected $type = null;
 	const ROW_type = "type";
 	/**
 	 * @var string|null $link
@@ -108,9 +108,25 @@ class core_pages extends DbModell {
 			. " `" . self::ROW_link . "`,"
 			. " `" . self::ROW_orderby . "`"
 			." FROM " . self::getSingleton()->getTableName2() . " " . $where . " ORDER BY IFNULL(`" . self::ROW_orderby . "`,0);");
+		$navi = self::naviEntriesFromPagesList($data);
+		return $navi;
+	}
+
+	/**
+	 * @param core_pages[]|string[][] $pages
+	 * @return core_pages[]
+	 */
+	public static function naviEntriesFromPagesList($pages){
 		$navi = array();
-		foreach ($data as $row) {
-			$navi[$row[self::ROW_pageid]] = new core_pages($row);
+		foreach ($pages as $page) {
+			if($page instanceof core_pages){
+				if($page->getType()===null){
+					$page->type = self::TYPE_web;
+				}
+				$navi[$page->getPageId()] = $page;
+			}else{
+				$navi[$page[self::ROW_pageid]] = new core_pages($page);
+			}
 		}
 		return $navi;
 	}
@@ -169,6 +185,13 @@ class core_pages extends DbModell {
 	 */
 	public function getPageId() {
 		return $this->pageid;
+	}
+
+	/**
+	 * @return string|null core_pages::TYPE_ ['web','api','ext','int','sup']
+	 */
+	public function getType() {
+		return $this->type;
 	}
 
 	/**

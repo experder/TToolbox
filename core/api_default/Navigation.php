@@ -17,21 +17,24 @@ class Navigation {
 	/**
 	 * @var core_pages[]
 	 */
-	protected $entries;
+	protected $entries = null;
 
 	/**
 	 * @var core_pages[] $breadcrumbs
 	 */
 	private $breadcrumbs = null;
 
-	protected function __construct($entries) {
-		$this->entries = $entries;
+	protected function __construct() {
+		$this->load();
+	}
+
+	protected function load() {
+		$this->entries = core_pages::sql_select();
 	}
 
 	public static function getInstance() {
 		if (self::$singleton === null) {
-			$entries = core_pages::sql_select();
-			self::$singleton = new \tt\api\Navigation($entries);
+			self::$singleton = new \tt\api\Navigation();
 		}
 		return self::$singleton;
 	}
