@@ -212,6 +212,15 @@ class core_pages extends DbModell {
 	}
 
 	/**
+	 * @return core_pages
+	 */
+	public function getTopEntry() {
+		$parent = $this->getParentEntry();
+		if($parent===false)return $this;
+		return $parent->getTopEntry();
+	}
+
+	/**
 	 * @param core_pages $child
 	 */
 	public function addChildEntry($child) {
